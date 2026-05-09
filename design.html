@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>~ / design system</title>
+<link rel="stylesheet" href="styles/main.css">
+<style>
+  /* Page-local layout — does not belong in the design system itself.
+     Kept here to avoid leaking styleguide chrome into main.css. */
+  body { padding: var(--sp-56) var(--sp-32) var(--sp-100); max-width: var(--w-layout); margin: 0 auto; }
+
+  .ds-h1 {
+    font-family: var(--font-serif);
+    font-size: var(--fs-display);
+    font-weight: var(--fw-regular);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--sp-8);
+  }
+  .ds-h1 em { color: var(--color-accent); font-style: italic; font-weight: var(--fw-light); }
+  .ds-lede {
+    color: var(--color-text-dim);
+    font-size: var(--fs-13);
+    margin-bottom: var(--sp-72);
+    max-width: var(--w-prose);
+  }
+
+  .ds-section { margin-bottom: var(--sp-72); }
+  .ds-section h2 {
+    font-family: var(--font-serif);
+    font-weight: var(--fw-regular);
+    font-size: var(--fs-22);
+    margin-bottom: var(--sp-22);
+    padding-bottom: var(--sp-12);
+    border-bottom: var(--bw) solid var(--color-line-soft);
+  }
+  .ds-section h2 small {
+    color: var(--color-text-faint);
+    font-family: var(--font-mono);
+    font-size: var(--fs-11);
+    margin-left: var(--sp-12);
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .ds-grid {
+    display: grid;
+    gap: var(--sp-12);
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+
+  .ds-swatch {
+    border: var(--bw) solid var(--color-line-soft);
+    padding: var(--sp-12);
+    font-size: var(--fs-11);
+    color: var(--color-text-dim);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-8);
+  }
+  .ds-swatch-color {
+    height: 56px;
+    border-radius: var(--r-sm);
+    border: var(--bw) solid var(--color-line-soft);
+  }
+  .ds-swatch code {
+    font-family: var(--font-mono);
+    color: var(--color-text);
+    font-size: var(--fs-12);
+  }
+  .ds-swatch .meta { color: var(--color-text-faint); }
+
+  .ds-row {
+    display: grid;
+    grid-template-columns: 200px 1fr auto;
+    gap: var(--sp-16);
+    align-items: baseline;
+    padding: var(--sp-10) 0;
+    border-bottom: var(--bw) solid var(--color-line-soft);
+    font-size: var(--fs-12);
+    color: var(--color-text-dim);
+  }
+  .ds-row code {
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    font-size: var(--fs-12);
+  }
+  .ds-row .ds-row-sample { color: var(--color-text); }
+  .ds-row .ds-row-value { color: var(--color-text-faint); font-family: var(--font-mono); }
+
+  .ds-spacing-bar {
+    height: 8px;
+    background: var(--color-accent);
+    border-radius: var(--r-sm);
+  }
+
+  .ds-component-block {
+    border: var(--bw) solid var(--color-line-soft);
+    padding: var(--sp-22);
+    margin-bottom: var(--sp-22);
+  }
+  .ds-component-label {
+    color: var(--color-text-faint);
+    font-size: var(--fs-11);
+    letter-spacing: var(--tracking-wide);
+    margin-bottom: var(--sp-12);
+  }
+
+  .ds-back {
+    display: inline-block;
+    color: var(--color-text-faint);
+    font-size: var(--fs-12);
+    text-decoration: none;
+    border-bottom: var(--bw) dashed var(--color-line);
+    margin-bottom: var(--sp-32);
+  }
+  .ds-back:hover { color: var(--color-accent); border-color: var(--color-accent); }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="ds-back">← back to site</a>
+
+<h1 class="ds-h1">design system<em>.</em></h1>
+<p class="ds-lede">Tokens and components powering the personal site. Edit <code>styles/main.css</code> :root to change anything globally.</p>
+
+<!-- ── COLOR ─────────────────────────────────────────────────── -->
+<section class="ds-section">
+  <h2>color <small>--color-*</small></h2>
+  <div class="ds-grid" id="ds-colors"></div>
+</section>
+
+<!-- ── TYPOGRAPHY ────────────────────────────────────────────── -->
+<section class="ds-section">
+  <h2>typography <small>--fs-* / --font-* / --fw-* / --lh-*</small></h2>
+  <div id="ds-type"></div>
+</section>
+
+<!-- ── SPACING ───────────────────────────────────────────────── -->
+<section class="ds-section">
+  <h2>spacing <small>--sp-*</small></h2>
+  <div id="ds-spacing"></div>
+</section>
+
+<!-- ── BORDERS / RADII / DOTS ───────────────────────────────── -->
+<section class="ds-section">
+  <h2>borders, radii, dots <small>--bw / --r-* / --dot*</small></h2>
+  <div id="ds-misc"></div>
+</section>
+
+<!-- ── MOTION ────────────────────────────────────────────────── -->
+<section class="ds-section">
+  <h2>motion <small>--dur-* / --ease-* / --delay-*</small></h2>
+  <div id="ds-motion"></div>
+</section>
+
+<!-- ── COMPONENTS ────────────────────────────────────────────── -->
+<section class="ds-section">
+  <h2>components</h2>
+
+  <div class="ds-component-block">
+    <div class="ds-component-label">.sec-head</div>
+    <div class="sec-head">
+      <span class="sec-cmd">$ cat</span>
+      <span class="sec-title">about.md</span>
+      <span class="sec-meta">~/profile</span>
+    </div>
+  </div>
+
+  <div class="ds-component-block">
+    <div class="ds-component-label">.prose</div>
+    <div class="prose">
+      <p>I build AI products that people actually use. Five years across <strong>consumer chat</strong>, <strong>developer tools</strong>, and <strong>enterprise copilots</strong>.</p>
+    </div>
+  </div>
+
+  <div class="ds-component-block">
+    <div class="ds-component-label">.case</div>
+    <div class="cases">
+      <div class="case">
+        <div class="case-id">001</div>
+        <div>
+          <div class="case-title">Inline AI assistant for SaaS editor</div>
+          <div class="case-desc">Designed prompt UX, eval framework, rollout strategy.</div>
+          <div class="case-tags">
+            <span class="tag">RAG</span>
+            <span class="tag">eval</span>
+            <span class="tag">0→1</span>
+          </div>
+        </div>
+        <div class="case-meta">2024<span class="impact">+38% speed</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ds-component-block">
+    <div class="ds-component-label">.lens-card</div>
+    <div class="lens">
+      <div class="lens-card">
+        <div class="lens-num">/ 01</div>
+        <div class="lens-text">Evals before features. <em>If you can't measure it, you're shipping vibes.</em></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ds-component-block">
+    <div class="ds-component-label">.try-hint kbd</div>
+    <div class="try-hint" style="position:static;opacity:1;animation:none;">
+      try: <kbd>hover</kbd> <kbd>click</kbd> <kbd>scroll</kbd>
+    </div>
+  </div>
+</section>
+
+<script>
+  const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+  // ── Colors ────────────────────────────────────────────────────
+  const colors = [
+    'color-bg', 'color-bg-soft', 'color-line', 'color-line-soft',
+    'color-text', 'color-text-dim', 'color-text-faint',
+    'color-accent', 'color-success',
+  ];
+  document.getElementById('ds-colors').innerHTML = colors.map(name => {
+    const value = cssVar('--' + name);
+    return `
+      <div class="ds-swatch">
+        <div class="ds-swatch-color" style="background:${value}"></div>
+        <code>--${name}</code>
+        <span class="meta">${value}</span>
+      </div>`;
+  }).join('');
+
+  // ── Type scale ────────────────────────────────────────────────
+  const typeTokens = [
+    ['--fs-10', 'caption micro'],
+    ['--fs-11', 'caption'],
+    ['--fs-11-5', 'meta-soft'],
+    ['--fs-12', 'meta'],
+    ['--fs-12-5', 'boot line'],
+    ['--fs-13', 'small body'],
+    ['--fs-13-5', 'contact'],
+    ['--fs-14', 'body (base)'],
+    ['--fs-15', 'lens body'],
+    ['--fs-17', 'prose'],
+    ['--fs-19', 'case title'],
+    ['--fs-22', 'sec title'],
+    ['--fs-display', 'display name'],
+  ];
+  document.getElementById('ds-type').innerHTML = typeTokens.map(([token, label]) => `
+    <div class="ds-row">
+      <code>${token}</code>
+      <div class="ds-row-sample" style="font-size: var(${token});">${label}</div>
+      <div class="ds-row-value">${cssVar(token)}</div>
+    </div>
+  `).join('');
+
+  // ── Spacing scale ─────────────────────────────────────────────
+  const spaceTokens = [
+    '--sp-3','--sp-6','--sp-7','--sp-8','--sp-9','--sp-10','--sp-12',
+    '--sp-14','--sp-16','--sp-18','--sp-20','--sp-22','--sp-24',
+    '--sp-32','--sp-36','--sp-48','--sp-56','--sp-64','--sp-72','--sp-80','--sp-100',
+  ];
+  document.getElementById('ds-spacing').innerHTML = spaceTokens.map(token => `
+    <div class="ds-row">
+      <code>${token}</code>
+      <div class="ds-spacing-bar" style="width: var(${token});"></div>
+      <div class="ds-row-value">${cssVar(token)}</div>
+    </div>
+  `).join('');
+
+  // ── Borders / radii / dots ────────────────────────────────────
+  const miscTokens = [
+    ['--bw',       'border (1px)'],
+    ['--bw-thick', 'border thick'],
+    ['--r-sm',     'border radius'],
+    ['--dot',      'dot small'],
+    ['--dot-lg',   'dot large'],
+  ];
+  document.getElementById('ds-misc').innerHTML = miscTokens.map(([token, label]) => `
+    <div class="ds-row">
+      <code>${token}</code>
+      <div class="ds-row-sample">${label}</div>
+      <div class="ds-row-value">${cssVar(token)}</div>
+    </div>
+  `).join('');
+
+  // ── Motion ────────────────────────────────────────────────────
+  const motionTokens = [
+    '--dur-quick','--dur-fast','--dur-base','--dur-slow','--dur-slower','--dur-pulse','--dur-glow',
+    '--delay-identity','--delay-section-1','--delay-section-2','--delay-section-3','--delay-section-4','--delay-try-hint',
+  ];
+  document.getElementById('ds-motion').innerHTML = motionTokens.map(token => `
+    <div class="ds-row">
+      <code>${token}</code>
+      <div class="ds-row-sample">${token.startsWith('--dur') ? 'duration' : 'choreography delay'}</div>
+      <div class="ds-row-value">${cssVar(token)}</div>
+    </div>
+  `).join('');
+</script>
+
+</body>
+</html>
