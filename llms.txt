@@ -7,7 +7,7 @@ I build AI products by treating myself like one — versioned, measured, always 
 ## Identity
 - Name: Antares Yuan
 - Role: AI Product Manager
-- Location: Seattle|Beijing · open to remote
+- Location: Seattle | Beijing · currently remote working at YiTang
 - Status: Building in public
 - Tags: Pi-Shaped AI PM, AI Agent Native, 0→1, HCI Researcher, HCDE @ UDub
 
