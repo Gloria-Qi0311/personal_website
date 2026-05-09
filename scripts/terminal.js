@@ -5,8 +5,8 @@
    (mouse-friendly kanban + keyboard/agent-friendly CLI) backed by one
    source of truth.
 
-   Boots independently of render.js (its own fetches), so a slow card
-   render doesn't block the terminal and vice versa.
+   Boots independently of render.js so a slow card render doesn't block
+   the terminal and vice versa.
    ════════════════════════════════════════════════════════════════════════ */
 (() => {
   const root = document.getElementById('terminal-root');
@@ -30,8 +30,25 @@
 
   /* ── State ──────────────────────────────────────────────────────── */
   const state = { profile: null, board: null, lens: null, contact: null };
-  const history = [];     // command strings, oldest first
-  let historyIdx = -1;    // -1 = composing new
+  const history = [];
+  let historyIdx = -1;
+
+  const HIST_KEY = 'antares_term_history';
+  const HIST_MAX = 50;
+
+  const saveHistory = () => {
+    try { localStorage.setItem(HIST_KEY, JSON.stringify(history.slice(-HIST_MAX))); }
+    catch (e) { /* localStorage may be disabled — silent ok */ }
+  };
+  const loadHistory = () => {
+    try {
+      const raw = localStorage.getItem(HIST_KEY);
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) history.push(...arr);
+      }
+    } catch (e) {}
+  };
 
   /* ── Rendering ─────────────────────────────────────────────────── */
   // Insert lines BEFORE the prompt line so the input always stays at bottom.
@@ -48,45 +65,30 @@
   const printCmd = (cmd) =>
     print(`<span class="term-prompt">$</span><span class="term-cmd">${escape(cmd)}</span>`, '');
 
-  /* ── Command catalog ───────────────────────────────────────────── */
-  const cmds = {};
-
-  cmds.help = () => {
-    const rows = [
-      ['help',                       'show this list'],
-      ['whoami',                     'identity, slogan, location'],
-      ['projects [--status=X]',      'list cards; status: shipped|now|next|later|all'],
-      ['cat <ID>',                   'full details for a card (e.g. cat SHIP-01)'],
-      ['now',                        'shortcut for projects --status=now'],
-      ['lens',                       'principles / how I think'],
-      ['contact',                    'email + socials + open-to'],
-      ['cv',                         'one-shot resume — everything above'],
-      ['clear',                      'clear screen'],
-    ];
-    const w = Math.max(...rows.map(r => r[0].length));
-    print(rows.map(r =>
-      `<span class="term-key">${escape(r[0].padEnd(w + 2))}</span>` +
-      `<span class="term-dim">${escape(r[1])}</span>`
-    ).join('<br>'));
+  // Pretty-print structured data — used by every command's --json path.
+  const printJSON = (data) => {
+    const str = JSON.stringify(data, null, 2);
+    print(`<pre style="margin:0;font-family:inherit;font-size:inherit;color:inherit;white-space:pre-wrap;">${escape(str)}</pre>`);
   };
 
-  cmds.whoami = () => {
-    const p = state.profile;
-    if (!p) return print('profile not loaded', 'term-err');
-    print(
-      [
-        `<span class="term-key">${escape(p.name)} ${escape(p.nameAccent ?? '')}</span>`,
-        `<span class="term-dim">${escape(p.role ?? '')} · ${escape(p.location ?? '')}</span>`,
-        '',
-        `${escape(p.slogan ?? '')}`,
-        '',
-        `<span class="term-dim">tags:</span> ${(p.tags ?? []).map(escape).join(', ')}`,
-        `<span class="term-dim">status:</span> <span class="term-ok">●</span> ${escape(p.status ?? '')}`,
-      ].join('<br>')
-    );
+  /* ── Flag parser ───────────────────────────────────────────────── */
+  // Splits raw args into { positional[], opts{} }. Supports --json,
+  // --status=X, --days=N, --tag=X, and bare --flag → true.
+  const parseFlags = (args) => {
+    const opts = { json: false };
+    const positional = [];
+    for (const a of args) {
+      if (a === '--json')              opts.json   = true;
+      else if (a.startsWith('--status=')) opts.status = a.slice(9);
+      else if (a.startsWith('--days='))   opts.days   = parseInt(a.slice(7), 10);
+      else if (a.startsWith('--tag='))    opts.tag    = a.slice(6);
+      else if (a.startsWith('--'))        opts[a.slice(2)] = true;
+      else                                positional.push(a);
+    }
+    return { args: positional, opts };
   };
 
-  // Status → ID prefix; mirrors render.js so cat IDs match the board badges.
+  /* ── Card index helpers ────────────────────────────────────────── */
   const idPrefix = { shipped: 'SHIP', now: 'NOW', next: 'NEXT', later: 'LATER' };
   const pad2 = (n) => String(n).padStart(2, '0');
 
@@ -106,40 +108,93 @@
     return out;
   };
 
-  cmds.projects = (args) => {
-    if (!state.board) return print('board not loaded', 'term-err');
-    const flag = args.find(a => a.startsWith('--status='));
-    const status = flag ? flag.split('=')[1] : 'all';
-
-    let list = allCards();
-    if (status !== 'all') {
-      const filtered = list.filter(c => c.status === status);
-      if (filtered.length === 0) {
-        return print(`<span class="term-dim">no cards with status '${escape(status)}'.</span>`);
-      }
-      list = filtered;
+  // Render a list of cards as a tabular listing
+  const printCardTable = (list) => {
+    if (list.length === 0) {
+      return print(`<span class="term-dim">no cards.</span>`);
     }
-
     const widthId = Math.max(...list.map(c => c.displayId.length));
     const lines = list.map((c) => {
-      const idCell = `<span class="term-key">${escape(c.displayId.padEnd(widthId + 2))}</span>`;
+      const idCell    = `<span class="term-key">${escape(c.displayId.padEnd(widthId + 2))}</span>`;
       const titleCell = `<span class="term-out">${escape(c.title)}</span>`;
-      const impactCell = c.impact ? `  <span class="term-ok">${escape(c.impact)}</span>` : '';
-      const date = c.updated ? `  <span class="term-dim">${escape(c.updated)}</span>` : '';
-      return idCell + titleCell + impactCell + date;
+      const impact    = c.impact ? `  <span class="term-ok">${escape(c.impact)}</span>` : '';
+      const date      = c.updated ? `  <span class="term-dim">${escape(c.updated)}</span>` : '';
+      return idCell + titleCell + impact + date;
     });
     print(lines.join('<br>'));
-    print(`<span class="term-dim">${list.length} card${list.length === 1 ? '' : 's'} · cat &lt;ID&gt; for detail</span>`);
+    print(`<span class="term-dim">${list.length} card${list.length === 1 ? '' : 's'} · cat &lt;ID&gt; or open &lt;ID&gt;</span>`);
   };
 
-  cmds.now = () => cmds.projects(['--status=now']);
+  /* ── Command catalog ───────────────────────────────────────────── */
+  const cmds = {};
 
-  cmds.cat = (args) => {
+  cmds.help = () => {
+    const rows = [
+      ['help',                       'show this list'],
+      ['whoami',                     'identity, slogan, location'],
+      ['projects [--status=X]',      'list cards: shipped|now|next|later|all'],
+      ['cat <ID>',                   'full details for a card (e.g. cat SHIP-01)'],
+      ['open <ID>',                  'open a card in the side panel'],
+      ['search <keyword>',           'fuzzy match across all cards'],
+      ['recent [--days=N]',          'recently updated cards (default: top 5)'],
+      ['now',                        'shortcut for projects --status=now'],
+      ['lens',                       'principles / how I think'],
+      ['fortune',                    'random principle'],
+      ['contact',                    'email + socials + open-to'],
+      ['stats',                      'counts by status, top tags'],
+      ['cv',                         'one-shot resume — everything above'],
+      ['clear',                      'clear screen (⌃L)'],
+    ];
+    const w = Math.max(...rows.map(r => r[0].length));
+    print(rows.map(r =>
+      `<span class="term-key">${escape(r[0].padEnd(w + 2))}</span>` +
+      `<span class="term-dim">${escape(r[1])}</span>`
+    ).join('<br>'));
+    print(`<br><span class="term-dim">flags:</span> <span class="term-key">--json</span> <span class="term-dim">on any command for structured output</span>`);
+  };
+
+  cmds.whoami = (args, opts) => {
+    const p = state.profile;
+    if (!p) return print('profile not loaded', 'term-err');
+    if (opts.json) return printJSON(p);
+    print(
+      [
+        `<span class="term-key">${escape(p.name)} ${escape(p.nameAccent ?? '')}</span>`,
+        `<span class="term-dim">${escape(p.role ?? '')} · ${escape(p.location ?? '')}</span>`,
+        '',
+        `${escape(p.slogan ?? '')}`,
+        '',
+        `<span class="term-dim">tags:</span> ${(p.tags ?? []).map(escape).join(', ')}`,
+        `<span class="term-dim">status:</span> <span class="term-ok">●</span> ${escape(p.status ?? '')}`,
+      ].join('<br>')
+    );
+  };
+
+  cmds.projects = (args, opts) => {
+    if (!state.board) return print('board not loaded', 'term-err');
+    let list = allCards();
+    if (opts.status && opts.status !== 'all') {
+      list = list.filter(c => c.status === opts.status);
+    }
+    if (opts.tag) {
+      list = list.filter(c => (c.tags ?? []).some(t => t.toLowerCase() === opts.tag.toLowerCase()));
+    }
+    if (opts.json) return printJSON(list);
+    if (list.length === 0) {
+      return print(`<span class="term-dim">no matches.</span>`);
+    }
+    printCardTable(list);
+  };
+
+  cmds.now = (args, opts) => cmds.projects(args, { ...opts, status: 'now' });
+
+  cmds.cat = (args, opts) => {
     const id = (args[0] ?? '').toUpperCase();
     if (!id) return print('usage: cat &lt;ID&gt; — e.g. cat SHIP-01', 'term-err');
     const list = allCards();
     const c = list.find(x => x.displayId === id);
     if (!c) return print(`no card '${escape(id)}' — try \`projects\``, 'term-err');
+    if (opts.json) return printJSON(c);
 
     const tags = (c.tags ?? []).map(escape).join(', ') || '<span class="term-dim">none</span>';
     const links = (c.links ?? [])
@@ -163,11 +218,102 @@
       out.push('<span class="term-dim">─── details ───</span>');
       out.push(escape(c.details).replace(/\n/g, '<br>'));
     }
+    out.push('');
+    out.push(`<span class="term-dim">tip: \`open ${escape(c.displayId)}\` to view in the side panel</span>`);
     print(out.join('<br>'));
   };
 
-  cmds.lens = () => {
+  cmds.open = (args, opts) => {
+    const id = (args[0] ?? '').toUpperCase();
+    if (!id) return print('usage: open &lt;ID&gt; — e.g. open SHIP-01', 'term-err');
+    const list = allCards();
+    if (!list.find(c => c.displayId === id)) {
+      return print(`no card '${escape(id)}' — try \`projects\``, 'term-err');
+    }
+    if (opts.json) return printJSON({ opened: id });
+    print(`<span class="term-dim">opening</span> <span class="term-key">${escape(id)}</span> <span class="term-dim">→ side panel</span>`);
+    document.dispatchEvent(new CustomEvent('agent:open-card', { detail: { id } }));
+  };
+
+  cmds.search = (args, opts) => {
+    const q = args.join(' ').toLowerCase().trim();
+    if (!q) return print('usage: search &lt;keyword&gt;', 'term-err');
+    const list = allCards();
+    const matches = list.filter(c => {
+      const hay = [c.title, c.summary, c.details, ...(c.tags ?? [])].filter(Boolean).join(' ').toLowerCase();
+      return hay.includes(q);
+    });
+    if (opts.json) return printJSON(matches);
+    if (matches.length === 0) {
+      return print(`<span class="term-dim">no matches for '${escape(q)}'</span>`);
+    }
+    print(`<span class="term-dim">${matches.length} match${matches.length === 1 ? '' : 'es'} for '${escape(q)}':</span>`);
+    printCardTable(matches);
+  };
+
+  cmds.recent = (args, opts) => {
+    let list = allCards()
+      .filter(c => c.updated)
+      .sort((a, b) => (b.updated ?? '').localeCompare(a.updated ?? ''));
+
+    if (opts.days != null && Number.isFinite(opts.days)) {
+      const cutoffMs = Date.now() - opts.days * 86400000;
+      const cutoff = new Date(cutoffMs).toISOString().slice(0, 10);
+      list = list.filter(c => (c.updated ?? '') >= cutoff);
+      if (opts.json) return printJSON(list);
+      print(`<span class="term-dim">updated within ${opts.days} day${opts.days === 1 ? '' : 's'}:</span>`);
+    } else {
+      list = list.slice(0, 5);
+      if (opts.json) return printJSON(list);
+      print(`<span class="term-dim">5 most recently updated:</span>`);
+    }
+
+    printCardTable(list);
+  };
+
+  cmds.stats = (args, opts) => {
+    const list = allCards();
+    const byStatus = { shipped: 0, now: 0, next: 0, later: 0 };
+    const tagCount = new Map();
+    list.forEach(c => {
+      if (byStatus[c.status] != null) byStatus[c.status]++;
+      (c.tags ?? []).forEach(t => tagCount.set(t, (tagCount.get(t) ?? 0) + 1));
+    });
+    const topTags = [...tagCount.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5);
+    const lastUpdated = list.map(c => c.updated).filter(Boolean).sort().pop() ?? null;
+    const lensCount = state.lens?.items?.length ?? 0;
+
+    if (opts.json) {
+      return printJSON({
+        total: list.length,
+        byStatus,
+        topTags: Object.fromEntries(topTags),
+        lastUpdated,
+        lensCount,
+      });
+    }
+
+    print([
+      `<span class="term-key">total:</span>       ${list.length} cards`,
+      `<span class="term-key">by status:</span>   shipped:${byStatus.shipped}  now:${byStatus.now}  next:${byStatus.next}  later:${byStatus.later}`,
+      `<span class="term-key">top tags:</span>    ${topTags.length ? topTags.map(([t, n]) => `${escape(t)}(${n})`).join(', ') : '<span class="term-dim">—</span>'}`,
+      `<span class="term-key">last update:</span> ${lastUpdated ?? '<span class="term-dim">—</span>'}`,
+      `<span class="term-key">lens:</span>        ${lensCount} entr${lensCount === 1 ? 'y' : 'ies'}`,
+    ].join('<br>'));
+  };
+
+  cmds.fortune = (args, opts) => {
     const items = state.lens?.items ?? [];
+    if (items.length === 0) return print('no lens entries yet', 'term-dim');
+    const it = items[Math.floor(Math.random() * items.length)];
+    if (opts.json) return printJSON(it);
+    const aside = it.aside ? `<br>  <span class="term-dim">${escape(it.aside)}</span>` : '';
+    print(`<span class="term-key">${escape(it.num ?? '')}</span> ${escape(it.main ?? '')}${aside}`);
+  };
+
+  cmds.lens = (args, opts) => {
+    const items = state.lens?.items ?? [];
+    if (opts.json) return printJSON(items);
     if (items.length === 0) return print('no lens entries yet', 'term-dim');
     const lines = items.map(it => {
       const aside = it.aside ? `<br>  <span class="term-dim">${escape(it.aside)}</span>` : '';
@@ -176,9 +322,10 @@
     print(lines.join('<br><br>'));
   };
 
-  cmds.contact = () => {
+  cmds.contact = (args, opts) => {
     const c = state.contact;
     if (!c) return print('contact not loaded', 'term-err');
+    if (opts.json) return printJSON(c);
     const items = (c.items ?? []).map(it =>
       `<span class="term-key">${escape((it.key ?? '').padEnd(10))}</span><a href="${escape(it.href ?? '#')}" style="color:var(--term-cmd);">${escape(it.label ?? '')}</a>`
     ).join('<br>');
@@ -186,24 +333,54 @@
     print(`<span class="term-dim">${escape(intro)}</span><br><br>${items}`);
   };
 
-  cmds.cv = () => {
-    cmds.whoami();
+  cmds.cv = (args, opts) => {
+    if (opts.json) {
+      const list = allCards();
+      return printJSON({
+        profile: state.profile,
+        board: {
+          shipped: list.filter(c => c.status === 'shipped'),
+          now:     list.filter(c => c.status === 'now'),
+          next:    list.filter(c => c.status === 'next'),
+          later:   list.filter(c => c.status === 'later'),
+        },
+        lens: state.lens?.items ?? [],
+        contact: state.contact,
+      });
+    }
+    cmds.whoami([], {});
     print('<br><span class="term-dim">─── shipped ───</span>');
-    cmds.projects(['--status=shipped']);
+    cmds.projects([], { status: 'shipped' });
     print('<br><span class="term-dim">─── now ───</span>');
-    cmds.projects(['--status=now']);
+    cmds.projects([], { status: 'now' });
     print('<br><span class="term-dim">─── next ───</span>');
-    cmds.projects(['--status=next']);
+    cmds.projects([], { status: 'next' });
     print('<br><span class="term-dim">─── lens ───</span>');
-    cmds.lens();
+    cmds.lens([], {});
     print('<br><span class="term-dim">─── contact ───</span>');
-    cmds.contact();
+    cmds.contact([], {});
   };
 
   cmds.clear = () => {
     body.querySelectorAll('.terminal-line').forEach(n => {
       if (n !== promptLine) n.remove();
     });
+  };
+
+  /* ── Tab completion ────────────────────────────────────────────── */
+  const completeOnTab = () => {
+    const cur = input.value;
+    // Only complete the first token (command name) for v1.
+    if (cur.includes(' ')) return;
+    const cmdNames = Object.keys(cmds).sort();
+    const matches = cmdNames.filter(n => n.startsWith(cur.toLowerCase()));
+    if (matches.length === 0) return;
+    if (matches.length === 1) {
+      input.value = matches[0] + ' ';
+      return;
+    }
+    // Multiple matches — show them like double-Tab in bash, keep input
+    print(`<span class="term-dim">${matches.join('  ')}</span>`);
   };
 
   /* ── Input handling ────────────────────────────────────────────── */
@@ -213,14 +390,16 @@
     printCmd(trimmed);
     history.push(trimmed);
     historyIdx = -1;
+    saveHistory();
 
-    const [name, ...args] = trimmed.split(/\s+/);
+    const [name, ...rest] = trimmed.split(/\s+/);
     const fn = cmds[name.toLowerCase()];
     if (!fn) {
       print(`<span class="term-err">command not found:</span> ${escape(name)} <span class="term-dim">— try \`help\`</span>`);
       return;
     }
-    try { fn(args); }
+    const { args, opts } = parseFlags(rest);
+    try { fn(args, opts); }
     catch (e) { print(`<span class="term-err">error:</span> ${escape(e.message)}`); }
   };
 
@@ -229,6 +408,11 @@
       exec(input.value);
       input.value = '';
       ev.preventDefault();
+      return;
+    }
+    if (ev.key === 'Tab') {
+      ev.preventDefault();
+      completeOnTab();
       return;
     }
     if (ev.key === 'ArrowUp') {
@@ -250,7 +434,7 @@
       ev.preventDefault();
       return;
     }
-    if (ev.key === 'l' && (ev.ctrlKey || ev.metaKey)) {
+    if (ev.key.toLowerCase() === 'l' && (ev.ctrlKey || ev.metaKey)) {
       cmds.clear();
       ev.preventDefault();
     }
@@ -260,7 +444,31 @@
   body.addEventListener('click', () => input.focus());
   clearBtn?.addEventListener('click', () => { cmds.clear(); input.focus(); });
 
+  /* ── ⌘K / Ctrl+K — global jump-to-terminal shortcut ────────────── */
+  // Also used by the "for agents" hero CTA: any anchor pointing at
+  // #terminal triggers the same focus behavior on click.
+  const focusTerminal = () => {
+    const section = document.getElementById('terminal');
+    if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Wait a tick for scroll, then focus input
+    setTimeout(() => input.focus({ preventScroll: true }), 350);
+  };
+
+  window.addEventListener('keydown', (ev) => {
+    if ((ev.metaKey || ev.ctrlKey) && ev.key.toLowerCase() === 'k') {
+      ev.preventDefault();
+      focusTerminal();
+    }
+  });
+
+  // Hook any link pointing to #terminal — including the "for agents" CTA.
+  document.addEventListener('click', (ev) => {
+    const a = ev.target.closest('a[href="#terminal"]');
+    if (a) focusTerminal();
+  });
+
   /* ── Boot ──────────────────────────────────────────────────────── */
+  loadHistory();
   (async () => {
     try {
       const [profile, board, lens, contact] = await Promise.all([
@@ -271,11 +479,10 @@
       ]);
       Object.assign(state, { profile, board, lens, contact });
 
-      // Welcome line — short, agent-friendly
       print(
         [
           `<span class="term-dim">${escape(state.profile.name ?? '')} ${escape(state.profile.nameAccent ?? '')} · agent surface · ${new Date().toISOString().slice(0, 10)}</span>`,
-          `<span class="term-dim">type</span> <span class="term-key">help</span><span class="term-dim"> for commands · </span><span class="term-key">cv</span><span class="term-dim"> for the full picture</span>`,
+          `<span class="term-dim">type</span> <span class="term-key">help</span><span class="term-dim"> for commands · </span><span class="term-key">cv</span><span class="term-dim"> for the full picture · </span><span class="term-key">⌘K</span><span class="term-dim"> from anywhere</span>`,
         ].join('<br>')
       );
     } catch (e) {

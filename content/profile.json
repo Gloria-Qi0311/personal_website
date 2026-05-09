@@ -29,6 +29,12 @@
       "label": "let's talk",
       "anchor": "#contact",
       "note": "open to founder convos & contracts"
+    },
+    {
+      "audience": "for agents",
+      "label": "use the CLI · ⌘K",
+      "anchor": "#terminal",
+      "note": "/llms.txt also available"
     }
   ]
 }
