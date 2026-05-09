@@ -1,0 +1,22 @@
+# Antares Yuan — AI PM
+
+> AI Product Manager. A living roadmap of what I've shipped, what I'm building, and where I'm going.
+
+I build AI products by treating myself like one — versioned, measured, always shipping.
+
+## Identity
+- Name: Antares Yuan
+- Role: AI Product Manager
+- Location: Seattle|Beijing · open to remote
+- Status: Building in public
+- Tags: AI PM, Agent Native, 0→1, Architecture background
+
+## Sections
+- [Roadmap board](/#shipped): four-column kanban — shipped, now, next, later
+- [Agent terminal](/#terminal): interactive CLI — same data as the board
+- [Lens](/#lens): how I think
+- [Contact](/#contact): how to reach me
+- [Full content](/llms-full.txt): every card + lens entry + contact, plain text
+
+## Edit
+This site is content-managed via Decap CMS at /admin/. Source: github.com/AntaresYuan/personal_website

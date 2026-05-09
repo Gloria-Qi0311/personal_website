@@ -427,6 +427,12 @@
     };
     window.addEventListener('hashchange', handleHash);
     setTimeout(handleHash, 0);
+
+    // Cross-surface: terminal can request a card open via custom event
+    document.addEventListener('agent:open-card', (ev) => {
+      const id = ev.detail?.id;
+      if (id) openCardModal(id);
+    });
   };
 
   /* ── Boot ───────────────────────────────────────────────────────── */
