@@ -75,26 +75,62 @@
     {
       "id": "next-1",
       "status": "next",
-      "title": "[Next 3-6 months]",
-      "summary": "A bet you're committing to next. Be ambitious but believable.",
+      "title": "From PM to Builder",
+      "summary": "Stop briefing engineers — become one. Use solo builder loops to solve real business problems end-to-end, not just spec them.",
       "details": "",
-      "tags": ["plan"],
+      "tags": ["Career Pivot", "AI Builder", "0→1"],
       "impact": "",
       "links": [],
       "updated": "2026-05-09",
       "order": 1
     },
     {
+      "id": "next-2",
+      "status": "next",
+      "title": "Make AI worth looking at",
+      "summary": "Most AI products inherit the model's flat default aesthetic. Explore distillation + skill composition to ship AI that's well-crafted, not just functional.",
+      "details": "",
+      "tags": ["AI Aesthetic", "Distillation", "Skills", "Craft"],
+      "impact": "",
+      "links": [],
+      "updated": "2026-05-09",
+      "order": 2
+    },
+    {
+      "id": "next-3",
+      "status": "next",
+      "title": "Close the product loop",
+      "summary": "Build operations + data analytics fluency so I own the full product lifecycle — not just the design-and-ship slice.",
+      "details": "",
+      "tags": ["Product Ops", "Data Analysis", "Full-stack PM"],
+      "impact": "",
+      "links": [],
+      "updated": "2026-05-09",
+      "order": 3
+    },
+    {
       "id": "later-1",
       "status": "later",
-      "title": "[The ambition]",
-      "summary": "The 1-3 year version of you. This is what makes founders want to talk.",
+      "title": "AI for people, not just AI people",
+      "summary": "The 1-3 year version of me: shipped AI products that ordinary people — not the early-adopter or AI-insider crowd — use daily to make their lives meaningfully better.",
       "details": "",
-      "tags": ["vision"],
+      "tags": ["Mission", "Mass-impact AI", "Real-world AI"],
       "impact": "",
       "links": [],
       "updated": "2026-05-09",
       "order": 1
+    },
+    {
+      "id": "later-2",
+      "status": "later",
+      "title": "Human-centered, agent-aware",
+      "summary": "Human-centered design stays the foundation. But in the agent era, AI is also a user — and most products still ignore that. The 1-3 year version of me: deep enough AI fluency to design for both humans and the agents acting on their behalf, so the AI actually helps.",
+      "details": "",
+      "tags": ["Human-centered Design", "Agent-friendly", "HCI × AI", "Pi-shaped"],
+      "impact": "",
+      "links": [],
+      "updated": "2026-05-09",
+      "order": 2
     }
   ]
 }

@@ -139,7 +139,7 @@
         </div>
       </div>
       <div class="board-toolbar-right">
-        <span class="board-stat"><strong id="board-total-count">8</strong> cards</span>
+        <span class="board-stat"><strong id="board-total-count">11</strong> cards</span>
         <span class="board-stat sep">·</span>
         <span class="board-stat" id="board-shipped-count">3 shipped</span>
         <kbd class="kbd-hint" aria-hidden="true">⌘K</kbd>
@@ -147,7 +147,7 @@
     </div>
 
     <!-- filter chips (click to filter by tag) -->
-    <div class="board-filters" id="board-filters" role="group" aria-label="Filter by tag"><button class="filter-chip is-active" type="button" data-filter="all" aria-pressed="true">All</button><button class="filter-chip" type="button" data-filter="side project" aria-pressed="false">SIDE PROJECT</button><button class="filter-chip" type="button" data-filter="ai pm" aria-pressed="false">AI PM</button><button class="filter-chip" type="button" data-filter="website" aria-pressed="false">Website</button><button class="filter-chip" type="button" data-filter="productivity" aria-pressed="false">Productivity</button><button class="filter-chip" type="button" data-filter="0→1" aria-pressed="false">0→1</button><button class="filter-chip" type="button" data-filter="explainable ai" aria-pressed="false">Explainable AI</button></div>
+    <div class="board-filters" id="board-filters" role="group" aria-label="Filter by tag"><button class="filter-chip is-active" type="button" data-filter="all" aria-pressed="true">All</button><button class="filter-chip" type="button" data-filter="side project" aria-pressed="false">SIDE PROJECT</button><button class="filter-chip" type="button" data-filter="ai pm" aria-pressed="false">AI PM</button><button class="filter-chip" type="button" data-filter="0→1" aria-pressed="false">0→1</button><button class="filter-chip" type="button" data-filter="website" aria-pressed="false">Website</button><button class="filter-chip" type="button" data-filter="productivity" aria-pressed="false">Productivity</button><button class="filter-chip" type="button" data-filter="ai builder" aria-pressed="false">AI Builder</button></div>
 
     <!-- columns -->
     <div class="board" id="board">
@@ -272,17 +272,51 @@
       <article class="column col-next" id="col-next" aria-labelledby="col-next-title">
         <header class="col-head">
           <h3 class="col-title" id="col-next-title"><span class="col-dot"></span>Next</h3>
-          <span class="col-count" data-count="next">1</span>
+          <span class="col-count" data-count="next">3</span>
         </header>
         <div class="col-cards" data-cards="next">
-            <button type="button" class="card" data-id="next-1" data-card-id="NEXT-01" data-tags="plan" aria-label="Open details for [Next 3-6 months]">
+            <button type="button" class="card" data-id="next-1" data-card-id="NEXT-01" data-tags="career pivot|ai builder|0→1" aria-label="Open details for From PM to Builder">
               <div class="card-meta-top">
                 <span class="card-id">NEXT-01</span>
                 <span class="card-handle" aria-hidden="true">⋮⋮</span>
               </div>
-              <div class="card-title">[Next 3-6 months]</div>
-              <div class="card-summary">A bet you&#39;re committing to next. Be ambitious but believable.</div>
-              <div class="card-tags"><span class="tag">plan</span></div>
+              <div class="card-title">From PM to Builder</div>
+              <div class="card-summary">Stop briefing engineers — become one. Use solo builder loops to solve real business problems end-to-end, not just spec them.</div>
+              <div class="card-tags"><span class="tag">Career Pivot</span><span class="tag tag-blue">AI Builder</span><span class="tag">0→1</span></div>
+              <div class="card-footer">
+                <span class="card-footer-left">
+                  <span>2026-05-09</span>
+                  <span class="card-comments">0</span>
+                </span>
+                
+              </div>
+              
+            </button>
+            <button type="button" class="card" data-id="next-2" data-card-id="NEXT-02" data-tags="ai aesthetic|distillation|skills|craft" aria-label="Open details for Make AI worth looking at">
+              <div class="card-meta-top">
+                <span class="card-id">NEXT-02</span>
+                <span class="card-handle" aria-hidden="true">⋮⋮</span>
+              </div>
+              <div class="card-title">Make AI worth looking at</div>
+              <div class="card-summary">Most AI products inherit the model&#39;s flat default aesthetic. Explore distillation + skill composition to ship AI that&#39;s well-crafted, not just functional.</div>
+              <div class="card-tags"><span class="tag">AI Aesthetic</span><span class="tag tag-blue">Distillation</span><span class="tag">Skills</span><span class="tag tag-blue">Craft</span></div>
+              <div class="card-footer">
+                <span class="card-footer-left">
+                  <span>2026-05-09</span>
+                  <span class="card-comments">0</span>
+                </span>
+                
+              </div>
+              
+            </button>
+            <button type="button" class="card" data-id="next-3" data-card-id="NEXT-03" data-tags="product ops|data analysis|full-stack pm" aria-label="Open details for Close the product loop">
+              <div class="card-meta-top">
+                <span class="card-id">NEXT-03</span>
+                <span class="card-handle" aria-hidden="true">⋮⋮</span>
+              </div>
+              <div class="card-title">Close the product loop</div>
+              <div class="card-summary">Build operations + data analytics fluency so I own the full product lifecycle — not just the design-and-ship slice.</div>
+              <div class="card-tags"><span class="tag">Product Ops</span><span class="tag tag-blue">Data Analysis</span><span class="tag">Full-stack PM</span></div>
               <div class="card-footer">
                 <span class="card-footer-left">
                   <span>2026-05-09</span>
@@ -297,17 +331,34 @@
       <article class="column col-later" id="col-later" aria-labelledby="col-later-title">
         <header class="col-head">
           <h3 class="col-title" id="col-later-title"><span class="col-dot"></span>Later</h3>
-          <span class="col-count" data-count="later">1</span>
+          <span class="col-count" data-count="later">2</span>
         </header>
         <div class="col-cards" data-cards="later">
-            <button type="button" class="card" data-id="later-1" data-card-id="LATER-01" data-tags="vision" aria-label="Open details for [The ambition]">
+            <button type="button" class="card" data-id="later-1" data-card-id="LATER-01" data-tags="mission|mass-impact ai|real-world ai" aria-label="Open details for AI for people, not just AI people">
               <div class="card-meta-top">
                 <span class="card-id">LATER-01</span>
                 <span class="card-handle" aria-hidden="true">⋮⋮</span>
               </div>
-              <div class="card-title">[The ambition]</div>
-              <div class="card-summary">The 1-3 year version of you. This is what makes founders want to talk.</div>
-              <div class="card-tags"><span class="tag">vision</span></div>
+              <div class="card-title">AI for people, not just AI people</div>
+              <div class="card-summary">The 1-3 year version of me: shipped AI products that ordinary people — not the early-adopter or AI-insider crowd — use daily to make their lives meaningfully better.</div>
+              <div class="card-tags"><span class="tag">Mission</span><span class="tag tag-blue">Mass-impact AI</span><span class="tag">Real-world AI</span></div>
+              <div class="card-footer">
+                <span class="card-footer-left">
+                  <span>2026-05-09</span>
+                  <span class="card-comments">0</span>
+                </span>
+                
+              </div>
+              
+            </button>
+            <button type="button" class="card" data-id="later-2" data-card-id="LATER-02" data-tags="human-centered design|agent-friendly|hci × ai|pi-shaped" aria-label="Open details for Human-centered, agent-aware">
+              <div class="card-meta-top">
+                <span class="card-id">LATER-02</span>
+                <span class="card-handle" aria-hidden="true">⋮⋮</span>
+              </div>
+              <div class="card-title">Human-centered, agent-aware</div>
+              <div class="card-summary">Human-centered design stays the foundation. But in the agent era, AI is also a user — and most products still ignore that. The 1-3 year version of me: deep enough AI fluency to design for both humans and the agents acting on their behalf, so the AI actually helps.</div>
+              <div class="card-tags"><span class="tag">Human-centered Design</span><span class="tag tag-blue">Agent-friendly</span><span class="tag">HCI × AI</span><span class="tag tag-blue">Pi-shaped</span></div>
               <div class="card-footer">
                 <span class="card-footer-left">
                   <span>2026-05-09</span>

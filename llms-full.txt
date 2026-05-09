@@ -75,15 +75,30 @@ Tags: SIDE PROJECT, Job Application, Chrome Extension
 Updated: 2026-05-09
 # Next
 
-## NEXT-01 · NEXT · [Next 3-6 months]
-A bet you're committing to next. Be ambitious but believable.
-Tags: plan
+## NEXT-01 · NEXT · From PM to Builder
+Stop briefing engineers — become one. Use solo builder loops to solve real business problems end-to-end, not just spec them.
+Tags: Career Pivot, AI Builder, 0→1
+Updated: 2026-05-09
+
+## NEXT-02 · NEXT · Make AI worth looking at
+Most AI products inherit the model's flat default aesthetic. Explore distillation + skill composition to ship AI that's well-crafted, not just functional.
+Tags: AI Aesthetic, Distillation, Skills, Craft
+Updated: 2026-05-09
+
+## NEXT-03 · NEXT · Close the product loop
+Build operations + data analytics fluency so I own the full product lifecycle — not just the design-and-ship slice.
+Tags: Product Ops, Data Analysis, Full-stack PM
 Updated: 2026-05-09
 # Later
 
-## LATER-01 · LATER · [The ambition]
-The 1-3 year version of you. This is what makes founders want to talk.
-Tags: vision
+## LATER-01 · LATER · AI for people, not just AI people
+The 1-3 year version of me: shipped AI products that ordinary people — not the early-adopter or AI-insider crowd — use daily to make their lives meaningfully better.
+Tags: Mission, Mass-impact AI, Real-world AI
+Updated: 2026-05-09
+
+## LATER-02 · LATER · Human-centered, agent-aware
+Human-centered design stays the foundation. But in the agent era, AI is also a user — and most products still ignore that. The 1-3 year version of me: deep enough AI fluency to design for both humans and the agents acting on their behalf, so the AI actually helps.
+Tags: Human-centered Design, Agent-friendly, HCI × AI, Pi-shaped
 Updated: 2026-05-09
 
 # Lens — how I think
