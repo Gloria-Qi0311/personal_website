@@ -6,6 +6,11 @@
   "status": "shipping in public",
   "slogan": "I build AI products by treating myself like one — versioned, measured, always shipping.",
   "tags": ["AI PM", "Agent Native", "0→1", "Architecture background"],
+  "avatar": {
+    "calm":    "media/avatar-calm.png",
+    "talking": "media/avatar-talking.png",
+    "alt":     "Esther — illustrated portrait"
+  },
   "ctas": [
     {
       "audience": "for HR",

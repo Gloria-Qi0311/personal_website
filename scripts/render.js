@@ -42,6 +42,26 @@
   };
 
   const renderHero = (profile) => {
+    // Avatar — calm by default; talking on hover/focus/tap.
+    if (profile.avatar) {
+      const calm    = $('#avatar-calm');
+      const talking = $('#avatar-talking');
+      if (calm)    { calm.src = profile.avatar.calm    ?? ''; calm.alt = profile.avatar.alt ?? ''; }
+      if (talking) { talking.src = profile.avatar.talking ?? ''; }
+      const wrap = $('#hero-avatar');
+      if (wrap) {
+        // Tap toggle for touch devices (hover doesn't fire there).
+        wrap.addEventListener('click', () => {
+          wrap.classList.toggle('is-talking');
+          // Auto-revert after a beat so it doesn't stick if forgotten
+          clearTimeout(wrap._revertTimer);
+          if (wrap.classList.contains('is-talking')) {
+            wrap._revertTimer = setTimeout(() => wrap.classList.remove('is-talking'), 1800);
+          }
+        });
+      }
+    }
+
     const accent = profile.nameAccent
       ? ` <em>${escape(profile.nameAccent)}</em>`
       : '';
