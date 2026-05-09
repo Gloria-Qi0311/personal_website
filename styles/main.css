@@ -113,6 +113,12 @@
 /* ════════════════════════════════════════════════════════════════════════
    BASE
    ════════════════════════════════════════════════════════════════════════ */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--sp-24);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 html, body {
   background: var(--color-bg);
   color: var(--color-text);
@@ -121,6 +127,7 @@ html, body {
   line-height: var(--lh-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 a { color: inherit; text-decoration: none; }
@@ -270,6 +277,7 @@ button:focus-visible,
   line-height: var(--lh-tight);
   letter-spacing: var(--tracking-tight);
   margin-bottom: var(--sp-20);
+  text-wrap: balance;
 }
 .hero-name em {
   font-style: italic;
@@ -296,6 +304,7 @@ button:focus-visible,
   font-family: var(--font-mono);
   font-size: var(--fs-12);
   color: var(--color-text-dim);
+  overflow-wrap: anywhere;
 }
 .hero-meta .pill {
   display: inline-flex;
@@ -1355,6 +1364,9 @@ body.modal-open { overflow: hidden; }
   /* Make view tabs scrollable if cramped */
   .board-views { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .filter-chip { font-size: var(--fs-10); }
+  /* Bigger tap targets on touch widths */
+  .filter-chip { padding: var(--sp-6) var(--sp-12); min-height: 30px; }
+  .view-tab    { padding: var(--sp-6) var(--sp-12); min-height: 32px; }
 }
 
 @media (max-width: 640px) {
@@ -1371,12 +1383,33 @@ body.modal-open { overflow: hidden; }
   .column { min-height: auto; }
   .contact { grid-template-columns: 1fr; gap: var(--sp-20); }
   .hero-ctas { flex-direction: column; }
-  .hero-ctas .cta { flex: 1 1 auto; }
+  .hero-ctas .cta { flex: 1 1 auto; padding: var(--sp-14) var(--sp-16); }
   .board-toolbar { padding: var(--sp-10) var(--sp-12); }
   .board-toolbar-right { font-size: var(--fs-11); }
   /* On narrow screens always show drag handle since hover doesn't fire */
   .card-handle { opacity: 0.5; }
   .site-footer { flex-direction: column; gap: var(--sp-8); align-items: flex-start; }
+}
+
+/* Very small phones (≤ 380px: iPhone SE, older Androids) */
+@media (max-width: 380px) {
+  .page { padding: var(--sp-20) var(--sp-12) var(--sp-48); }
+  .hero-left { flex-direction: column; gap: var(--sp-12); }
+  .hero-avatar, .avatar-img { width: 64px; height: 64px; }
+  .hero-meta { gap: var(--sp-8); font-size: var(--fs-11); }
+  .hero-meta .sep { display: none; }
+}
+
+/* Touch devices: kill transform-on-hover effects that get "stuck" after tap.
+   `hover: none` matches phones/tablets that have no fine pointer. */
+@media (hover: none) {
+  .cta:hover,
+  .card:hover,
+  .lens-card:hover,
+  .agents-card:hover,
+  .hero-avatar:hover { transform: none; box-shadow: none; }
+  .cta:hover, .agents-card:hover { border-color: var(--color-line); }
+  .lens-card:hover { border-color: var(--color-line-soft); }
 }
 
 /* ════════════════════════════════════════════════════════════════════════
