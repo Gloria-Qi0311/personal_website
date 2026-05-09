@@ -189,7 +189,7 @@
        On <768px viewports the panel becomes a full-screen sheet.
   ──────────────────────────────────────────────────────────────────── -->
   <div class="modal-backdrop" id="modal-backdrop" hidden></div>
-  <dialog class="card-modal" id="card-modal" aria-labelledby="modal-title">
+  <div class="card-modal" id="card-modal" role="dialog" aria-modal="false" aria-labelledby="modal-title" aria-hidden="true">
     <header class="panel-header">
       <div class="panel-nav-group">
         <button type="button" class="panel-nav" id="panel-prev" aria-label="Previous card (↑)" title="↑ prev">
@@ -217,7 +217,7 @@
       </div>
       <div class="modal-links" id="modal-links"></div>
     </div>
-  </dialog>
+  </div>
 
   <!-- ── FOOTER ──────────────────────────────────────────────────── -->
   <footer class="site-footer">

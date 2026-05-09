@@ -742,12 +742,15 @@ button:focus-visible,
   transition: transform var(--dur-base) var(--ease-out);
   display: flex;
   flex-direction: column;
+  /* When closed: stays in DOM, visually offscreen, doesn't catch clicks. */
+  pointer-events: none;
+  visibility: hidden;
 }
-.card-modal[open] {
-  display: flex;
+.card-modal.is-open {
   transform: translateX(0);
+  pointer-events: auto;
+  visibility: visible;
 }
-.card-modal::backdrop { background: transparent; }
 
 /* ── Panel header: prev/next + close ───────────────────────────────── */
 .panel-header {

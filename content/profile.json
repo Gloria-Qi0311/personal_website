@@ -1,15 +1,15 @@
 {
-  "name": "Esther",
+  "name": "Antares",
   "nameAccent": "Yuan",
   "role": "AI Product Manager",
-  "location": "Shanghai · open to remote",
-  "status": "shipping in public",
+  "location": "Seattle|Beijing · open to remote",
+  "status": "Building in public",
   "slogan": "I build AI products by treating myself like one — versioned, measured, always shipping.",
   "tags": ["AI PM", "Agent Native", "0→1", "Architecture background"],
   "avatar": {
     "calm":    "media/avatar-calm.png",
     "talking": "media/avatar-talking.png",
-    "alt":     "Esther — illustrated portrait"
+    "alt":     "Antares — illustrated portrait"
   },
   "ctas": [
     {

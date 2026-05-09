@@ -355,12 +355,13 @@
 
     if (!document.body.classList.contains('modal-open')) {
       backdrop.hidden = false;
-      // Force reflow so the transition fires from translateX(100%)
-      void backdrop.offsetHeight;
+      // Force reflow so the slide-in transition fires from translateX(100%)
+      void modal.offsetWidth;
       backdrop.classList.add('is-open');
-      modal.setAttribute('open', '');
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
       document.body.classList.add('modal-open');
-      // Move focus to close on first open; keep focus on nav buttons during navigation
+      // Move focus to close on first open; navigation keeps focus naturally
       $('#modal-close')?.focus();
     }
 
@@ -374,7 +375,8 @@
     const modal    = $('#card-modal');
     const backdrop = $('#modal-backdrop');
     if (!modal || !backdrop) return;
-    modal.removeAttribute('open');
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
     backdrop.classList.remove('is-open');
     document.body.classList.remove('modal-open');
     currentCardId = null;
