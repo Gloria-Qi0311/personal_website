@@ -18,17 +18,35 @@ A living **PM-style dashboard** of what I've shipped, what I'm building, and whe
 │   ├── lens.json           ← short-form principles
 │   └── contact.json        ← email + socials + "open to" line
 ├── scripts/
-│   ├── render.js           ← dashboard rendering
-│   ├── terminal.js         ← embedded Agent Terminal
-│   └── build-llms.js       ← regen /llms.txt + /llms-full.txt from JSON
-├── llms.txt                ← agent-readable summary (regenerate after edits)
+│   ├── render.js           ← runtime: hydrates the page for interactive use
+│   ├── terminal.js         ← runtime: embedded Agent Terminal
+│   ├── build-html.js       ← build:   pre-renders content into index.html
+│   ├── build-llms.js       ← build:   regen /llms.txt + /llms-full.txt
+│   └── build.js            ← build:   runs both of the above
+├── llms.txt                ← agent-readable summary (committed, regenerate after edits)
 ├── llms-full.txt           ← full content dump (same)
 └── admin/
     ├── index.html          ← Decap CMS bootstrap
     └── config.yml          ← collection schemas (mirror /content)
 ```
 
-After editing any file under `content/`, run `node scripts/build-llms.js` to regenerate the agent-readable text files.
+After editing any file under `content/` (or via `/admin/`), run:
+
+```bash
+node scripts/build.js
+```
+
+This rewrites `index.html` with content baked into the HTML (so agents and JS-disabled readers see it) and regenerates `llms.txt` + `llms-full.txt`. Commit the result.
+
+## How agent-friendly is this?
+
+The site exposes three machine-readable surfaces backed by the same JSON:
+
+- **`/llms.txt`** — short summary per [llmstxt.org](https://llmstxt.org)
+- **`/llms-full.txt`** — full content dump in plain text
+- **`/content/*.json`** — typed structured data
+
+Plus: cards have stable IDs (`SHIP-01`, `NOW-01`, …) so agents can cite them across conversations, and the home HTML is **pre-rendered** — agents that don't execute JavaScript still see all content.
 
 ## Local preview
 

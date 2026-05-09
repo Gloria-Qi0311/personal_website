@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html data-prerendered="true" lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Esther Yuan — AI PM</title>
-<meta name="description" content="A living roadmap of what I've shipped, what I'm building, and where I'm going.">
+<title>Antares Yuan — AI PM</title>
+<meta name="description" content="AI Product Manager. A living roadmap of what I&#39;ve shipped, what I&#39;m building, and where I&#39;m going.">
 
 <!-- ── Theme + favicon ───────────────────────────────────────────── -->
 <meta name="theme-color" content="#FAF7F0" media="(prefers-color-scheme: light)">
@@ -16,12 +16,12 @@
 
 <!-- ── Open Graph / Twitter ──────────────────────────────────────── -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="Esther Yuan — AI PM">
-<meta property="og:description" content="A living roadmap of what I've shipped, what I'm building, and where I'm going.">
+<meta property="og:title" content="Antares Yuan — AI PM">
+<meta property="og:description" content="AI Product Manager. A living roadmap of what I&#39;ve shipped, what I&#39;m building, and where I&#39;m going.">
 <meta property="og:image" content="og-image.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Esther Yuan — AI PM">
-<meta name="twitter:description" content="A living roadmap of what I've shipped, what I'm building, and where I'm going.">
+<meta name="twitter:title" content="Antares Yuan — AI PM">
+<meta name="twitter:description" content="AI Product Manager. A living roadmap of what I&#39;ve shipped, what I&#39;m building, and where I&#39;m going.">
 <meta name="twitter:image" content="og-image.png">
 
 <link rel="stylesheet" href="styles/main.css">
@@ -34,8 +34,8 @@
 
   <!-- ── TOP NAV ─────────────────────────────────────────────────── -->
   <nav class="topnav rise">
-    <div class="brand"><span class="dot"></span><span id="brand-name"></span></div>
-    <div class="meta" id="last-updated"></div>
+    <div class="brand"><span class="dot"></span><span id="brand-name">Antares Yuan</span></div>
+    <div class="meta" id="last-updated">updated 2026-05-09</div>
   </nav>
 
   <!-- ── HERO ────────────────────────────────────────────────────── -->
@@ -45,16 +45,44 @@
            Calm by default; swaps to talking on hover/focus/tap. -->
       <button type="button" class="hero-avatar" id="hero-avatar"
               aria-label="Avatar — tap or hover to see me say hi">
-        <img class="avatar-img avatar-calm"    id="avatar-calm"    alt="">
-        <img class="avatar-img avatar-talking" id="avatar-talking" alt="" aria-hidden="true">
+        <img class="avatar-img avatar-calm"    id="avatar-calm"    alt="Antares — illustrated portrait" src="media/avatar-calm.png">
+        <img class="avatar-img avatar-talking" id="avatar-talking" alt="" aria-hidden="true" src="media/avatar-talking.png">
       </button>
       <div class="hero-text">
-        <h1 class="hero-name" id="hero-name"></h1>
-        <p class="hero-slogan" id="hero-slogan"></p>
-        <div class="hero-meta" id="hero-meta"></div>
+        <h1 class="hero-name" id="hero-name">Antares <em>Yuan</em></h1>
+        <p class="hero-slogan" id="hero-slogan">I build AI products by treating myself like one — versioned, measured, always shipping.</p>
+        <div class="hero-meta" id="hero-meta"><span>AI Product Manager</span><span class="sep">·</span><span>Seattle|Beijing · open to remote</span><span class="sep">·</span><span class="now-pill"><span class="pulse"></span>Building in public</span><span class="pill">AI PM</span><span class="pill">Agent Native</span><span class="pill">0→1</span><span class="pill">Architecture background</span></div>
       </div>
     </div>
-    <div class="hero-ctas" id="hero-ctas"></div>
+    <div class="hero-ctas" id="hero-ctas">
+        <a class="cta" href="#shipped">
+          <div>
+            <div class="cta-label">for HR</div>
+            <div class="cta-text">30-second snapshot</div>
+          </div>
+          <span class="cta-arrow">→</span>
+        </a>
+        <a class="cta" href="#now">
+          <div>
+            <div class="cta-label">for founders</div>
+            <div class="cta-text">what I&#39;m building next</div>
+          </div>
+          <span class="cta-arrow">→</span>
+        </a>
+        <a class="cta" href="#contact">
+          <div>
+            <div class="cta-label">for collaborators</div>
+            <div class="cta-text">let&#39;s talk</div>
+          </div>
+          <span class="cta-arrow">→</span>
+        </a>
+        <a class="cta" href="#terminal">
+          <div>
+            <div class="cta-label">for agents</div>
+            <div class="cta-text">use the CLI · ⌘K</div>
+          </div>
+          <span class="cta-arrow">→</span>
+        </a></div>
   </header>
 
   <!-- ── BOARD ───────────────────────────────────────────────────── -->
@@ -74,51 +102,133 @@
         </div>
       </div>
       <div class="board-toolbar-right">
-        <span class="board-stat"><strong id="board-total-count">0</strong> cards</span>
+        <span class="board-stat"><strong id="board-total-count">5</strong> cards</span>
         <span class="board-stat sep">·</span>
-        <span class="board-stat" id="board-shipped-count">0 shipped</span>
+        <span class="board-stat" id="board-shipped-count">2 shipped</span>
         <kbd class="kbd-hint" aria-hidden="true">⌘K</kbd>
       </div>
     </div>
 
     <!-- filter chips (click to filter by tag) -->
-    <div class="board-filters" id="board-filters" role="group" aria-label="Filter by tag">
-      <button class="filter-chip is-active" type="button" data-filter="all">All</button>
-      <!-- tag chips injected by render.js -->
-    </div>
+    <div class="board-filters" id="board-filters" role="group" aria-label="Filter by tag"><button class="filter-chip is-active" type="button" data-filter="all" aria-pressed="true">All</button><button class="filter-chip" type="button" data-filter="side project" aria-pressed="false">SIDE PROJECT</button><button class="filter-chip" type="button" data-filter="ai pm" aria-pressed="false">AI PM</button><button class="filter-chip" type="button" data-filter="0→1" aria-pressed="false">0→1</button><button class="filter-chip" type="button" data-filter="agents" aria-pressed="false">agents</button><button class="filter-chip" type="button" data-filter="tool-use" aria-pressed="false">tool-use</button><button class="filter-chip" type="button" data-filter="focus" aria-pressed="false">focus</button></div>
 
     <!-- columns -->
     <div class="board" id="board">
       <article class="column col-shipped" id="col-shipped" aria-labelledby="col-shipped-title">
         <header class="col-head">
           <h3 class="col-title" id="col-shipped-title"><span class="col-dot"></span>Shipped</h3>
-          <span class="col-count" data-count="shipped">0</span>
+          <span class="col-count" data-count="shipped">2</span>
         </header>
-        <div class="col-cards" data-cards="shipped"></div>
+        <div class="col-cards" data-cards="shipped">
+            <button type="button" class="card" data-id="shipped-1" data-card-id="SHIP-01" data-tags="side project|ai pm|0→1" aria-label="Open details for Worth Fly">
+              <div class="card-meta-top">
+                <span class="card-id">SHIP-01</span>
+                <span class="card-handle" aria-hidden="true">⋮⋮</span>
+              </div>
+              <div class="card-title">Worth Fly</div>
+              <div class="card-summary">One-line problem → outcome. Be specific. Real metrics beat adjectives.</div>
+              <div class="card-tags"><span class="tag">SIDE PROJECT</span><span class="tag tag-blue">AI PM</span><span class="tag">0→1</span></div>
+              <div class="card-footer">
+                <span class="card-footer-left">
+                  <span>2026-04-10</span>
+                  <span class="card-comments">0</span>
+                </span>
+                <span class="card-impact">Null</span>
+              </div>
+              <div class="card-links"><a href="https://worthfly.vercel.app" target="_blank" rel="noopener">Demo ↗</a><a href="https://github.com/AntaresYuan/Worthfly" target="_blank" rel="noopener">GitHub ↗</a></div>
+            </button>
+            <button type="button" class="card" data-id="placeholder-shipped-2" data-card-id="SHIP-02" data-tags="agents|tool-use" aria-label="Open details for [Project 2]">
+              <div class="card-meta-top">
+                <span class="card-id">SHIP-02</span>
+                <span class="card-handle" aria-hidden="true">⋮⋮</span>
+              </div>
+              <div class="card-title">[Project 2]</div>
+              <div class="card-summary">Replace this card. Add 4-5 real shipped projects.</div>
+              <div class="card-tags"><span class="tag">agents</span><span class="tag tag-blue">tool-use</span></div>
+              <div class="card-footer">
+                <span class="card-footer-left">
+                  <span>2026-03-10</span>
+                  <span class="card-comments">0</span>
+                </span>
+                <span class="card-impact">12 hrs/wk saved</span>
+              </div>
+              
+            </button></div>
       </article>
 
       <article class="column col-now" id="now" aria-labelledby="col-now-title">
         <header class="col-head">
           <h3 class="col-title" id="col-now-title"><span class="col-dot"></span>Now</h3>
-          <span class="col-count" data-count="now">0</span>
+          <span class="col-count" data-count="now">1</span>
         </header>
-        <div class="col-cards" data-cards="now"></div>
+        <div class="col-cards" data-cards="now">
+            <button type="button" class="card" data-id="placeholder-now-1" data-card-id="NOW-01" data-tags="focus" aria-label="Open details for [Current focus]">
+              <div class="card-meta-top">
+                <span class="card-id">NOW-01</span>
+                <span class="card-handle" aria-hidden="true">⋮⋮</span>
+              </div>
+              <div class="card-title">[Current focus]</div>
+              <div class="card-summary">What&#39;s getting your hours this week. Keep Now to 1-3 items.</div>
+              <div class="card-tags"><span class="tag">focus</span></div>
+              <div class="card-footer">
+                <span class="card-footer-left">
+                  <span>2026-05-09</span>
+                  <span class="card-comments">0</span>
+                </span>
+                
+              </div>
+              
+            </button></div>
       </article>
 
       <article class="column col-next" id="col-next" aria-labelledby="col-next-title">
         <header class="col-head">
           <h3 class="col-title" id="col-next-title"><span class="col-dot"></span>Next</h3>
-          <span class="col-count" data-count="next">0</span>
+          <span class="col-count" data-count="next">1</span>
         </header>
-        <div class="col-cards" data-cards="next"></div>
+        <div class="col-cards" data-cards="next">
+            <button type="button" class="card" data-id="placeholder-next-1" data-card-id="NEXT-01" data-tags="plan" aria-label="Open details for [Next 3-6 months]">
+              <div class="card-meta-top">
+                <span class="card-id">NEXT-01</span>
+                <span class="card-handle" aria-hidden="true">⋮⋮</span>
+              </div>
+              <div class="card-title">[Next 3-6 months]</div>
+              <div class="card-summary">A bet you&#39;re committing to next. Be ambitious but believable.</div>
+              <div class="card-tags"><span class="tag">plan</span></div>
+              <div class="card-footer">
+                <span class="card-footer-left">
+                  <span>2026-05-09</span>
+                  <span class="card-comments">0</span>
+                </span>
+                
+              </div>
+              
+            </button></div>
       </article>
 
       <article class="column col-later" id="col-later" aria-labelledby="col-later-title">
         <header class="col-head">
           <h3 class="col-title" id="col-later-title"><span class="col-dot"></span>Later</h3>
-          <span class="col-count" data-count="later">0</span>
+          <span class="col-count" data-count="later">1</span>
         </header>
-        <div class="col-cards" data-cards="later"></div>
+        <div class="col-cards" data-cards="later">
+            <button type="button" class="card" data-id="placeholder-later-1" data-card-id="LATER-01" data-tags="vision" aria-label="Open details for [The ambition]">
+              <div class="card-meta-top">
+                <span class="card-id">LATER-01</span>
+                <span class="card-handle" aria-hidden="true">⋮⋮</span>
+              </div>
+              <div class="card-title">[The ambition]</div>
+              <div class="card-summary">The 1-3 year version of you. This is what makes founders want to talk.</div>
+              <div class="card-tags"><span class="tag">vision</span></div>
+              <div class="card-footer">
+                <span class="card-footer-left">
+                  <span>2026-05-09</span>
+                  <span class="card-comments">0</span>
+                </span>
+                
+              </div>
+              
+            </button></div>
       </article>
     </div>
 
@@ -165,23 +275,88 @@
   <!-- ── LENS: how I think ───────────────────────────────────────── -->
   <section class="section rise rise-3" id="lens">
     <header class="sec-head">
-      <span class="sec-cmd" id="lens-cmd"></span>
-      <span class="sec-title" id="lens-title"></span>
-      <span class="sec-meta" id="lens-meta"></span>
+      <span class="sec-cmd" id="lens-cmd">$ grep -i</span>
+      <span class="sec-title" id="lens-title">how_i_think.md</span>
+      <span class="sec-meta" id="lens-meta">principles · updated occasionally</span>
     </header>
-    <div class="lens" id="lens-list"></div>
+    <div class="lens" id="lens-list">
+        <div class="lens-card">
+          <div class="lens-num">/ 01</div>
+          <div class="lens-text">Evals before features.<em>If you can&#39;t measure it, you&#39;re shipping vibes.</em></div>
+        </div>
+        <div class="lens-card">
+          <div class="lens-num">/ 02</div>
+          <div class="lens-text">The model is one input.<em>Latency, UX, and trust often matter more than benchmark deltas.</em></div>
+        </div>
+        <div class="lens-card">
+          <div class="lens-num">/ 03</div>
+          <div class="lens-text">Demos lie. Production tells the truth.<em>Watch the long tail.</em></div>
+        </div>
+        <div class="lens-card">
+          <div class="lens-num">/ 04</div>
+          <div class="lens-text">A great PM removes ambiguity. Models add it back.<em>The job is balance.</em></div>
+        </div></div>
   </section>
 
   <!-- ── CONTACT ─────────────────────────────────────────────────── -->
   <section class="section rise rise-4" id="contact">
     <header class="sec-head">
-      <span class="sec-cmd" id="contact-cmd"></span>
-      <span class="sec-title" id="contact-title"></span>
+      <span class="sec-cmd" id="contact-cmd">$ ./reach-out</span>
+      <span class="sec-title" id="contact-title">open to:</span>
     </header>
     <div class="contact">
-      <p class="contact-intro" id="contact-intro"></p>
-      <div class="contact-list" id="contact-list"></div>
+      <p class="contact-intro" id="contact-intro">Currently open to: founder conversations in AI infra &amp; agents, AI PM roles at top product orgs, and contractor work on 0→1 features. <em>Tell me what you&#39;re building.</em></p>
+      <div class="contact-list" id="contact-list"><a href="mailto:chenjy4@uw.edu"><span class="key">email</span><span>chenjy4@uw.edu</span></a><a href="#"><span class="key">linkedin</span><span>Chenjie (Antares) Yuan</span></a><a href="#"><span class="key">x</span><span>@yourhandle</span></a><a href="https://github.com/AntaresYuan" target="_blank" rel="noopener"><span class="key">github</span><span>@AntaresYuan</span></a></div>
     </div>
+  </section>
+
+  <!-- ── AGENT-FRIENDLY SURFACES ─────────────────────────────────────
+       Documents how AI agents and other machine readers can consume the
+       site. Aimed at engineering peers / curious humans — agents
+       themselves go straight to the endpoints.
+  ──────────────────────────────────────────────────────────────────── -->
+  <section class="section agents-section rise" id="agents" aria-label="For AI agents">
+    <header class="sec-head">
+      <span class="sec-cmd">$ /agents</span>
+      <span class="sec-title">how this site works for AI</span>
+      <span class="sec-meta">three entry points</span>
+    </header>
+
+    <p class="agents-intro">
+      This site is designed to be read by both humans and AI agents. The dashboard, terminal, and detail panels are for you. For an agent, prefer:
+    </p>
+
+    <div class="agents-endpoints">
+      <a href="/llms.txt" class="agents-card">
+        <div class="agents-card-head">
+          <span class="agents-method">GET</span>
+          <span class="agents-path">/llms.txt</span>
+        </div>
+        <p>Short summary in plain text per the <a href="https://llmstxt.org" target="_blank" rel="noopener">llmstxt.org</a> spec. Best entry point — gist in &lt;1KB.</p>
+      </a>
+
+      <a href="/llms-full.txt" class="agents-card">
+        <div class="agents-card-head">
+          <span class="agents-method">GET</span>
+          <span class="agents-path">/llms-full.txt</span>
+        </div>
+        <p>Full content dump — every project card, lens entry, contact info — all plain text. Use when you need depth.</p>
+      </a>
+
+      <a href="/content/board.json" class="agents-card">
+        <div class="agents-card-head">
+          <span class="agents-method">GET</span>
+          <span class="agents-path">/content/*.json</span>
+        </div>
+        <p>Raw structured data: <code>profile.json</code>, <code>board.json</code>, <code>lens.json</code>, <code>contact.json</code>. Use for typed access to specific fields.</p>
+      </a>
+    </div>
+
+    <ul class="agents-extras">
+      <li><strong>Stable IDs.</strong> Cards have permanent display IDs (<code>SHIP-01</code>, <code>NOW-01</code>, …) — citable across conversations and durable across content edits.</li>
+      <li><strong>Pre-rendered HTML.</strong> The home page ships with content baked into the initial HTML — readable without executing JavaScript.</li>
+      <li><strong>Open content.</strong> All data lives at <a href="https://github.com/AntaresYuan/personal_website/tree/main/content" target="_blank" rel="noopener">/content</a> on GitHub. Free to scrape, fork, or quote.</li>
+    </ul>
   </section>
 
   <!-- ── COMMENTS (Giscus) ───────────────────────────────────────────
@@ -262,7 +437,7 @@
 
   <!-- ── FOOTER ──────────────────────────────────────────────────── -->
   <footer class="site-footer">
-    <span id="footer-copyright"></span>
+    <span id="footer-copyright">© 2026 Antares Yuan · <em>This site is a roadmap of how Antares is growing as an AI Builder, not only a resume.</em></span>
     <span>
       <a href="/admin/">edit</a> ·
       <a href="https://github.com/AntaresYuan/personal_website">source</a> ·
