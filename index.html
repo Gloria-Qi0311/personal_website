@@ -3,75 +3,95 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>~ / ai pm</title>
+<title>Esther Yuan — AI PM</title>
+<meta name="description" content="A living roadmap of what I've shipped, what I'm building, and where I'm going.">
 <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
 
-<div class="layout">
+<main class="page">
 
-  <div class="shell">
+  <!-- ── TOP NAV ─────────────────────────────────────────────────── -->
+  <nav class="topnav rise">
+    <div class="brand"><span class="dot"></span><span id="brand-name"></span></div>
+    <div class="meta" id="last-updated"></div>
+  </nav>
 
-    <div class="boot" id="boot"></div>
-
-    <div class="identity">
-      <h1 class="name" id="identity-name"></h1>
-      <div class="role-row">
-        <span id="identity-role"></span>
-        <span class="dot">·</span>
-        <span id="identity-location"></span>
-        <span class="dot">·</span>
-        <span class="now"><span class="pulse"></span><span id="identity-status"></span></span>
-      </div>
+  <!-- ── HERO ────────────────────────────────────────────────────── -->
+  <header class="hero rise rise-1">
+    <div class="hero-left">
+      <h1 class="hero-name" id="hero-name"></h1>
+      <p class="hero-slogan" id="hero-slogan"></p>
+      <div class="hero-meta" id="hero-meta"></div>
     </div>
+    <div class="hero-ctas" id="hero-ctas"></div>
+  </header>
 
-    <section class="section s1" data-section="about">
-      <div class="sec-head"></div>
-      <div class="prose" id="about-body"></div>
-    </section>
+  <!-- ── BOARD: Shipped / Now / Next / Later ─────────────────────── -->
+  <section class="board rise rise-2" aria-label="Project board">
+    <article class="column col-shipped" id="col-shipped" aria-labelledby="col-shipped-title">
+      <header class="col-head">
+        <h2 class="col-title" id="col-shipped-title"><span class="col-dot"></span>Shipped</h2>
+        <span class="col-count" data-count="shipped">0</span>
+      </header>
+      <div class="col-cards" data-cards="shipped"></div>
+    </article>
 
-    <section class="section s2" data-section="cases">
-      <div class="sec-head"></div>
-      <div class="cases" id="cases-list"></div>
-    </section>
+    <article class="column col-now" id="col-now" aria-labelledby="col-now-title">
+      <header class="col-head">
+        <h2 class="col-title" id="col-now-title"><span class="col-dot"></span>Now</h2>
+        <span class="col-count" data-count="now">0</span>
+      </header>
+      <div class="col-cards" data-cards="now"></div>
+    </article>
 
-    <section class="section s3" data-section="lens">
-      <div class="sec-head"></div>
-      <div class="lens" id="lens-list"></div>
-    </section>
+    <article class="column col-next" id="col-next" aria-labelledby="col-next-title">
+      <header class="col-head">
+        <h2 class="col-title" id="col-next-title"><span class="col-dot"></span>Next</h2>
+        <span class="col-count" data-count="next">0</span>
+      </header>
+      <div class="col-cards" data-cards="next"></div>
+    </article>
 
-    <section class="section s4" data-section="contact">
-      <div class="sec-head"></div>
-      <div class="contact-grid" id="contact-grid"></div>
-      <div style="margin-top:24px">
-        <input type="text" id="message-input"
-          style="width:100%;max-width:400px;background:transparent;border:none;
-                 border-bottom:1px solid var(--line);padding:8px 0;color:var(--text);
-                 font-family:inherit;font-size:13px;outline:none;"
-          onfocus="this.style.borderColor='var(--accent)'"
-          onblur="this.style.borderColor='var(--line)'">
-      </div>
-    </section>
+    <article class="column col-later" id="col-later" aria-labelledby="col-later-title">
+      <header class="col-head">
+        <h2 class="col-title" id="col-later-title"><span class="col-dot"></span>Later</h2>
+        <span class="col-count" data-count="later">0</span>
+      </header>
+      <div class="col-cards" data-cards="later"></div>
+    </article>
+  </section>
 
-    <footer id="site-footer"></footer>
+  <!-- ── LENS: how I think ───────────────────────────────────────── -->
+  <section class="section rise rise-3" id="lens">
+    <header class="sec-head">
+      <span class="sec-cmd" id="lens-cmd"></span>
+      <span class="sec-title" id="lens-title"></span>
+      <span class="sec-meta" id="lens-meta"></span>
+    </header>
+    <div class="lens" id="lens-list"></div>
+  </section>
 
-  </div>
-
-  <!-- Avatar column -->
-  <div class="avatar-col">
-    <div class="avatar-wrap">
-      <canvas id="avatar"></canvas>
-      <div class="avatar-label"><span class="blink-dot"></span><span id="avatar-label-text"></span></div>
-      <div class="try-hint">
-        try: <span id="try-hint-keys"></span>
-      </div>
+  <!-- ── CONTACT ─────────────────────────────────────────────────── -->
+  <section class="section rise rise-4" id="contact">
+    <header class="sec-head">
+      <span class="sec-cmd" id="contact-cmd"></span>
+      <span class="sec-title" id="contact-title"></span>
+    </header>
+    <div class="contact">
+      <p class="contact-intro" id="contact-intro"></p>
+      <div class="contact-list" id="contact-list"></div>
     </div>
-  </div>
+  </section>
 
-</div>
+  <!-- ── FOOTER ──────────────────────────────────────────────────── -->
+  <footer class="site-footer">
+    <span id="footer-copyright"></span>
+    <span><a href="/admin/">edit</a> · <a href="https://github.com/AntaresYuan/personal_website">source</a></span>
+  </footer>
+
+</main>
 
 <script src="scripts/render.js"></script>
-<script src="scripts/avatar.js"></script>
-<script src="scripts/boot.js"></script>
 </body>
 </html>

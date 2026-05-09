@@ -1,180 +1,194 @@
-/* ═══════════════════════════════════════════════════════════════════════
-   RENDER — fetch content/site.json and populate the DOM, then fire a
-   `site:ready` event so avatar.js and boot.js can initialize with data.
+/* ════════════════════════════════════════════════════════════════════════
+   render.js — fetches /content/*.json and populates the dashboard.
+   Single source of truth: content files. CMS edits commit those files;
+   a redeploy (or live reload in dev) reflects the changes.
+   ════════════════════════════════════════════════════════════════════════ */
+(() => {
+  const $ = (sel) => document.querySelector(sel);
 
-   Why this shape: scripts/avatar.js and scripts/boot.js attach listeners
-   on parse but defer their work until `site:ready`. Content lives in a
-   single JSON file so future edits don't touch markup.
-   ═══════════════════════════════════════════════════════════════════════ */
+  const escape = (s) =>
+    String(s ?? '').replace(/[&<>"']/g, (c) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    }[c]));
 
-(async function () {
-  let data;
-  try {
-    const res = await fetch('content/site.json');
-    data = await res.json();
-  } catch (err) {
-    console.error('[render] failed to load content/site.json', err);
-    return;
-  }
+  // Allow the small set of inline tags we use in copy (em, strong, br).
+  const safeRich = (s) => {
+    return escape(s).replace(/&lt;(\/?(em|strong|br)\s*\/?)&gt;/gi, '<$1>');
+  };
 
-  document.documentElement.lang = data.meta?.lang || 'en';
-  if (data.meta?.title) document.title = data.meta.title;
+  const json = async (path) => {
+    const res = await fetch(path, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`Failed to load ${path}: ${res.status}`);
+    return res.json();
+  };
 
-  renderIdentity(data.identity);
-  renderSection('about', data.about, renderAbout);
-  renderSection('cases', data.cases, renderCases);
-  renderSection('lens', data.lens, renderLens);
-  renderSection('contact', data.contact, renderContact);
-  renderFooter(data.footer);
-  renderAvatarChrome(data.avatar);
+  /* ── Renderers ──────────────────────────────────────────────────── */
 
-  window.SITE_DATA = data;
-  document.dispatchEvent(new CustomEvent('site:ready', { detail: data }));
-})();
-
-function renderIdentity(identity) {
-  const nameEl = document.getElementById('identity-name');
-  if (nameEl) {
-    nameEl.textContent = identity.name;
-    if (identity.nameAccent) {
-      const em = document.createElement('em');
-      em.textContent = identity.nameAccent;
-      nameEl.appendChild(em);
+  const renderMeta = (site) => {
+    document.title = site.meta?.title ?? document.title;
+    if (site.meta?.lang) document.documentElement.lang = site.meta.lang;
+    if (site.meta?.description) {
+      const m = document.querySelector('meta[name="description"]');
+      if (m) m.setAttribute('content', site.meta.description);
     }
-  }
-  setText('identity-role', identity.role);
-  setText('identity-location', identity.location);
-  setText('identity-status', identity.status);
-}
+    $('#brand-name').textContent = site.meta?.title?.split('—')[0]?.trim() ?? '';
+    $('#last-updated').textContent = site.footer?.lastUpdated
+      ? `updated ${site.footer.lastUpdated}`
+      : '';
+    $('#footer-copyright').innerHTML = [
+      escape(site.footer?.copyright ?? ''),
+      site.footer?.tagline ? `<em>${escape(site.footer.tagline)}</em>` : '',
+    ].filter(Boolean).join(' · ');
+  };
 
-function renderSection(key, payload, bodyRenderer) {
-  if (!payload?.head) return;
-  const head = document.querySelector(`[data-section="${key}"] .sec-head`);
-  if (head) {
-    head.innerHTML = '';
-    head.appendChild(span('sec-cmd', payload.head.cmd));
-    head.appendChild(span('sec-title', payload.head.title));
-    if (payload.head.meta) head.appendChild(span('sec-meta', payload.head.meta));
-  }
-  bodyRenderer(payload);
-}
+  const renderHero = (profile) => {
+    const accent = profile.nameAccent
+      ? ` <em>${escape(profile.nameAccent)}</em>`
+      : '';
+    $('#hero-name').innerHTML = escape(profile.name) + accent;
+    $('#hero-slogan').textContent = profile.slogan ?? '';
 
-function renderAbout(about) {
-  const root = document.getElementById('about-body');
-  if (!root) return;
-  root.innerHTML = '';
-  about.paragraphs.forEach(html => {
-    const p = document.createElement('p');
-    p.innerHTML = html;
-    root.appendChild(p);
-  });
-}
-
-function renderCases(cases) {
-  const root = document.getElementById('cases-list');
-  if (!root) return;
-  root.innerHTML = '';
-  cases.items.forEach(c => {
-    const row = document.createElement('div');
-    row.className = 'case';
-    row.dataset.caseId = c.id;
-
-    row.appendChild(div('case-id', c.id));
-
-    const mid = document.createElement('div');
-    mid.appendChild(div('case-title', c.title));
-    mid.appendChild(div('case-desc', c.description));
-    const tags = div('case-tags', '');
-    c.tags.forEach(t => tags.appendChild(span('tag', t)));
-    mid.appendChild(tags);
-    row.appendChild(mid);
-
-    const meta = document.createElement('div');
-    meta.className = 'case-meta';
-    meta.appendChild(document.createTextNode(c.year));
-    if (c.impact) meta.appendChild(span('impact', c.impact));
-    row.appendChild(meta);
-
-    root.appendChild(row);
-  });
-}
-
-function renderLens(lens) {
-  const root = document.getElementById('lens-list');
-  if (!root) return;
-  root.innerHTML = '';
-  lens.items.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'lens-card';
-    card.appendChild(div('lens-num', item.num));
-    const text = document.createElement('div');
-    text.className = 'lens-text';
-    text.appendChild(document.createTextNode(item.main + ' '));
-    const aside = document.createElement('em');
-    aside.textContent = item.aside;
-    text.appendChild(aside);
-    card.appendChild(text);
-    root.appendChild(card);
-  });
-}
-
-function renderContact(contact) {
-  const grid = document.getElementById('contact-grid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  contact.items.forEach(item => {
-    grid.appendChild(div('contact-key', item.label));
-    const valWrap = document.createElement('div');
-    valWrap.className = 'contact-val';
-    const a = document.createElement('a');
-    a.href = item.href || '#';
-    a.textContent = item.value;
-    if (item.id) a.id = item.id;
-    valWrap.appendChild(a);
-    grid.appendChild(valWrap);
-  });
-
-  const input = document.getElementById('message-input');
-  if (input && contact.messageInputPlaceholder) {
-    input.placeholder = contact.messageInputPlaceholder;
-  }
-}
-
-function renderFooter(text) {
-  setText('site-footer', text);
-}
-
-function renderAvatarChrome(avatar) {
-  const label = document.getElementById('avatar-label-text');
-  if (label) label.textContent = avatar.label;
-
-  const hint = document.getElementById('try-hint-keys');
-  if (hint && Array.isArray(avatar.tryHint)) {
-    hint.innerHTML = '';
-    avatar.tryHint.forEach((k, i) => {
-      if (i > 0) hint.appendChild(document.createTextNode(' '));
-      const kbd = document.createElement('kbd');
-      kbd.textContent = k;
-      hint.appendChild(kbd);
+    const meta = $('#hero-meta');
+    meta.innerHTML = '';
+    if (profile.role) {
+      meta.insertAdjacentHTML('beforeend', `<span>${escape(profile.role)}</span>`);
+    }
+    if (profile.location) {
+      meta.insertAdjacentHTML('beforeend', `<span class="sep">·</span><span>${escape(profile.location)}</span>`);
+    }
+    if (profile.status) {
+      meta.insertAdjacentHTML('beforeend',
+        `<span class="sep">·</span><span class="now-pill"><span class="pulse"></span>${escape(profile.status)}</span>`);
+    }
+    (profile.tags ?? []).forEach((t) => {
+      meta.insertAdjacentHTML('beforeend', `<span class="pill">${escape(t)}</span>`);
     });
-  }
-}
 
-function setText(id, text) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = text;
-}
+    const ctas = $('#hero-ctas');
+    ctas.innerHTML = '';
+    (profile.ctas ?? []).forEach((c) => {
+      const a = document.createElement('a');
+      a.className = 'cta';
+      a.href = c.anchor || '#';
+      a.innerHTML = `
+        <div>
+          <div class="cta-label">${escape(c.audience ?? '')}</div>
+          <div class="cta-text">${escape(c.label ?? '')}</div>
+        </div>
+        <span class="cta-arrow">→</span>`;
+      ctas.appendChild(a);
+    });
+  };
 
-function span(cls, text) {
-  const s = document.createElement('span');
-  s.className = cls;
-  s.textContent = text;
-  return s;
-}
+  const renderBoard = (board) => {
+    const cards = (board.cards ?? []).slice().sort((a, b) => {
+      const ao = a.order ?? 99, bo = b.order ?? 99;
+      if (ao !== bo) return ao - bo;
+      return (b.updated ?? '').localeCompare(a.updated ?? '');
+    });
 
-function div(cls, text) {
-  const d = document.createElement('div');
-  d.className = cls;
-  if (text !== '') d.textContent = text;
-  return d;
-}
+    const cols = ['shipped', 'now', 'next', 'later'];
+    cols.forEach((col) => {
+      const root = document.querySelector(`[data-cards="${col}"]`);
+      const countEl = document.querySelector(`[data-count="${col}"]`);
+      const filtered = cards.filter((c) => c.status === col);
+      countEl.textContent = filtered.length;
+      root.innerHTML = '';
+
+      if (filtered.length === 0) {
+        root.insertAdjacentHTML('beforeend',
+          `<div class="col-empty">no cards yet</div>`);
+        return;
+      }
+
+      filtered.forEach((c) => {
+        const tags = (c.tags ?? []).map((t, i) =>
+          `<span class="tag${i % 2 ? ' tag-blue' : ''}">${escape(t)}</span>`
+        ).join('');
+
+        const links = (c.links ?? []).filter(l => l.href && l.href !== '#').map((l) =>
+          `<a href="${escape(l.href)}" target="_blank" rel="noopener">${escape(l.label)} →</a>`
+        ).join('');
+
+        const html = `
+          <div class="card" data-id="${escape(c.id)}">
+            <div class="card-title">${escape(c.title)}</div>
+            ${c.summary ? `<div class="card-summary">${safeRich(c.summary)}</div>` : ''}
+            ${tags ? `<div class="card-tags">${tags}</div>` : ''}
+            <div class="card-footer">
+              <span>${escape(c.updated ?? '')}</span>
+              ${c.impact ? `<span class="card-impact">${escape(c.impact)}</span>` : ''}
+            </div>
+            ${links ? `<div class="card-links">${links}</div>` : ''}
+          </div>`;
+        root.insertAdjacentHTML('beforeend', html);
+      });
+    });
+  };
+
+  const renderLens = (lens) => {
+    if (lens.head) {
+      $('#lens-cmd').textContent  = lens.head.cmd  ?? '';
+      $('#lens-title').textContent = lens.head.title ?? '';
+      $('#lens-meta').textContent  = lens.head.meta  ?? '';
+    }
+    const list = $('#lens-list');
+    list.innerHTML = '';
+    (lens.items ?? []).forEach((it) => {
+      const aside = it.aside ? `<em>${escape(it.aside)}</em>` : '';
+      list.insertAdjacentHTML('beforeend', `
+        <div class="lens-card">
+          <div class="lens-num">${escape(it.num ?? '')}</div>
+          <div class="lens-text">${escape(it.main ?? '')}${aside}</div>
+        </div>`);
+    });
+  };
+
+  const renderContact = (contact) => {
+    if (contact.head) {
+      $('#contact-cmd').textContent  = contact.head.cmd  ?? '';
+      $('#contact-title').textContent = contact.head.title ?? '';
+    }
+    $('#contact-intro').innerHTML = safeRich(contact.intro ?? '');
+
+    const list = $('#contact-list');
+    list.innerHTML = '';
+    (contact.items ?? []).forEach((it) => {
+      const a = document.createElement('a');
+      a.href = it.href ?? '#';
+      if (it.href?.startsWith('http')) {
+        a.target = '_blank';
+        a.rel = 'noopener';
+      }
+      a.innerHTML = `<span class="key">${escape(it.key ?? '')}</span><span>${escape(it.label ?? '')}</span>`;
+      list.appendChild(a);
+    });
+  };
+
+  /* ── Boot ───────────────────────────────────────────────────────── */
+  (async () => {
+    try {
+      const [site, profile, board, lens, contact] = await Promise.all([
+        json('content/site.json'),
+        json('content/profile.json'),
+        json('content/board.json'),
+        json('content/lens.json'),
+        json('content/contact.json'),
+      ]);
+      renderMeta(site);
+      renderHero(profile);
+      renderBoard(board);
+      renderLens(lens);
+      renderContact(contact);
+    } catch (e) {
+      console.error('[render]', e);
+      const main = document.querySelector('main');
+      if (main) {
+        main.insertAdjacentHTML('afterbegin',
+          `<div style="padding:16px;background:#FFE56B;border-radius:6px;font-family:monospace;font-size:13px;">
+            content load failed — check that /content/*.json files exist and are valid JSON. error: ${escape(e.message)}
+           </div>`);
+      }
+    }
+  })();
+})();

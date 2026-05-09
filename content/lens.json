@@ -1,0 +1,29 @@
+{
+  "head": {
+    "cmd": "$ grep -i",
+    "title": "how_i_think.md",
+    "meta": "principles · updated occasionally"
+  },
+  "items": [
+    {
+      "num": "/ 01",
+      "main": "Evals before features.",
+      "aside": "If you can't measure it, you're shipping vibes."
+    },
+    {
+      "num": "/ 02",
+      "main": "The model is one input.",
+      "aside": "Latency, UX, and trust often matter more than benchmark deltas."
+    },
+    {
+      "num": "/ 03",
+      "main": "Demos lie. Production tells the truth.",
+      "aside": "Watch the long tail."
+    },
+    {
+      "num": "/ 04",
+      "main": "A great PM removes ambiguity. Models add it back.",
+      "aside": "The job is balance."
+    }
+  ]
+}

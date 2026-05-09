@@ -1,0 +1,29 @@
+{
+  "name": "Esther",
+  "nameAccent": "Yuan",
+  "role": "AI Product Manager",
+  "location": "Shanghai · open to remote",
+  "status": "shipping in public",
+  "slogan": "I build AI products by treating myself like one — versioned, measured, always shipping.",
+  "tags": ["AI PM", "Agent Native", "0→1", "Architecture background"],
+  "ctas": [
+    {
+      "audience": "for HR",
+      "label": "30-second snapshot",
+      "anchor": "#shipped",
+      "note": "see what I've shipped + impact"
+    },
+    {
+      "audience": "for founders",
+      "label": "what I'm building next",
+      "anchor": "#now",
+      "note": "current focus + bets"
+    },
+    {
+      "audience": "for collaborators",
+      "label": "let's talk",
+      "anchor": "#contact",
+      "note": "open to founder convos & contracts"
+    }
+  ]
+}
