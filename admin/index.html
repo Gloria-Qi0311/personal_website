@@ -3,13 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Content · Esther Yuan</title>
+  <title>Content · Antares Yuan</title>
+  <style>
+    body { font-family: -apple-system, system-ui, sans-serif; margin: 0; }
+    #cms-loading-msg {
+      max-width: 480px; margin: 80px auto; padding: 24px;
+      background: #fff8dc; border: 1px solid #f0d568; border-radius: 8px;
+      color: #5a4a00; line-height: 1.5; font-size: 14px;
+    }
+    #cms-loading-msg code {
+      background: rgba(0,0,0,0.06); padding: 1px 6px; border-radius: 4px;
+    }
+  </style>
   <!-- Decap CMS: in-browser CMS that commits content edits to the GitHub repo.
        Single editor: only repo collaborators (i.e. the owner) can authenticate
-       through GitHub OAuth. Public visitors hit /admin/ but cannot log in. -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+       through GitHub OAuth. Public visitors hit /admin/ but cannot log in.
+
+       jsDelivr is preferred over unpkg for better global (incl. mainland CN)
+       latency. The onload handler removes the fallback message when CMS boots.
+       The onerror handler swaps to unpkg if jsDelivr fails. -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/decap-cms@3/dist/decap-cms.js"
+    onload="document.getElementById('cms-loading-msg')?.remove()"
+    onerror="(function(s){var f=document.createElement('script');f.src='https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';f.onload=function(){document.getElementById('cms-loading-msg')?.remove()};document.head.appendChild(f);})()">
+  </script>
 </head>
 <body>
+  <!-- Fallback message — visible only if Decap fails to mount (e.g. CDN
+       blocked, JS error). Removed by the onload handler above on success. -->
+  <div id="cms-loading-msg">
+    <strong>Loading the CMS…</strong><br>
+    If this message stays for more than 10 seconds, the CMS bundle failed to
+    load. Open your browser's Web Inspector → Console tab and report the red
+    error to <code>chenjy4@uw.edu</code>.
+  </div>
   <!-- Decap auto-mounts here when the script loads. -->
 </body>
 </html>
