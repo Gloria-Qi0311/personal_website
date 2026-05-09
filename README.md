@@ -17,10 +17,18 @@ A living **PM-style dashboard** of what I've shipped, what I'm building, and whe
 │   ├── board.json          ← project cards (status: shipped/now/next/later)
 │   ├── lens.json           ← short-form principles
 │   └── contact.json        ← email + socials + "open to" line
+├── scripts/
+│   ├── render.js           ← dashboard rendering
+│   ├── terminal.js         ← embedded Agent Terminal
+│   └── build-llms.js       ← regen /llms.txt + /llms-full.txt from JSON
+├── llms.txt                ← agent-readable summary (regenerate after edits)
+├── llms-full.txt           ← full content dump (same)
 └── admin/
     ├── index.html          ← Decap CMS bootstrap
     └── config.yml          ← collection schemas (mirror /content)
 ```
+
+After editing any file under `content/`, run `node scripts/build-llms.js` to regenerate the agent-readable text files.
 
 ## Local preview
 

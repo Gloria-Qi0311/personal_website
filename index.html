@@ -10,6 +10,9 @@
 <meta name="theme-color" content="#FAF7F0" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1A1A1F" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<!-- llmstxt.org — agent-readable summary + full content dump -->
+<link rel="alternate" type="text/plain" href="/llms.txt"      title="LLM-readable summary">
+<link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLM-readable full content">
 
 <!-- ── Open Graph / Twitter ──────────────────────────────────────── -->
 <meta property="og:type" content="website">
@@ -121,6 +124,44 @@
 
   </section>
 
+  <!-- ── AGENT TERMINAL ──────────────────────────────────────────────
+       Embedded interactive CLI. Same data as the board (content/*.json),
+       different surface — for keyboard users and AI agents.
+  ──────────────────────────────────────────────────────────────────── -->
+  <section class="section terminal-section rise rise-3" id="terminal" aria-label="Agent terminal">
+    <header class="sec-head">
+      <span class="sec-cmd">$ ./agent</span>
+      <span class="sec-title">terminal</span>
+      <span class="sec-meta" id="terminal-meta">type <kbd>help</kbd> · ↑↓ history</span>
+    </header>
+
+    <div class="terminal" id="terminal-root">
+      <div class="terminal-chrome">
+        <span class="terminal-dot d-r"></span>
+        <span class="terminal-dot d-y"></span>
+        <span class="terminal-dot d-g"></span>
+        <span class="terminal-path" id="terminal-path">antares@local: ~</span>
+        <span class="terminal-spacer"></span>
+        <button type="button" class="terminal-action" id="terminal-clear" title="clear (⌃L)">clear</button>
+      </div>
+      <div class="terminal-body" id="terminal-body" tabindex="-1">
+        <!-- history rendered here -->
+        <div class="terminal-line term-prompt-line">
+          <span class="term-prompt">$</span>
+          <input
+            type="text"
+            class="terminal-input"
+            id="terminal-input"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+            aria-label="Terminal command"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ── LENS: how I think ───────────────────────────────────────── -->
   <section class="section rise rise-3" id="lens">
     <header class="sec-head">
@@ -222,11 +263,16 @@
   <!-- ── FOOTER ──────────────────────────────────────────────────── -->
   <footer class="site-footer">
     <span id="footer-copyright"></span>
-    <span><a href="/admin/">edit</a> · <a href="https://github.com/AntaresYuan/personal_website">source</a></span>
+    <span>
+      <a href="/admin/">edit</a> ·
+      <a href="https://github.com/AntaresYuan/personal_website">source</a> ·
+      <a href="/llms.txt" title="agent-readable summary">/llms.txt</a>
+    </span>
   </footer>
 
 </main>
 
 <script src="scripts/render.js"></script>
+<script src="scripts/terminal.js"></script>
 </body>
 </html>
