@@ -1,0 +1,24 @@
+# ─────────────────────────────────────────────────────────────────────
+# Cloudflare Worker config for the Decap CMS OAuth proxy.
+#
+# Deploy:
+#   cd workers/decap-oauth
+#   npx wrangler login          # one-time, browser auth
+#   npx wrangler secret put GITHUB_CLIENT_ID
+#   npx wrangler secret put GITHUB_CLIENT_SECRET
+#   npx wrangler deploy
+#
+# After first deploy, the URL will be:
+#   https://decap-oauth.<your-subdomain>.workers.dev
+#
+# That URL → register as the GitHub OAuth App's "Authorization callback URL"
+# (with /callback appended) and as `backend.base_url` in admin/config.yml.
+# ─────────────────────────────────────────────────────────────────────
+
+name = "decap-oauth"
+main = "src/index.js"
+compatibility_date = "2026-05-09"
+
+# Logs are useful for debugging the OAuth flow during first setup.
+[observability]
+enabled = true
