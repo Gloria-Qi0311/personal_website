@@ -1,28 +1,28 @@
 # personal_website
 
-我的个人网站 — terminal 风格 layout + 文字粒子 avatar。
+My personal website — terminal-style layout with a text-particle avatar.
 
-## 本地预览
+## Local preview
 
 ```bash
 npx serve .
 ```
 
-然后打开 http://localhost:3000。
+Then open http://localhost:3000.
 
-## 文件结构
+## File structure
 
 ```
 .
-├── index.html              ← 入口页面
+├── index.html              ← entry page
 ├── styles/
-│   └── main.css            ← 全部样式
+│   └── main.css            ← all styles
 ├── scripts/
-│   ├── avatar.js           ← canvas 文字粒子 avatar
-│   └── boot.js             ← terminal 启动序列动画
+│   ├── avatar.js           ← canvas text-particle avatar
+│   └── boot.js             ← terminal boot-sequence animation
 └── README.md
 ```
 
 ## Roadmap
 
-见 [Issue #35](https://github.com/AntaresYuan/personal_website/issues/35)。
+See [Issue #35](https://github.com/AntaresYuan/personal_website/issues/35).
