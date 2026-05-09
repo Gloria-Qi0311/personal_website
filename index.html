@@ -38,16 +38,18 @@
   <!-- ── HERO ────────────────────────────────────────────────────── -->
   <header class="hero rise rise-1">
     <div class="hero-left">
-      <!-- Avatar: calm by default; swaps to talking on hover/focus/tap.
-           tabindex makes it keyboard-focusable for the swap. -->
+      <!-- Avatar sits inline on the left of the name/slogan block.
+           Calm by default; swaps to talking on hover/focus/tap. -->
       <button type="button" class="hero-avatar" id="hero-avatar"
               aria-label="Avatar — tap or hover to see me say hi">
         <img class="avatar-img avatar-calm"    id="avatar-calm"    alt="">
         <img class="avatar-img avatar-talking" id="avatar-talking" alt="" aria-hidden="true">
       </button>
-      <h1 class="hero-name" id="hero-name"></h1>
-      <p class="hero-slogan" id="hero-slogan"></p>
-      <div class="hero-meta" id="hero-meta"></div>
+      <div class="hero-text">
+        <h1 class="hero-name" id="hero-name"></h1>
+        <p class="hero-slogan" id="hero-slogan"></p>
+        <div class="hero-meta" id="hero-meta"></div>
+      </div>
     </div>
     <div class="hero-ctas" id="hero-ctas"></div>
   </header>

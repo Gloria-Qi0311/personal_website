@@ -218,21 +218,24 @@ button:focus-visible,
   padding-bottom: var(--sp-48);
   border-bottom: var(--bw) solid var(--color-line-soft);
 }
-/* ── Hero avatar — calm/talking swap with yellow halo ──────────────── */
+/* ── Hero left: avatar + text inline ────────────────────────────────── */
+.hero-left {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-24);
+  min-width: 0;
+}
+.hero-text { min-width: 0; flex: 1; }
+
+/* ── Hero avatar — pure line-art on cream, no halo ──────────────────── */
 .hero-avatar {
-  width: 140px;
-  height: 140px;
-  margin-bottom: var(--sp-24);
+  flex: 0 0 auto;
+  width: 120px;
+  height: 120px;
+  margin-top: -8px;        /* nudge up so it baselines with the display name */
   padding: 0;
   border: none;
-  background:
-    radial-gradient(circle at 50% 48%,
-      var(--color-yellow) 0%,
-      var(--color-yellow) 38%,
-      var(--color-yellow-soft) 55%,
-      var(--color-yellow-glow) 75%,
-      transparent 100%);
-  border-radius: 50%;
+  background: transparent;
   display: grid;
   place-items: center;
   position: relative;
@@ -245,14 +248,12 @@ button:focus-visible,
 
 .avatar-img {
   position: absolute;
-  width: 132px;
-  height: 132px;
+  width: 120px;
+  height: 120px;
   object-fit: contain;
   user-select: none;
   pointer-events: none;
   transition: opacity var(--dur-base) var(--ease-out);
-  /* Slight lift so head sits centered on the halo */
-  transform: translateY(-2px);
 }
 .avatar-talking { opacity: 0; }
 .hero-avatar:hover         .avatar-talking,
@@ -890,8 +891,9 @@ button:focus-visible,
   .hero { gap: var(--sp-24); margin-bottom: var(--sp-40); padding-bottom: var(--sp-24); }
   .hero-name { font-size: clamp(34px, 9vw, 48px); }
   .hero-slogan { font-size: var(--fs-17); }
-  .hero-avatar { width: 110px; height: 110px; margin-bottom: var(--sp-16); }
-  .avatar-img  { width: 104px; height: 104px; }
+  .hero-left { gap: var(--sp-14); }
+  .hero-avatar { width: 80px;  height: 80px;  margin-top: 0; }
+  .avatar-img  { width: 80px;  height: 80px; }
   .board { grid-template-columns: 1fr; gap: var(--sp-10); padding: var(--sp-10); }
   .column { min-height: auto; }
   .contact { grid-template-columns: 1fr; gap: var(--sp-20); }
