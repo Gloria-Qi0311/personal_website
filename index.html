@@ -182,6 +182,28 @@
     </div>
   </section>
 
+  <!-- ── CARD DETAIL MODAL ──────────────────────────────────────────
+       Opened by clicking any board card. Closes on ESC, backdrop click,
+       or the X button. Hash sync — visiting #card/SHIP-01 opens directly.
+  ──────────────────────────────────────────────────────────────────── -->
+  <div class="modal-backdrop" id="modal-backdrop" hidden></div>
+  <dialog class="card-modal" id="card-modal" aria-labelledby="modal-title">
+    <button type="button" class="modal-close" id="modal-close" aria-label="Close">×</button>
+    <div class="modal-meta-top">
+      <span class="modal-id" id="modal-id"></span>
+      <span class="modal-status" id="modal-status"></span>
+    </div>
+    <h2 class="modal-title" id="modal-title"></h2>
+    <p class="modal-summary" id="modal-summary"></p>
+    <div class="modal-tags" id="modal-tags"></div>
+    <div class="modal-details" id="modal-details"></div>
+    <div class="modal-foot">
+      <span class="modal-updated" id="modal-updated"></span>
+      <span class="modal-impact"  id="modal-impact"></span>
+    </div>
+    <div class="modal-links" id="modal-links"></div>
+  </dialog>
+
   <!-- ── FOOTER ──────────────────────────────────────────────────── -->
   <footer class="site-footer">
     <span id="footer-copyright"></span>

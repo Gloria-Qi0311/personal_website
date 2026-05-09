@@ -104,6 +104,43 @@
   const idPrefix = { shipped: 'SHIP', now: 'NOW', next: 'NEXT', later: 'LATER' };
   const pad2 = (n) => String(n).padStart(2, '0');
 
+  // Card index keyed by display ID (e.g. SHIP-01) — populated during render,
+  // consumed by the modal/hash router.
+  const cardIndex = new Map();
+
+  // Tiny markdown renderer for card details. Handles: ## h2, ### h3,
+  // - / * lists, paragraphs, inline `code`, **bold**, *italic*. No HTML
+  // pass-through — input is escaped first.
+  const mini = (md) => {
+    if (!md) return '';
+    const lines = escape(md).split(/\r?\n/);
+    let html = '';
+    let listOpen = false;
+    const closeList = () => { if (listOpen) { html += '</ul>'; listOpen = false; } };
+    for (const raw of lines) {
+      const line = raw.trim();
+      if (!line) { closeList(); continue; }
+      const m = /^(#{2,3})\s+(.*)$/.exec(line);
+      if (m) {
+        closeList();
+        html += `<h${m[1].length}>${m[2]}</h${m[1].length}>`;
+        continue;
+      }
+      if (/^[-*]\s+/.test(line)) {
+        if (!listOpen) { html += '<ul>'; listOpen = true; }
+        html += `<li>${line.replace(/^[-*]\s+/, '')}</li>`;
+        continue;
+      }
+      closeList();
+      html += `<p>${line}</p>`;
+    }
+    closeList();
+    return html
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em>$1</em>');
+  };
+
   const renderBoard = (board) => {
     const cards = (board.cards ?? []).slice().sort((a, b) => {
       const ao = a.order ?? 99, bo = b.order ?? 99;
@@ -142,8 +179,11 @@
         const displayId = `${idPrefix[col]}-${pad2(idx + 1)}`;
         const tagSlugs = (c.tags ?? []).map((t) => t.toLowerCase()).join('|');
 
+        // Stash for the detail modal — keyed by display ID
+        cardIndex.set(displayId, { ...c, displayId });
+
         const html = `
-          <div class="card" data-id="${escape(c.id)}" data-tags="${escape(tagSlugs)}">
+          <button type="button" class="card" data-id="${escape(c.id)}" data-card-id="${displayId}" data-tags="${escape(tagSlugs)}" aria-label="Open details for ${escape(c.title)}">
             <div class="card-meta-top">
               <span class="card-id">${displayId}</span>
               <span class="card-handle" aria-hidden="true">⋮⋮</span>
@@ -159,7 +199,7 @@
               ${c.impact ? `<span class="card-impact">${escape(c.impact)}</span>` : ''}
             </div>
             ${links ? `<div class="card-links">${links}</div>` : ''}
-          </div>`;
+          </button>`;
         root.insertAdjacentHTML('beforeend', html);
       });
     });
@@ -266,6 +306,99 @@
     });
   };
 
+  /* ── Card detail modal ─────────────────────────────────────────── */
+  const statusLabel = { shipped: 'Shipped', now: 'Now', next: 'Next', later: 'Later' };
+
+  const openCardModal = (displayId) => {
+    const c = cardIndex.get(displayId);
+    if (!c) return;
+
+    const modal    = $('#card-modal');
+    const backdrop = $('#modal-backdrop');
+    if (!modal || !backdrop) return;
+
+    $('#modal-id').textContent     = displayId;
+    const statusEl = $('#modal-status');
+    statusEl.className = 'modal-status s-' + c.status;
+    statusEl.textContent = statusLabel[c.status] ?? c.status;
+    $('#modal-title').textContent  = c.title ?? '';
+    $('#modal-summary').textContent = c.summary ?? '';
+
+    $('#modal-tags').innerHTML = (c.tags ?? []).map((t, i) =>
+      `<span class="tag${i % 2 ? ' tag-blue' : ''}">${escape(t)}</span>`
+    ).join('');
+
+    $('#modal-details').innerHTML = mini(c.details);
+
+    $('#modal-updated').textContent = c.updated ? `updated ${c.updated}` : '';
+    $('#modal-impact').textContent  = c.impact ?? '';
+
+    $('#modal-links').innerHTML = (c.links ?? [])
+      .filter(l => l.href && l.href !== '#')
+      .map((l) => `<a href="${escape(l.href)}" target="_blank" rel="noopener">${escape(l.label)} ↗</a>`)
+      .join('');
+
+    backdrop.hidden = false;
+    backdrop.classList.add('is-open');
+    modal.setAttribute('open', '');
+    document.body.classList.add('modal-open');
+
+    // Sync URL hash for deep-linking; don't trigger another open
+    if (location.hash !== `#card/${displayId}`) {
+      history.replaceState(null, '', `#card/${displayId}`);
+    }
+
+    // Move focus into the modal for keyboard users
+    const closeBtn = $('#modal-close');
+    if (closeBtn) closeBtn.focus();
+  };
+
+  const closeCardModal = () => {
+    const modal    = $('#card-modal');
+    const backdrop = $('#modal-backdrop');
+    if (!modal || !backdrop) return;
+    modal.removeAttribute('open');
+    backdrop.classList.remove('is-open');
+    document.body.classList.remove('modal-open');
+    // Hide backdrop after the transition so it doesn't trap clicks
+    setTimeout(() => { if (!backdrop.classList.contains('is-open')) backdrop.hidden = true; }, 250);
+
+    if (location.hash.startsWith('#card/')) {
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+  };
+
+  const wireModal = () => {
+    // Card click → open
+    document.addEventListener('click', (ev) => {
+      const card = ev.target.closest('.card[data-card-id]');
+      if (!card) return;
+      ev.preventDefault();
+      openCardModal(card.dataset.cardId);
+    });
+
+    // X button + backdrop close
+    $('#modal-close')?.addEventListener('click', closeCardModal);
+    $('#modal-backdrop')?.addEventListener('click', closeCardModal);
+
+    // ESC close
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape' && document.body.classList.contains('modal-open')) {
+        closeCardModal();
+      }
+    });
+
+    // Hash router: open on initial load + on navigation
+    const handleHash = () => {
+      const m = /^#card\/(.+)$/.exec(location.hash);
+      if (m) openCardModal(m[1]);
+      else if (document.body.classList.contains('modal-open')) closeCardModal();
+    };
+    window.addEventListener('hashchange', handleHash);
+    // Run once on boot, after cards are indexed
+    setTimeout(handleHash, 0);
+  };
+
   /* ── Boot ───────────────────────────────────────────────────────── */
   (async () => {
     try {
@@ -281,6 +414,7 @@
       renderBoard(board);
       renderLens(lens);
       renderContact(contact);
+      wireModal();
     } catch (e) {
       console.error('[render]', e);
       const main = document.querySelector('main');

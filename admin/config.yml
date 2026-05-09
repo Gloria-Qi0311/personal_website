@@ -98,6 +98,7 @@ collections:
                 options: ["shipped", "now", "next", "later"]
               - { label: "Title",     name: "title",   widget: "string" }
               - { label: "Summary",   name: "summary", widget: "text" }
+              - { label: "Details (markdown — supports ## h2, lists, **bold**, `code`)", name: "details", widget: "text", required: false }
               - label: "Tags"
                 name: "tags"
                 widget: "list"

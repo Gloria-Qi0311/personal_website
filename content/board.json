@@ -5,6 +5,7 @@
       "status": "shipped",
       "title": "[Project Name] — replace via /admin/",
       "summary": "One-line problem → outcome. Be specific. Real metrics beat adjectives.",
+      "details": "## Context\n\nReplace this with the longer story. Two or three short paragraphs is plenty.\n\n## What I owned\n\n- Decision X\n- Decision Y\n- Trade-off Z\n\n## Outcome\n\nWhat happened. What you'd do differently.",
       "tags": ["AI PM", "0→1"],
       "impact": "+38% speed",
       "links": [{ "label": "GitHub", "href": "#" }],
