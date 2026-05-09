@@ -1172,6 +1172,18 @@ body.modal-open { overflow: hidden; }
   caret-color: var(--term-prompt);
   padding: 0;
 }
+/* Selection inside the terminal input doubles as the ghost-text rendering
+   for live autocomplete suggestions: dim, no highlight, fading into bg.
+   When the user accepts (Tab) or types another char, the selection
+   collapses naturally. */
+.terminal-input::selection {
+  background: transparent;
+  color: var(--term-dim);
+}
+.terminal-input::-moz-selection {
+  background: transparent;
+  color: var(--term-dim);
+}
 
 @media (max-width: 640px) {
   .terminal-body { padding: var(--sp-12) var(--sp-14) var(--sp-14); min-height: 240px; max-height: 360px; }

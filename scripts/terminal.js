@@ -367,21 +367,114 @@
     });
   };
 
-  /* ── Tab completion ────────────────────────────────────────────── */
-  const completeOnTab = () => {
-    const cur = input.value;
-    // Only complete the first token (command name) for v1.
-    if (cur.includes(' ')) return;
-    const cmdNames = Object.keys(cmds).sort();
-    const matches = cmdNames.filter(n => n.startsWith(cur.toLowerCase()));
-    if (matches.length === 0) return;
-    if (matches.length === 1) {
-      input.value = matches[0] + ' ';
-      return;
+  /* ── Smart autocomplete ────────────────────────────────────────── */
+  // Returns FULL replacement candidates for the current input value.
+  // E.g. for "cat S" returns ["cat SHIP-01", "cat SHIP-02"].
+  // Each candidate is a full input.value replacement, not just the suffix —
+  // so the caller never has to reconstruct prefix + completion.
+  const getCompletions = (value) => {
+    if (value === '') return [];
+
+    // Token boundary: split on ANY whitespace, but preserve trailing-space
+    // semantics — a value ending in space means "starting a new token".
+    const endsWithSpace = /\s$/.test(value);
+    const tokens = value.trim().split(/\s+/);
+    const cmd = (tokens[0] ?? '').toLowerCase();
+
+    // First-token completion (no spaces yet)
+    if (tokens.length === 1 && !endsWithSpace) {
+      const cmdNames = Object.keys(cmds).sort();
+      return cmdNames.filter(n => n.startsWith(cmd)).map(n => n);
     }
-    // Multiple matches — show them like double-Tab in bash, keep input
-    print(`<span class="term-dim">${matches.join('  ')}</span>`);
+
+    // Has space(s) — completing an arg or flag.
+    const lastToken = endsWithSpace ? '' : tokens[tokens.length - 1];
+    const beforeLast = endsWithSpace ? value : value.slice(0, value.length - lastToken.length);
+
+    const cards = state.board ? allCards() : [];
+    const cardIds = cards.map(c => c.displayId);
+    const allTags = [...new Set(cards.flatMap(c => c.tags ?? []))];
+    const STATUSES = ['shipped', 'now', 'next', 'later', 'all'];
+
+    // cat <ID> / open <ID> — complete card IDs (case-insensitive prefix)
+    if ((cmd === 'cat' || cmd === 'open') && tokens.length <= 2) {
+      const partial = lastToken.toUpperCase();
+      return cardIds
+        .filter(id => id.startsWith(partial))
+        .map(id => beforeLast + id);
+    }
+
+    // --status=X
+    if (lastToken.startsWith('--status=')) {
+      const partial = lastToken.slice(9).toLowerCase();
+      return STATUSES
+        .filter(s => s.startsWith(partial))
+        .map(s => beforeLast + '--status=' + s);
+    }
+
+    // --tag=X
+    if (lastToken.startsWith('--tag=')) {
+      const partial = lastToken.slice(6).toLowerCase();
+      return allTags
+        .filter(t => t.toLowerCase().startsWith(partial))
+        .map(t => beforeLast + '--tag=' + t);
+    }
+
+    // Flag completion: lastToken starts with -- (or just --)
+    if (lastToken.startsWith('--') || (endsWithSpace && lastToken === '')) {
+      const flags = ['--json'];
+      if (cmd === 'projects') flags.push('--status=', '--tag=');
+      if (cmd === 'recent')   flags.push('--days=');
+      return flags
+        .filter(f => f.startsWith(lastToken))
+        .map(f => beforeLast + f);
+    }
+
+    return [];
   };
+
+  // Longest common prefix across an array of strings — used for partial
+  // completion on Tab when there are multiple candidates.
+  const lcp = (strs) => {
+    if (strs.length === 0) return '';
+    let p = strs[0];
+    for (let i = 1; i < strs.length; i++) {
+      while (!strs[i].startsWith(p)) {
+        p = p.slice(0, -1);
+        if (p === '') return '';
+      }
+    }
+    return p;
+  };
+
+  // Ghost-text suggestion via input selection: insert the best completion
+  // after the user's typed prefix and select the appended portion. Browser
+  // ::selection styling makes the selected portion render as dim/ghost text.
+  // If user keeps typing, the typed char replaces the selection automatically.
+  // If user presses Tab, the selection collapses to the end (= "accepted").
+  const suggest = () => {
+    const v = input.value;
+    // Only suggest when cursor is at end and there's no existing selection
+    if (input.selectionStart !== v.length || input.selectionEnd !== v.length) return;
+
+    const candidates = getCompletions(v);
+    if (candidates.length === 0) return;
+
+    // Pick the first (best) candidate. If equal to current value, no-op.
+    const best = candidates[0];
+    if (!best.startsWith(v) || best === v) return;
+
+    // Apply ghost text: extend value to best, select the appended portion
+    input.value = best;
+    input.setSelectionRange(v.length, best.length);
+  };
+
+  input.addEventListener('input', (ev) => {
+    // Only suggest on forward typing — not on backspace, paste, undo, etc.
+    if (ev.inputType === 'insertText' || ev.inputType === 'insertCompositionText') {
+      suggest();
+    }
+  });
 
   /* ── Input handling ────────────────────────────────────────────── */
   const exec = (raw) => {
@@ -405,6 +498,7 @@
 
   input.addEventListener('keydown', (ev) => {
     if (ev.key === 'Enter') {
+      // Selection (active suggestion) is part of value — accept it, then run
       exec(input.value);
       input.value = '';
       ev.preventDefault();
@@ -412,8 +506,51 @@
     }
     if (ev.key === 'Tab') {
       ev.preventDefault();
-      completeOnTab();
+      // If a ghost suggestion is active (selection within input), accept it
+      // by collapsing the selection to the end.
+      if (input.selectionStart !== input.selectionEnd) {
+        input.setSelectionRange(input.value.length, input.value.length);
+        return;
+      }
+      // No active suggestion: try to complete from scratch
+      const completions = getCompletions(input.value);
+      if (completions.length === 0) return;
+      if (completions.length === 1) {
+        input.value = completions[0];
+        input.setSelectionRange(input.value.length, input.value.length);
+        return;
+      }
+      // Multiple: complete to longest common prefix + show candidates
+      const common = lcp(completions);
+      if (common.length > input.value.length) {
+        input.value = common;
+        input.setSelectionRange(common.length, common.length);
+      }
+      // Show just the trailing fragment of each candidate (after the prefix)
+      // so output is dense — like bash.
+      const tails = completions.map(c => {
+        const tail = c.slice(common.length);
+        return tail || c;
+      });
+      print(`<span class="term-dim">${tails.map(escape).join('  ')}</span>`);
       return;
+    }
+    if (ev.key === 'Escape') {
+      // Dismiss active ghost suggestion: drop the selected suffix
+      if (input.selectionStart !== input.selectionEnd) {
+        ev.preventDefault();
+        input.value = input.value.slice(0, input.selectionStart);
+        return;
+      }
+    }
+    if (ev.key === 'ArrowRight') {
+      // Right arrow at end of selection also accepts the suggestion
+      if (input.selectionStart !== input.selectionEnd &&
+          input.selectionEnd === input.value.length) {
+        ev.preventDefault();
+        input.setSelectionRange(input.value.length, input.value.length);
+        return;
+      }
     }
     if (ev.key === 'ArrowUp') {
       if (history.length === 0) return;
