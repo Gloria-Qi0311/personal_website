@@ -2,7 +2,7 @@
 
 > AI Product Manager. A living roadmap of what I've shipped, what I'm building, and where I'm going.
 
-I build AI products by treating myself like one — versioned, measured, always shipping.
+A star to ship by.
 
 ## Identity
 - Name: Antares Yuan

@@ -100,7 +100,7 @@ const sectionFor = (label, status) => {
 const full = `# ${site.meta?.title ?? 'Personal site'}
 
 ${profile.slogan ?? ''}
-
+${profile.manifesto ? `\n${profile.manifesto}\n` : ''}
 Name: ${profile.name} ${profile.nameAccent ?? ''}
 Role: ${profile.role}
 Location: ${profile.location}

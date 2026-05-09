@@ -1,5 +1,7 @@
 # Antares Yuan — AI PM
 
+A star to ship by.
+
 I build AI products by treating myself like one — versioned, measured, always shipping.
 
 Name: Antares Yuan
