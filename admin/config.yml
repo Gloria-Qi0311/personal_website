@@ -1,9 +1,8 @@
 # ─────────────────────────────────────────────────────────────────────
 # Decap CMS configuration.
 #
-# Backend: GitHub OAuth via an external proxy (see issue #48).
-# Until the proxy is deployed and `base_url` points at it, browser login
-# will fail — but the schema and editing UI are wired up correctly.
+# Backend: GitHub OAuth via a self-hosted Cloudflare Worker proxy.
+# Worker source: workers/decap-oauth/  (deploy: see that folder's README)
 #
 # Local preview during development:
 #   - run a static server from repo root (e.g. `npx serve .`)
@@ -15,9 +14,7 @@ backend:
   name: github
   repo: AntaresYuan/personal_website
   branch: main
-  # Replace with your deployed OAuth proxy URL (Cloudflare Worker / Vercel fn).
-  # Until then, login will fail with a "404" — that is expected.
-  base_url: https://oauth.example.com
+  base_url: https://decap-oauth.chenjy4.workers.dev
   auth_endpoint: auth
 
 # Allow `?local_backend=true` to use a filesystem proxy during dev.
