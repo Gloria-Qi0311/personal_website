@@ -1,0 +1,166 @@
+# ─────────────────────────────────────────────────────────────────────
+# Decap CMS configuration.
+#
+# Backend: GitHub OAuth via an external proxy (see issue #48).
+# Until the proxy is deployed and `base_url` points at it, browser login
+# will fail — but the schema and editing UI are wired up correctly.
+#
+# Local preview during development:
+#   - run a static server from repo root (e.g. `npx serve .`)
+#   - visit http://localhost:3000/admin/?local_backend=true
+#   - run `npx decap-server` in another terminal (no auth, file-system writes)
+# ─────────────────────────────────────────────────────────────────────
+
+backend:
+  name: github
+  repo: AntaresYuan/personal_website
+  branch: main
+  # Replace with your deployed OAuth proxy URL (Cloudflare Worker / Vercel fn).
+  # Until then, login will fail with a "404" — that is expected.
+  base_url: https://oauth.example.com
+  auth_endpoint: auth
+
+# Allow `?local_backend=true` to use a filesystem proxy during dev.
+local_backend: true
+
+publish_mode: simple
+media_folder: "media"
+public_folder: "/media"
+
+# ─────────────────────────────────────────────────────────────────────
+# Collections — each maps to a JSON file or folder under /content.
+# ─────────────────────────────────────────────────────────────────────
+collections:
+  # ── Site meta + footer ─────────────────────────────────────────────
+  - name: "site"
+    label: "Site meta"
+    files:
+      - file: "content/site.json"
+        label: "Site"
+        name: "site"
+        format: "json"
+        fields:
+          - { label: "Title",       name: "meta.title",       widget: "string" }
+          - { label: "Language",    name: "meta.lang",        widget: "string", default: "en" }
+          - { label: "Description", name: "meta.description", widget: "text" }
+          - { label: "Footer copyright",  name: "footer.copyright",  widget: "string" }
+          - { label: "Footer tagline",    name: "footer.tagline",    widget: "string" }
+          - { label: "Last updated (YYYY-MM-DD)", name: "footer.lastUpdated", widget: "string" }
+
+  # ── Hero / profile ─────────────────────────────────────────────────
+  - name: "profile"
+    label: "Hero / profile"
+    files:
+      - file: "content/profile.json"
+        label: "Profile"
+        name: "profile"
+        format: "json"
+        fields:
+          - { label: "Name",         name: "name",        widget: "string" }
+          - { label: "Name accent",  name: "nameAccent",  widget: "string", required: false }
+          - { label: "Role",         name: "role",        widget: "string" }
+          - { label: "Location",     name: "location",    widget: "string" }
+          - { label: "Status (now)", name: "status",      widget: "string" }
+          - { label: "Slogan",       name: "slogan",      widget: "text" }
+          - label: "Tags"
+            name: "tags"
+            widget: "list"
+            field: { label: "Tag", name: "tag", widget: "string" }
+          - label: "Audience CTAs (3 entries)"
+            name: "ctas"
+            widget: "list"
+            min: 1
+            max: 4
+            fields:
+              - { label: "Audience",  name: "audience", widget: "string" }
+              - { label: "Label",     name: "label",    widget: "string" }
+              - { label: "Anchor (#shipped, #now, #contact, …)", name: "anchor", widget: "string" }
+              - { label: "Helper note", name: "note",   widget: "string", required: false }
+
+  # ── Board: project cards ───────────────────────────────────────────
+  - name: "board"
+    label: "Board (Shipped/Now/Next/Later)"
+    files:
+      - file: "content/board.json"
+        label: "Cards"
+        name: "cards"
+        format: "json"
+        fields:
+          - label: "Cards"
+            name: "cards"
+            widget: "list"
+            summary: "{{fields.title}} · {{fields.status}}"
+            fields:
+              - { label: "ID (slug)", name: "id",      widget: "string" }
+              - label: "Status"
+                name: "status"
+                widget: "select"
+                options: ["shipped", "now", "next", "later"]
+              - { label: "Title",     name: "title",   widget: "string" }
+              - { label: "Summary",   name: "summary", widget: "text" }
+              - { label: "Details (markdown — supports ## h2, lists, **bold**, `code`)", name: "details", widget: "text", required: false }
+              - label: "Tags"
+                name: "tags"
+                widget: "list"
+                field: { label: "Tag", name: "tag", widget: "string" }
+              - { label: "Impact",    name: "impact",  widget: "string", required: false }
+              - label: "Links"
+                name: "links"
+                widget: "list"
+                required: false
+                fields:
+                  - { label: "Label", name: "label", widget: "string" }
+                  - { label: "URL",   name: "href",  widget: "string" }
+              - { label: "Updated (YYYY-MM-DD)", name: "updated", widget: "string" }
+              - { label: "Order within column", name: "order", widget: "number", default: 1 }
+
+  # ── Lens: principles ───────────────────────────────────────────────
+  - name: "lens"
+    label: "Lens (how I think)"
+    files:
+      - file: "content/lens.json"
+        label: "Lens"
+        name: "lens"
+        format: "json"
+        fields:
+          - label: "Section header"
+            name: "head"
+            widget: "object"
+            fields:
+              - { label: "Command", name: "cmd",   widget: "string" }
+              - { label: "Title",   name: "title", widget: "string" }
+              - { label: "Meta",    name: "meta",  widget: "string", required: false }
+          - label: "Items"
+            name: "items"
+            widget: "list"
+            summary: "{{fields.num}} {{fields.main}}"
+            fields:
+              - { label: "Number (e.g. / 01)", name: "num",   widget: "string" }
+              - { label: "Main line",          name: "main",  widget: "string" }
+              - { label: "Aside / nuance",     name: "aside", widget: "string" }
+
+  # ── Contact ────────────────────────────────────────────────────────
+  - name: "contact"
+    label: "Contact"
+    files:
+      - file: "content/contact.json"
+        label: "Contact"
+        name: "contact"
+        format: "json"
+        fields:
+          - label: "Section header"
+            name: "head"
+            widget: "object"
+            fields:
+              - { label: "Command", name: "cmd",   widget: "string" }
+              - { label: "Title",   name: "title", widget: "string" }
+              - { label: "Meta",    name: "meta",  widget: "string", required: false }
+          - { label: "Intro (supports <em>/<strong>)", name: "intro", widget: "text" }
+          - label: "Items"
+            name: "items"
+            widget: "list"
+            summary: "{{fields.key}} · {{fields.label}}"
+            fields:
+              - { label: "Key (email / linkedin / …)", name: "key",   widget: "string" }
+              - { label: "Display label", name: "label", widget: "string" }
+              - { label: "URL",           name: "href",  widget: "string" }

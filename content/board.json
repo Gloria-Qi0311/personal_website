@@ -1,0 +1,60 @@
+{
+  "cards": [
+    {
+      "id": "placeholder-shipped-1",
+      "status": "shipped",
+      "title": "[Project Name] — replace via /admin/",
+      "summary": "One-line problem → outcome. Be specific. Real metrics beat adjectives.",
+      "details": "## Context\n\nReplace this with the longer story. Two or three short paragraphs is plenty.\n\n## What I owned\n\n- Decision X\n- Decision Y\n- Trade-off Z\n\n## Outcome\n\nWhat happened. What you'd do differently.",
+      "tags": ["AI PM", "0→1"],
+      "impact": "+38% speed",
+      "links": [{ "label": "GitHub", "href": "#" }],
+      "updated": "2026-04-20",
+      "order": 1
+    },
+    {
+      "id": "placeholder-shipped-2",
+      "status": "shipped",
+      "title": "[Project 2]",
+      "summary": "Replace this card. Add 4–5 real shipped projects.",
+      "tags": ["agents", "tool-use"],
+      "impact": "12 hrs/wk saved",
+      "links": [],
+      "updated": "2026-03-10",
+      "order": 2
+    },
+    {
+      "id": "placeholder-now-1",
+      "status": "now",
+      "title": "[Current focus]",
+      "summary": "What's getting your hours this week. Keep Now to 1–3 items.",
+      "tags": ["focus"],
+      "impact": "",
+      "links": [],
+      "updated": "2026-05-09",
+      "order": 1
+    },
+    {
+      "id": "placeholder-next-1",
+      "status": "next",
+      "title": "[Next 3-6 months]",
+      "summary": "A bet you're committing to next. Be ambitious but believable.",
+      "tags": ["plan"],
+      "impact": "",
+      "links": [],
+      "updated": "2026-05-09",
+      "order": 1
+    },
+    {
+      "id": "placeholder-later-1",
+      "status": "later",
+      "title": "[The ambition]",
+      "summary": "The 1–3 year version of you. This is what makes founders want to talk.",
+      "tags": ["vision"],
+      "impact": "",
+      "links": [],
+      "updated": "2026-05-09",
+      "order": 1
+    }
+  ]
+}

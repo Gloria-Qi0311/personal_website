@@ -1,0 +1,14 @@
+{
+  "head": {
+    "cmd": "$ ./reach-out",
+    "title": "open to:",
+    "meta": ""
+  },
+  "intro": "Currently open to: founder conversations in AI infra & agents, AI PM roles at top product orgs, and contractor work on 0→1 features. <em>Tell me what you're building.</em>",
+  "items": [
+    { "key": "email",    "label": "hello@yourname.dev", "href": "mailto:hello@yourname.dev" },
+    { "key": "linkedin", "label": "/in/yourname",       "href": "#" },
+    { "key": "x",        "label": "@yourhandle",        "href": "#" },
+    { "key": "github",   "label": "@AntaresYuan",       "href": "https://github.com/AntaresYuan" }
+  ]
+}

@@ -3,155 +3,230 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>~ / ai pm</title>
+<title>Esther Yuan — AI PM</title>
+<meta name="description" content="A living roadmap of what I've shipped, what I'm building, and where I'm going.">
+
+<!-- ── Theme + favicon ───────────────────────────────────────────── -->
+<meta name="theme-color" content="#FAF7F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1A1F" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+<!-- ── Open Graph / Twitter ──────────────────────────────────────── -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Esther Yuan — AI PM">
+<meta property="og:description" content="A living roadmap of what I've shipped, what I'm building, and where I'm going.">
+<meta property="og:image" content="og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Esther Yuan — AI PM">
+<meta name="twitter:description" content="A living roadmap of what I've shipped, what I'm building, and where I'm going.">
+<meta name="twitter:image" content="og-image.png">
+
 <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
 
-<div class="layout">
+<a class="skip-link" href="#main-content">Skip to content</a>
 
-  <div class="shell">
+<main class="page" id="main-content">
 
-    <div class="boot" id="boot"></div>
+  <!-- ── TOP NAV ─────────────────────────────────────────────────── -->
+  <nav class="topnav rise">
+    <div class="brand"><span class="dot"></span><span id="brand-name"></span></div>
+    <div class="meta" id="last-updated"></div>
+  </nav>
 
-    <div class="identity">
-      <h1 class="name">Your Name<em>.</em></h1>
-      <div class="role-row">
-        <span>AI Product Manager</span>
-        <span class="dot">·</span>
-        <span>Shanghai</span>
-        <span class="dot">·</span>
-        <span class="now"><span class="pulse"></span>building something</span>
+  <!-- ── HERO ────────────────────────────────────────────────────── -->
+  <header class="hero rise rise-1">
+    <div class="hero-left">
+      <!-- Avatar sits inline on the left of the name/slogan block.
+           Calm by default; swaps to talking on hover/focus/tap. -->
+      <button type="button" class="hero-avatar" id="hero-avatar"
+              aria-label="Avatar — tap or hover to see me say hi">
+        <img class="avatar-img avatar-calm"    id="avatar-calm"    alt="">
+        <img class="avatar-img avatar-talking" id="avatar-talking" alt="" aria-hidden="true">
+      </button>
+      <div class="hero-text">
+        <h1 class="hero-name" id="hero-name"></h1>
+        <p class="hero-slogan" id="hero-slogan"></p>
+        <div class="hero-meta" id="hero-meta"></div>
+      </div>
+    </div>
+    <div class="hero-ctas" id="hero-ctas"></div>
+  </header>
+
+  <!-- ── BOARD ───────────────────────────────────────────────────── -->
+  <section class="board-section rise rise-2" aria-label="Project board" id="shipped">
+
+    <!-- toolbar: board name + view tabs + count -->
+    <div class="board-toolbar">
+      <div class="board-toolbar-left">
+        <h2 class="board-name">
+          <span class="board-icon" aria-hidden="true">⊞</span>
+          <span id="board-name-text">Roadmap</span>
+        </h2>
+        <div class="board-views" role="tablist" aria-label="Board view">
+          <button class="view-tab is-active" type="button" role="tab" aria-selected="true">Board</button>
+          <button class="view-tab is-disabled" type="button" role="tab" aria-selected="false" aria-disabled="true" title="coming soon">Timeline</button>
+          <button class="view-tab is-disabled" type="button" role="tab" aria-selected="false" aria-disabled="true" title="coming soon">Specs</button>
+        </div>
+      </div>
+      <div class="board-toolbar-right">
+        <span class="board-stat"><strong id="board-total-count">0</strong> cards</span>
+        <span class="board-stat sep">·</span>
+        <span class="board-stat" id="board-shipped-count">0 shipped</span>
+        <kbd class="kbd-hint" aria-hidden="true">⌘K</kbd>
       </div>
     </div>
 
-    <section class="section s1" data-section="about">
-      <div class="sec-head">
-        <span class="sec-cmd">$ cat</span>
-        <span class="sec-title">about.md</span>
-        <span class="sec-meta">~/profile</span>
-      </div>
-      <div class="prose">
-        <p>I build AI products that people actually use. Five years across <strong>consumer chat</strong>, <strong>developer tools</strong>, and <strong>enterprise copilots</strong> — shipping features end-to-end from research to launch.</p>
-        <p>I think a lot about evaluation, the gap between demo and production, and where models help vs. where they get in the way.</p>
-      </div>
-    </section>
+    <!-- filter chips (click to filter by tag) -->
+    <div class="board-filters" id="board-filters" role="group" aria-label="Filter by tag">
+      <button class="filter-chip is-active" type="button" data-filter="all">All</button>
+      <!-- tag chips injected by render.js -->
+    </div>
 
-    <section class="section s2" data-section="cases">
-      <div class="sec-head">
-        <span class="sec-cmd">$ ls</span>
-        <span class="sec-title">case_studies/</span>
-        <span class="sec-meta">04 entries</span>
-      </div>
-      <div class="cases">
-        <div class="case">
-          <div class="case-id">001</div>
-          <div>
-            <div class="case-title">Inline AI assistant for SaaS editor</div>
-            <div class="case-desc">Designed prompt UX, eval framework, rollout strategy. Cut user task time by ~38%.</div>
-            <div class="case-tags"><span class="tag">RAG</span><span class="tag">eval</span><span class="tag">0→1</span></div>
-          </div>
-          <div class="case-meta">2024<span class="impact">+38% speed</span></div>
-        </div>
-        <div class="case">
-          <div class="case-id">002</div>
-          <div>
-            <div class="case-title">Multi-step agent for ops automation</div>
-            <div class="case-desc">Internal tool replacing manual triage. Owned scope, model selection, HITL checkpoints.</div>
-            <div class="case-tags"><span class="tag">agents</span><span class="tag">tool-use</span></div>
-          </div>
-          <div class="case-meta">2024<span class="impact">12 hrs/wk</span></div>
-        </div>
-        <div class="case">
-          <div class="case-id">003</div>
-          <div>
-            <div class="case-title">Voice-to-action mobile feature</div>
-            <div class="case-desc">Cross-functional with iOS, ASR, design. Shipped to 2M+ users with 91% intent accuracy.</div>
-            <div class="case-tags"><span class="tag">multimodal</span><span class="tag">consumer</span></div>
-          </div>
-          <div class="case-meta">2023<span class="impact">2M users</span></div>
-        </div>
-        <div class="case">
-          <div class="case-id">004</div>
-          <div>
-            <div class="case-title">LLM-powered search relevance</div>
-            <div class="case-desc">Re-ranked top-K with embeddings. A/B'd vs keyword baseline; +21% CTR on long-tail.</div>
-            <div class="case-tags"><span class="tag">embeddings</span><span class="tag">A/B</span></div>
-          </div>
-          <div class="case-meta">2023<span class="impact">+21% CTR</span></div>
-        </div>
-      </div>
-    </section>
+    <!-- columns -->
+    <div class="board" id="board">
+      <article class="column col-shipped" id="col-shipped" aria-labelledby="col-shipped-title">
+        <header class="col-head">
+          <h3 class="col-title" id="col-shipped-title"><span class="col-dot"></span>Shipped</h3>
+          <span class="col-count" data-count="shipped">0</span>
+        </header>
+        <div class="col-cards" data-cards="shipped"></div>
+      </article>
 
-    <section class="section s3" data-section="lens">
-      <div class="sec-head">
-        <span class="sec-cmd">$ grep -i</span>
-        <span class="sec-title">how_i_think.txt</span>
-        <span class="sec-meta">principles</span>
-      </div>
-      <div class="lens">
-        <div class="lens-card">
-          <div class="lens-num">/ 01</div>
-          <div class="lens-text">Evals before features. <em>If you can't measure it, you're shipping vibes.</em></div>
-        </div>
-        <div class="lens-card">
-          <div class="lens-num">/ 02</div>
-          <div class="lens-text">The model is one input. <em>Latency, UX, trust often matter more.</em></div>
-        </div>
-        <div class="lens-card">
-          <div class="lens-num">/ 03</div>
-          <div class="lens-text">Demos lie. Production tells the truth. <em>Watch the long tail.</em></div>
-        </div>
-        <div class="lens-card">
-          <div class="lens-num">/ 04</div>
-          <div class="lens-text">A great PM removes ambiguity. <em>Models add it back. The job is balance.</em></div>
-        </div>
-      </div>
-    </section>
+      <article class="column col-now" id="now" aria-labelledby="col-now-title">
+        <header class="col-head">
+          <h3 class="col-title" id="col-now-title"><span class="col-dot"></span>Now</h3>
+          <span class="col-count" data-count="now">0</span>
+        </header>
+        <div class="col-cards" data-cards="now"></div>
+      </article>
 
-    <section class="section s4" data-section="contact">
-      <div class="sec-head">
-        <span class="sec-cmd">$ ./contact</span>
-        <span class="sec-title">--reach-out</span>
-      </div>
-      <div class="contact-grid">
-        <div class="contact-key">email</div>
-        <div class="contact-val"><a href="mailto:hello@yourname.dev">hello@yourname.dev</a></div>
-        <div class="contact-key">x</div>
-        <div class="contact-val"><a href="#">@yourhandle</a></div>
-        <div class="contact-key">linkedin</div>
-        <div class="contact-val"><a href="#">/in/yourname</a></div>
-        <div class="contact-key">writing</div>
-        <div class="contact-val"><a href="#" id="contact-input-target">notes.yourname.dev</a></div>
-      </div>
-      <div style="margin-top:24px">
-        <input type="text" id="message-input" placeholder="leave me a note ↵"
-          style="width:100%;max-width:400px;background:transparent;border:none;
-                 border-bottom:1px solid var(--line);padding:8px 0;color:var(--text);
-                 font-family:inherit;font-size:13px;outline:none;"
-          onfocus="this.style.borderColor='var(--accent)'"
-          onblur="this.style.borderColor='var(--line)'">
-      </div>
-    </section>
+      <article class="column col-next" id="col-next" aria-labelledby="col-next-title">
+        <header class="col-head">
+          <h3 class="col-title" id="col-next-title"><span class="col-dot"></span>Next</h3>
+          <span class="col-count" data-count="next">0</span>
+        </header>
+        <div class="col-cards" data-cards="next"></div>
+      </article>
 
-    <footer>© 2026 — built with Pretext-style text layout</footer>
+      <article class="column col-later" id="col-later" aria-labelledby="col-later-title">
+        <header class="col-head">
+          <h3 class="col-title" id="col-later-title"><span class="col-dot"></span>Later</h3>
+          <span class="col-count" data-count="later">0</span>
+        </header>
+        <div class="col-cards" data-cards="later"></div>
+      </article>
+    </div>
 
-  </div>
+  </section>
 
-  <!-- Avatar column -->
-  <div class="avatar-col">
-    <div class="avatar-wrap">
-      <canvas id="avatar"></canvas>
-      <div class="avatar-label"><span class="blink-dot"></span>online · click me</div>
-      <div class="try-hint">
-        try: <kbd>hover</kbd> <kbd>click</kbd> <kbd>scroll</kbd> <kbd>type</kbd>
+  <!-- ── LENS: how I think ───────────────────────────────────────── -->
+  <section class="section rise rise-3" id="lens">
+    <header class="sec-head">
+      <span class="sec-cmd" id="lens-cmd"></span>
+      <span class="sec-title" id="lens-title"></span>
+      <span class="sec-meta" id="lens-meta"></span>
+    </header>
+    <div class="lens" id="lens-list"></div>
+  </section>
+
+  <!-- ── CONTACT ─────────────────────────────────────────────────── -->
+  <section class="section rise rise-4" id="contact">
+    <header class="sec-head">
+      <span class="sec-cmd" id="contact-cmd"></span>
+      <span class="sec-title" id="contact-title"></span>
+    </header>
+    <div class="contact">
+      <p class="contact-intro" id="contact-intro"></p>
+      <div class="contact-list" id="contact-list"></div>
+    </div>
+  </section>
+
+  <!-- ── COMMENTS (Giscus) ───────────────────────────────────────────
+       Setup (one-time, owner only):
+       1. Enable GitHub Discussions on the repo
+       2. Visit https://giscus.app and configure for AntaresYuan/personal_website
+       3. Paste the generated data-repo-id and data-category-id below
+       4. Uncomment the <script> block
+       Until then, this section renders the empty-state placeholder.
+  ──────────────────────────────────────────────────────────────────── -->
+  <section class="section comments-section" aria-label="Comments">
+    <header class="sec-head">
+      <span class="sec-cmd">$ comments</span>
+      <span class="sec-title">notes from readers</span>
+      <span class="sec-meta">via GitHub Discussions</span>
+    </header>
+    <div id="giscus-container">
+      <p class="comments-placeholder">
+        Comments will appear here once Giscus is wired up — see
+        <a href="https://github.com/AntaresYuan/personal_website/issues/49">#49</a>.
+      </p>
+      <!--
+      <script src="https://giscus.app/client.js"
+              data-repo="AntaresYuan/personal_website"
+              data-repo-id="REPLACE_WITH_REPO_ID"
+              data-category="General"
+              data-category-id="REPLACE_WITH_CATEGORY_ID"
+              data-mapping="pathname"
+              data-strict="0"
+              data-reactions-enabled="1"
+              data-emit-metadata="0"
+              data-input-position="top"
+              data-theme="light"
+              data-lang="en"
+              crossorigin="anonymous"
+              async>
+      </script>
+      -->
+    </div>
+  </section>
+
+  <!-- ── CARD DETAIL PANEL ──────────────────────────────────────────
+       Slides in from the right when a card is clicked. Closes on ESC,
+       backdrop click, or X. ↑/↓ navigates between cards. URL hash syncs
+       (#card/SHIP-01) for deep linking.
+       On <768px viewports the panel becomes a full-screen sheet.
+  ──────────────────────────────────────────────────────────────────── -->
+  <div class="modal-backdrop" id="modal-backdrop" hidden></div>
+  <div class="card-modal" id="card-modal" role="dialog" aria-modal="false" aria-labelledby="modal-title" aria-hidden="true">
+    <header class="panel-header">
+      <div class="panel-nav-group">
+        <button type="button" class="panel-nav" id="panel-prev" aria-label="Previous card (↑)" title="↑ prev">
+          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 9l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" class="panel-nav" id="panel-next" aria-label="Next card (↓)" title="↓ next">
+          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <span class="panel-position" id="panel-position"></span>
       </div>
+      <button type="button" class="modal-close" id="modal-close" aria-label="Close (Esc)" title="esc">×</button>
+    </header>
+    <div class="panel-body">
+      <div class="modal-meta-top">
+        <span class="modal-id" id="modal-id"></span>
+        <span class="modal-status" id="modal-status"></span>
+      </div>
+      <h2 class="modal-title" id="modal-title"></h2>
+      <p class="modal-summary" id="modal-summary"></p>
+      <div class="modal-tags" id="modal-tags"></div>
+      <div class="modal-details" id="modal-details"></div>
+      <div class="modal-foot">
+        <span class="modal-updated" id="modal-updated"></span>
+        <span class="modal-impact"  id="modal-impact"></span>
+      </div>
+      <div class="modal-links" id="modal-links"></div>
     </div>
   </div>
 
-</div>
+  <!-- ── FOOTER ──────────────────────────────────────────────────── -->
+  <footer class="site-footer">
+    <span id="footer-copyright"></span>
+    <span><a href="/admin/">edit</a> · <a href="https://github.com/AntaresYuan/personal_website">source</a></span>
+  </footer>
 
-<script src="scripts/avatar.js"></script>
-<script src="scripts/boot.js"></script>
+</main>
+
+<script src="scripts/render.js"></script>
 </body>
 </html>
