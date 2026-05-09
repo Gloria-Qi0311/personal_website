@@ -231,6 +231,15 @@ const footerHtml = () => {
 const tplPath = path.join(root, 'index.html');
 let html = fs.readFileSync(tplPath, 'utf8');
 
+// Insert (or refresh) a GENERATED banner right after <!DOCTYPE> so anyone
+// opening the file sees it's a build artifact. Strip any prior banner first
+// so the script stays idempotent.
+html = html.replace(/<!--\s*GENERATED — do not edit[\s\S]*?-->\s*\n?/i, '');
+html = html.replace(
+  /(<!doctype html>)/i,
+  `$1\n<!--\n  GENERATED — do not edit by hand.\n  Source of truth: content/*.json (and the structural template in this file).\n  Regenerate: \`node scripts/build.js\`\n-->`
+);
+
 // Mark as prerendered so render.js can short-circuit DOM population
 html = html.replace(/<html\b[^>]*>/, (m) => {
   if (/data-prerendered=/.test(m)) return m.replace(/data-prerendered="[^"]*"/, 'data-prerendered="true"');

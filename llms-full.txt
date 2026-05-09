@@ -5,12 +5,12 @@ I build AI products by treating myself like one — versioned, measured, always 
 Name: Antares Yuan
 Role: AI Product Manager
 Location: Seattle|Beijing · open to remote
-Tags: AI PM, Agent Native, 0→1, Architecture background
+Tags: Pi-Shaped AI PM, AI Agent Native, 0→1, HCI Researcher, Human Centered Design & Engineering  @ University of Washington, Solving social problems using human-centered design & product-oriented mindset.
 
 # Shipped
 
 ## SHIP-01 · SHIPPED · Worth Fly
-One-line problem → outcome. Be specific. Real metrics beat adjectives.
+WorthFly currently focuses on search, decision support, alert drafts, and external purchase handoff. Final fare, inventory, and ticketing still belong to the real booking channel.
 Impact: Null
 Tags: SIDE PROJECT, AI PM, 0→1
 Updated: 2026-04-10
@@ -33,7 +33,7 @@ Replace this with the longer story. Two or three short paragraphs is plenty.
 What happened. What you'd do differently.
 
 ## SHIP-02 · SHIPPED · [Project 2]
-Replace this card. Add 4-5 real shipped projects.
+hello
 Impact: 12 hrs/wk saved
 Tags: agents, tool-use
 Updated: 2026-03-10
@@ -78,3 +78,7 @@ Currently open to: founder conversations in AI infra & agents, AI PM roles at to
 
 ---
 Generated 2026-05-09 from content/*.json. Last site update: 2026-05-09
+
+
+---
+Generated from content/*.json. To update: edit the JSON (or via /admin/) and run `node scripts/build.js`.
