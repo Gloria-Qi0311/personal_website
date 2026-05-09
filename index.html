@@ -56,10 +56,17 @@
       <div class="hero-text">
         <h1 class="hero-name" id="hero-name">Antares <em>Yuan</em></h1>
         <p class="hero-slogan" id="hero-slogan">I build AI products by treating myself like one — versioned, measured, always shipping.</p>
-        <div class="hero-meta" id="hero-meta"><span>AI Product Manager</span><span class="sep">·</span><span>Seattle|Beijing · open to remote</span><span class="sep">·</span><span class="now-pill"><span class="pulse"></span>Building in public</span><span class="pill">Pi-Shaped AI PM</span><span class="pill">AI Agent Native</span><span class="pill">0→1</span><span class="pill">HCI Researcher</span><span class="pill">Human Centered Design &amp; Engineering  @ University of Washington</span><span class="pill">Solving social problems using human-centered design &amp; product-oriented mindset.</span></div>
+        <div class="hero-meta" id="hero-meta"><span>AI Product Manager</span><span class="sep">·</span><span>Seattle|Beijing · open to remote</span><span class="sep">·</span><span class="now-pill"><span class="pulse"></span>Building in public</span><span class="pill">Pi-Shaped AI PM</span><span class="pill">AI Agent Native</span><span class="pill">0→1</span><span class="pill">HCI Researcher</span><span class="pill">HCDE @ UDub</span></div>
       </div>
     </div>
     <div class="hero-ctas" id="hero-ctas">
+        <a class="cta" href="#terminal">
+          <div>
+            <div class="cta-label">for agents</div>
+            <div class="cta-text">use the CLI · ⌘K</div>
+          </div>
+          <span class="cta-arrow">→</span>
+        </a>
         <a class="cta" href="#shipped">
           <div>
             <div class="cta-label">for HR</div>
@@ -78,13 +85,6 @@
           <div>
             <div class="cta-label">for collaborators</div>
             <div class="cta-text">let&#39;s talk</div>
-          </div>
-          <span class="cta-arrow">→</span>
-        </a>
-        <a class="cta" href="#terminal">
-          <div>
-            <div class="cta-label">for agents</div>
-            <div class="cta-text">use the CLI · ⌘K</div>
           </div>
           <span class="cta-arrow">→</span>
         </a></div>
@@ -107,74 +107,125 @@
         </div>
       </div>
       <div class="board-toolbar-right">
-        <span class="board-stat"><strong id="board-total-count">5</strong> cards</span>
+        <span class="board-stat"><strong id="board-total-count">8</strong> cards</span>
         <span class="board-stat sep">·</span>
-        <span class="board-stat" id="board-shipped-count">2 shipped</span>
+        <span class="board-stat" id="board-shipped-count">3 shipped</span>
         <kbd class="kbd-hint" aria-hidden="true">⌘K</kbd>
       </div>
     </div>
 
     <!-- filter chips (click to filter by tag) -->
-    <div class="board-filters" id="board-filters" role="group" aria-label="Filter by tag"><button class="filter-chip is-active" type="button" data-filter="all" aria-pressed="true">All</button><button class="filter-chip" type="button" data-filter="side project" aria-pressed="false">SIDE PROJECT</button><button class="filter-chip" type="button" data-filter="ai pm" aria-pressed="false">AI PM</button><button class="filter-chip" type="button" data-filter="0→1" aria-pressed="false">0→1</button><button class="filter-chip" type="button" data-filter="agents" aria-pressed="false">agents</button><button class="filter-chip" type="button" data-filter="tool-use" aria-pressed="false">tool-use</button><button class="filter-chip" type="button" data-filter="focus" aria-pressed="false">focus</button></div>
+    <div class="board-filters" id="board-filters" role="group" aria-label="Filter by tag"><button class="filter-chip is-active" type="button" data-filter="all" aria-pressed="true">All</button><button class="filter-chip" type="button" data-filter="side project" aria-pressed="false">SIDE PROJECT</button><button class="filter-chip" type="button" data-filter="ai pm" aria-pressed="false">AI PM</button><button class="filter-chip" type="button" data-filter="website" aria-pressed="false">Website</button><button class="filter-chip" type="button" data-filter="productivity" aria-pressed="false">Productivity</button><button class="filter-chip" type="button" data-filter="0→1" aria-pressed="false">0→1</button><button class="filter-chip" type="button" data-filter="explainable ai" aria-pressed="false">Explainable AI</button></div>
 
     <!-- columns -->
     <div class="board" id="board">
       <article class="column col-shipped" id="col-shipped" aria-labelledby="col-shipped-title">
         <header class="col-head">
           <h3 class="col-title" id="col-shipped-title"><span class="col-dot"></span>Shipped</h3>
-          <span class="col-count" data-count="shipped">2</span>
+          <span class="col-count" data-count="shipped">3</span>
         </header>
         <div class="col-cards" data-cards="shipped">
-            <button type="button" class="card" data-id="shipped-1" data-card-id="SHIP-01" data-tags="side project|ai pm|0→1" aria-label="Open details for Worth Fly">
+            <button type="button" class="card" data-id="shipped-1" data-card-id="SHIP-01" data-tags="side project|ai pm|0→1|explainable ai|website" aria-label="Open details for Worth Fly">
               <div class="card-meta-top">
                 <span class="card-id">SHIP-01</span>
                 <span class="card-handle" aria-hidden="true">⋮⋮</span>
               </div>
               <div class="card-title">Worth Fly</div>
               <div class="card-summary">WorthFly currently focuses on search, decision support, alert drafts, and external purchase handoff. Final fare, inventory, and ticketing still belong to the real booking channel.</div>
-              <div class="card-tags"><span class="tag">SIDE PROJECT</span><span class="tag tag-blue">AI PM</span><span class="tag">0→1</span></div>
+              <div class="card-tags"><span class="tag">SIDE PROJECT</span><span class="tag tag-blue">AI PM</span><span class="tag">0→1</span><span class="tag tag-blue">Explainable AI</span><span class="tag">Website</span></div>
               <div class="card-footer">
                 <span class="card-footer-left">
                   <span>2026-04-10</span>
                   <span class="card-comments">0</span>
                 </span>
-                <span class="card-impact">Null</span>
+                
               </div>
               <div class="card-links"><a href="https://worthfly.vercel.app" target="_blank" rel="noopener">Demo ↗</a><a href="https://github.com/AntaresYuan/Worthfly" target="_blank" rel="noopener">GitHub ↗</a></div>
             </button>
-            <button type="button" class="card" data-id="placeholder-shipped-2" data-card-id="SHIP-02" data-tags="agents|tool-use" aria-label="Open details for [Project 2]">
+            <button type="button" class="card" data-id="shipped-2" data-card-id="SHIP-02" data-tags="side project|tool-use|ai pm|ai native|productivity" aria-label="Open details for Claude Credit Watchdog">
               <div class="card-meta-top">
                 <span class="card-id">SHIP-02</span>
                 <span class="card-handle" aria-hidden="true">⋮⋮</span>
               </div>
-              <div class="card-title">[Project 2]</div>
-              <div class="card-summary">hello</div>
-              <div class="card-tags"><span class="tag">agents</span><span class="tag tag-blue">tool-use</span></div>
+              <div class="card-title">Claude Credit Watchdog</div>
+              <div class="card-summary">A lightweight menu bar watchdog that monitors your Claude Code sessions, alerts you the moment credits renew, and automatically resumes your work.</div>
+              <div class="card-tags"><span class="tag">SIDE PROJECT</span><span class="tag tag-blue">tool-use</span><span class="tag">AI PM</span><span class="tag tag-blue">AI Native</span><span class="tag">Productivity</span></div>
               <div class="card-footer">
                 <span class="card-footer-left">
-                  <span>2026-03-10</span>
+                  <span>2026-04-15</span>
                   <span class="card-comments">0</span>
                 </span>
-                <span class="card-impact">12 hrs/wk saved</span>
+                <span class="card-impact">saved me 10 hrs+ of sleep</span>
               </div>
-              
+              <div class="card-links"><a href="https://claude-credit-watchdog.vercel.app" target="_blank" rel="noopener">Download ↗</a><a href="https://github.com/AntaresYuan/Claude-Credit-Watchdog" target="_blank" rel="noopener">GitHub ↗</a></div>
+            </button>
+            <button type="button" class="card" data-id="shipped-3" data-card-id="SHIP-03" data-tags="research project|hci|iui 2025" aria-label="Open details for SusBench">
+              <div class="card-meta-top">
+                <span class="card-id">SHIP-03</span>
+                <span class="card-handle" aria-hidden="true">⋮⋮</span>
+              </div>
+              <div class="card-title">SusBench</div>
+              <div class="card-summary">Online benchmark for evaluating the susceptibility of CUAs to UI dark patterns.</div>
+              <div class="card-tags"><span class="tag">RESEARCH PROJECT</span><span class="tag tag-blue">HCI</span><span class="tag">IUI 2025</span></div>
+              <div class="card-footer">
+                <span class="card-footer-left">
+                  <span>2026-02-23</span>
+                  <span class="card-comments">0</span>
+                </span>
+                <span class="card-impact">cited by 2 papers</span>
+              </div>
+              <div class="card-links"><a href="https://arxiv.org/pdf/2510.11035" target="_blank" rel="noopener">Paper ↗</a><a href="https://arxiv.org/abs/2510.11035" target="_blank" rel="noopener">DOI ↗</a><a href="https://github.com/SusBench-creator/SusBench" target="_blank" rel="noopener">GitHub ↗</a></div>
             </button></div>
       </article>
 
       <article class="column col-now" id="now" aria-labelledby="col-now-title">
         <header class="col-head">
           <h3 class="col-title" id="col-now-title"><span class="col-dot"></span>Now</h3>
-          <span class="col-count" data-count="now">1</span>
+          <span class="col-count" data-count="now">3</span>
         </header>
         <div class="col-cards" data-cards="now">
-            <button type="button" class="card" data-id="placeholder-now-1" data-card-id="NOW-01" data-tags="focus" aria-label="Open details for [Current focus]">
+            <button type="button" class="card" data-id="now-1" data-card-id="NOW-01" data-tags="lark ai challenge for college students|ai agent pm|delivery layer developer|collaboration|lark" aria-label="Open details for Lark Loom">
               <div class="card-meta-top">
                 <span class="card-id">NOW-01</span>
                 <span class="card-handle" aria-hidden="true">⋮⋮</span>
               </div>
-              <div class="card-title">[Current focus]</div>
-              <div class="card-summary">What&#39;s getting your hours this week. Keep Now to 1-3 items.</div>
-              <div class="card-tags"><span class="tag">focus</span></div>
+              <div class="card-title">Lark Loom</div>
+              <div class="card-summary">The collaborative AI Agent rooted  in the Lark ecosystem.</div>
+              <div class="card-tags"><span class="tag">Lark AI Challenge for College Students</span><span class="tag tag-blue">AI Agent PM</span><span class="tag">Delivery Layer Developer</span><span class="tag tag-blue">Collaboration</span><span class="tag">Lark</span></div>
+              <div class="card-footer">
+                <span class="card-footer-left">
+                  <span>2026-05-09</span>
+                  <span class="card-comments">0</span>
+                </span>
+                
+              </div>
+              <div class="card-links"><a href="https://github.com/EdwinjJ1/lark-loom" target="_blank" rel="noopener">GitHub(in Chinese) ↗</a><a href="https://bytedance.aiforce.cloud/app/app_4jv6kvy942afr" target="_blank" rel="noopener">Lark AI Challenge(in Chinese) ↗</a></div>
+            </button>
+            <button type="button" class="card" data-id="now-2" data-card-id="NOW-02" data-tags="side project|ai builder|xgboost|productivity|website" aria-label="Open details for Gmail Plus Plus">
+              <div class="card-meta-top">
+                <span class="card-id">NOW-02</span>
+                <span class="card-handle" aria-hidden="true">⋮⋮</span>
+              </div>
+              <div class="card-title">Gmail Plus Plus</div>
+              <div class="card-summary">Gmail++ is a AI-powered email ranking platform that gives you a read-only reply queue on top of Gmail, with visible reasoning and reversible account-scoped preferences.</div>
+              <div class="card-tags"><span class="tag">SIDE PROJECT</span><span class="tag tag-blue">AI Builder</span><span class="tag">XGBoost</span><span class="tag tag-blue">Productivity</span><span class="tag">Website</span></div>
+              <div class="card-footer">
+                <span class="card-footer-left">
+                  <span>2026-04-25</span>
+                  <span class="card-comments">0</span>
+                </span>
+                
+              </div>
+              <div class="card-links"><a href="https://gmailplusplus.site" target="_blank" rel="noopener">Try it ↗</a><a href="https://github.com/AntaresYuan/Gmailplusplus" target="_blank" rel="noopener">GitHub ↗</a></div>
+            </button>
+            <button type="button" class="card" data-id="now-3" data-card-id="NOW-03" data-tags="side project|job application|chrome extension" aria-label="Open details for ApplyMint">
+              <div class="card-meta-top">
+                <span class="card-id">NOW-03</span>
+                <span class="card-handle" aria-hidden="true">⋮⋮</span>
+              </div>
+              <div class="card-title">ApplyMint</div>
+              <div class="card-summary">ApplyMint is a AI-powered chrome extension that compiles the resume into JSON, import it once for visual editing, and automatically fill it in one click on the job application form</div>
+              <div class="card-tags"><span class="tag">SIDE PROJECT</span><span class="tag tag-blue">Job Application</span><span class="tag">Chrome Extension</span></div>
               <div class="card-footer">
                 <span class="card-footer-left">
                   <span>2026-05-09</span>
@@ -192,7 +243,7 @@
           <span class="col-count" data-count="next">1</span>
         </header>
         <div class="col-cards" data-cards="next">
-            <button type="button" class="card" data-id="placeholder-next-1" data-card-id="NEXT-01" data-tags="plan" aria-label="Open details for [Next 3-6 months]">
+            <button type="button" class="card" data-id="next-1" data-card-id="NEXT-01" data-tags="plan" aria-label="Open details for [Next 3-6 months]">
               <div class="card-meta-top">
                 <span class="card-id">NEXT-01</span>
                 <span class="card-handle" aria-hidden="true">⋮⋮</span>
@@ -217,7 +268,7 @@
           <span class="col-count" data-count="later">1</span>
         </header>
         <div class="col-cards" data-cards="later">
-            <button type="button" class="card" data-id="placeholder-later-1" data-card-id="LATER-01" data-tags="vision" aria-label="Open details for [The ambition]">
+            <button type="button" class="card" data-id="later-1" data-card-id="LATER-01" data-tags="vision" aria-label="Open details for [The ambition]">
               <div class="card-meta-top">
                 <span class="card-id">LATER-01</span>
                 <span class="card-handle" aria-hidden="true">⋮⋮</span>
@@ -311,7 +362,7 @@
     </header>
     <div class="contact">
       <p class="contact-intro" id="contact-intro">Currently open to: founder conversations in AI infra &amp; agents, AI PM roles at top product orgs, and contractor work on 0→1 features. <em>Tell me what you&#39;re building.</em></p>
-      <div class="contact-list" id="contact-list"><a href="mailto:chenjy4@uw.edu"><span class="key">email</span><span>chenjy4@uw.edu</span></a><a href="#"><span class="key">linkedin</span><span>Chenjie (Antares) Yuan</span></a><a href="#"><span class="key">x</span><span>@yourhandle</span></a><a href="https://github.com/AntaresYuan" target="_blank" rel="noopener"><span class="key">github</span><span>@AntaresYuan</span></a></div>
+      <div class="contact-list" id="contact-list"><a href="mailto:chenjy4@uw.edu"><span class="key">email</span><span>chenjy4@uw.edu</span></a><a href="#"><span class="key">linkedin</span><span>Chenjie (Antares) Yuan</span></a><a href="https://github.com/AntaresYuan" target="_blank" rel="noopener"><span class="key">github</span><span>@AntaresYuan</span></a></div>
     </div>
   </section>
 

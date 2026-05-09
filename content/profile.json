@@ -5,13 +5,19 @@
   "location": "Seattle|Beijing · open to remote",
   "status": "Building in public",
   "slogan": "I build AI products by treating myself like one — versioned, measured, always shipping.",
-  "tags": ["Pi-Shaped AI PM", "AI Agent Native", "0→1", "HCI Researcher", "Human Centered Design & Engineering  @ University of Washington", "Solving social problems using human-centered design & product-oriented mindset."],
+  "tags": ["Pi-Shaped AI PM", "AI Agent Native", "0→1", "HCI Researcher", "HCDE @ UDub"],
   "avatar": {
     "calm":    "media/avatar-calm.png",
     "talking": "media/avatar-talking.png",
     "alt":     "Antares — illustrated portrait"
   },
   "ctas": [
+        {
+      "audience": "for agents",
+      "label": "use the CLI · ⌘K",
+      "anchor": "#terminal",
+      "note": "/llms.txt also available"
+    },
     {
       "audience": "for HR",
       "label": "30-second snapshot",
@@ -29,12 +35,6 @@
       "label": "let's talk",
       "anchor": "#contact",
       "note": "open to founder convos & contracts"
-    },
-    {
-      "audience": "for agents",
-      "label": "use the CLI · ⌘K",
-      "anchor": "#terminal",
-      "note": "/llms.txt also available"
     }
   ]
 }

@@ -9,7 +9,7 @@ I build AI products by treating myself like one — versioned, measured, always 
 - Role: AI Product Manager
 - Location: Seattle|Beijing · open to remote
 - Status: Building in public
-- Tags: Pi-Shaped AI PM, AI Agent Native, 0→1, HCI Researcher, Human Centered Design & Engineering  @ University of Washington, Solving social problems using human-centered design & product-oriented mindset.
+- Tags: Pi-Shaped AI PM, AI Agent Native, 0→1, HCI Researcher, HCDE @ UDub
 
 ## Sections
 - [Roadmap board](/#shipped): four-column kanban — shipped, now, next, later

@@ -4,39 +4,58 @@ A living **PM-style dashboard** of what I've shipped, what I'm building, and whe
 
 > Edit content in-browser at `/admin/`. Public visitors read + comment.
 
-## Structure
+## Source vs. artifacts
+
+The repo has two kinds of files. **Only edit the source.**
 
 ```
-.
-├── index.html              ← entry: hero + kanban board + lens + contact
-├── styles/main.css         ← design tokens + dashboard styles
-├── scripts/render.js       ← fetches /content/*.json and populates the DOM
+SOURCE (edit these — directly or via /admin/)
 ├── content/
 │   ├── site.json           ← title, description, footer
 │   ├── profile.json        ← name, slogan, audience CTAs, tags
 │   ├── board.json          ← project cards (status: shipped/now/next/later)
 │   ├── lens.json           ← short-form principles
 │   └── contact.json        ← email + socials + "open to" line
+├── styles/main.css         ← design tokens + dashboard styles
 ├── scripts/
 │   ├── render.js           ← runtime: hydrates the page for interactive use
 │   ├── terminal.js         ← runtime: embedded Agent Terminal
 │   ├── build-html.js       ← build:   pre-renders content into index.html
 │   ├── build-llms.js       ← build:   regen /llms.txt + /llms-full.txt
-│   └── build.js            ← build:   runs both of the above
-├── llms.txt                ← agent-readable summary (committed, regenerate after edits)
-├── llms-full.txt           ← full content dump (same)
-└── admin/
-    ├── index.html          ← Decap CMS bootstrap
-    └── config.yml          ← collection schemas (mirror /content)
+│   ├── build.js            ← build:   runs both
+│   └── install-hooks.sh    ← installs the pre-commit hook (run once)
+├── admin/
+│   ├── index.html          ← Decap CMS bootstrap
+│   └── config.yml          ← collection schemas
+├── media/                  ← avatars + other static images
+└── favicon.svg
+
+ARTIFACTS (generated — do not hand-edit)
+├── index.html              ← built by scripts/build-html.js
+├── llms.txt                ← built by scripts/build-llms.js
+└── llms-full.txt           ← built by scripts/build-llms.js
 ```
 
-After editing any file under `content/` (or via `/admin/`), run:
+Each generated file carries a `GENERATED — do not edit` banner inside.
+
+### After editing content
 
 ```bash
 node scripts/build.js
+git add . && git commit -m "..."
 ```
 
-This rewrites `index.html` with content baked into the HTML (so agents and JS-disabled readers see it) and regenerates `llms.txt` + `llms-full.txt`. Commit the result.
+`build.js` rebuilds all three artifacts. They get committed alongside the source so any clone of the repo can deploy without a build step.
+
+### Don't want to remember? Install the hook (one-time)
+
+```bash
+bash scripts/install-hooks.sh
+```
+
+This adds a `pre-commit` hook that detects changes to `content/*.json`, runs `build.js`, and stages the regenerated artifacts automatically. Once installed, you only ever edit JSON; the artifacts stay in sync on commit.
+
+> Note: this is a "stay simple now, switch to deploy-time builds later" choice (issue #X). When the site moves to Cloudflare Pages / Vercel, the build will run on the host instead and the artifacts won't need to live in git.
 
 ## How agent-friendly is this?
 
