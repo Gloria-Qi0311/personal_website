@@ -5,16 +5,17 @@ I build AI products by treating myself like one — versioned, measured, always 
 Name: Antares Yuan
 Role: AI Product Manager
 Location: Seattle|Beijing · open to remote
-Tags: AI PM, Agent Native, 0→1, Architecture background
+Tags: Pi-Shaped AI PM, AI Agent Native, 0→1, HCI Researcher, HCDE @ UDub
 
 # Shipped
 
-## SHIP-01 · SHIPPED · [Project Name] — replace via /admin/
-One-line problem → outcome. Be specific. Real metrics beat adjectives.
-Impact: +38% speed
-Tags: AI PM, 0→1
-Updated: 2026-04-20
+## SHIP-01 · SHIPPED · Worth Fly
+WorthFly currently focuses on search, decision support, alert drafts, and external purchase handoff. Final fare, inventory, and ticketing still belong to the real booking channel.
+Tags: SIDE PROJECT, AI PM, 0→1, Explainable AI, Website
+Updated: 2026-04-10
 Links:
+  - Demo: https://worthfly.vercel.app
+  - GitHub: https://github.com/AntaresYuan/Worthfly
 
 ## Context
 
@@ -30,16 +31,45 @@ Replace this with the longer story. Two or three short paragraphs is plenty.
 
 What happened. What you'd do differently.
 
-## SHIP-02 · SHIPPED · [Project 2]
-Replace this card. Add 4–5 real shipped projects.
-Impact: 12 hrs/wk saved
-Tags: agents, tool-use
-Updated: 2026-03-10
+## SHIP-02 · SHIPPED · Claude Credit Watchdog
+A lightweight menu bar watchdog that monitors your Claude Code sessions, alerts you the moment credits renew, and automatically resumes your work.
+Impact: saved me 10 hrs+ of sleep
+Tags: SIDE PROJECT, tool-use, AI PM, AI Native, Productivity
+Updated: 2026-04-15
+Links:
+  - Download: https://claude-credit-watchdog.vercel.app
+  - GitHub: https://github.com/AntaresYuan/Claude-Credit-Watchdog
+
+## SHIP-03 · SHIPPED · SusBench
+Online benchmark for evaluating the susceptibility of CUAs to UI dark patterns.
+Impact: cited by 2 papers
+Tags: RESEARCH PROJECT, HCI, IUI 2025
+Updated: 2026-02-23
+Links:
+  - Paper: https://arxiv.org/pdf/2510.11035
+  - DOI: https://arxiv.org/abs/2510.11035
+  - GitHub: https://github.com/SusBench-creator/SusBench
 # Now
 
-## NOW-01 · NOW · [Current focus]
-What's getting your hours this week. Keep Now to 1–3 items.
-Tags: focus
+## NOW-01 · NOW · Lark Loom
+The collaborative AI Agent rooted  in the Lark ecosystem.
+Tags: Lark AI Challenge for College Students, AI Agent PM, Delivery Layer Developer, Collaboration, Lark
+Updated: 2026-05-09
+Links:
+  - GitHub(in Chinese): https://github.com/EdwinjJ1/lark-loom
+  - Lark AI Challenge(in Chinese): https://bytedance.aiforce.cloud/app/app_4jv6kvy942afr
+
+## NOW-02 · NOW · Gmail Plus Plus
+Gmail++ is a AI-powered email ranking platform that gives you a read-only reply queue on top of Gmail, with visible reasoning and reversible account-scoped preferences.
+Tags: SIDE PROJECT, AI Builder, XGBoost, Productivity, Website
+Updated: 2026-04-25
+Links:
+  - Try it: https://gmailplusplus.site
+  - GitHub: https://github.com/AntaresYuan/Gmailplusplus
+
+## NOW-03 · NOW · ApplyMint
+ApplyMint is a AI-powered chrome extension that compiles the resume into JSON, import it once for visual editing, and automatically fill it in one click on the job application form
+Tags: SIDE PROJECT, Job Application, Chrome Extension
 Updated: 2026-05-09
 # Next
 
@@ -50,7 +80,7 @@ Updated: 2026-05-09
 # Later
 
 ## LATER-01 · LATER · [The ambition]
-The 1–3 year version of you. This is what makes founders want to talk.
+The 1-3 year version of you. This is what makes founders want to talk.
 Tags: vision
 Updated: 2026-05-09
 
@@ -71,8 +101,11 @@ Currently open to: founder conversations in AI infra & agents, AI PM roles at to
 
 - email: chenjy4@uw.edu (mailto:chenjy4@uw.edu)
 - linkedin: Chenjie (Antares) Yuan (#)
-- x: @yourhandle (#)
 - github: @AntaresYuan (https://github.com/AntaresYuan)
 
 ---
 Generated 2026-05-09 from content/*.json. Last site update: 2026-05-09
+
+
+---
+Generated from content/*.json. To update: edit the JSON (or via /admin/) and run `node scripts/build.js`.

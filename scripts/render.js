@@ -213,15 +213,15 @@
     if (totalEl) totalEl.textContent = total;
     if (shippedEl) shippedEl.textContent = `${shippedCount} shipped`;
 
-    // Filter chips: derive top tags across all cards
     renderFilterChips(cards);
   };
 
+  // Renders the filter chips into the DOM. Skipped when the page is
+  // pre-rendered (build-html.js produces the same chip markup statically).
   const renderFilterChips = (cards) => {
     const root = document.getElementById('board-filters');
     if (!root) return;
 
-    // Count tag frequency, keep top 6.
     const counts = new Map();
     cards.forEach((c) => (c.tags ?? []).forEach((t) => {
       counts.set(t, (counts.get(t) ?? 0) + 1);
@@ -231,10 +231,8 @@
       .slice(0, 6)
       .map(([t]) => t);
 
-    // Append tag chips after the existing "All" chip
     root.querySelectorAll('[data-filter]:not([data-filter="all"])').forEach(n => n.remove());
 
-    // Initialize aria-pressed on the always-present "All" chip
     const allChip = root.querySelector('[data-filter="all"]');
     if (allChip) allChip.setAttribute('aria-pressed', 'true');
 
@@ -247,8 +245,13 @@
       b.textContent = tag;
       root.appendChild(b);
     });
+  };
 
-    // Click handler: filter cards by tag (idempotent — re-attaching is fine)
+  // Click delegation for filter chips. Always wired regardless of whether
+  // the chips were rendered statically (build-html) or dynamically.
+  const wireFilterChipClicks = () => {
+    const root = document.getElementById('board-filters');
+    if (!root) return;
     root.addEventListener('click', (ev) => {
       const chip = ev.target.closest('.filter-chip');
       if (!chip) return;
@@ -445,11 +448,37 @@
         json('content/lens.json'),
         json('content/contact.json'),
       ]);
-      renderMeta(site);
-      renderHero(profile);
-      renderBoard(board);
-      renderLens(lens);
-      renderContact(contact);
+      // If the page was pre-rendered by scripts/build-html.js, the DOM is
+      // already populated with identical content. Skip the populate pass so
+      // we avoid a redundant innerHTML rewrite (and the brief flicker that
+      // would cause). We still need cardIndex populated for the side-panel
+      // nav and for the agent:open-card cross-surface event.
+      const prerendered = document.documentElement.dataset.prerendered === 'true';
+      if (prerendered) {
+        // Hydrate cardIndex from the same data the build script used —
+        // no DOM mutation, just the in-memory Map for modal/terminal nav.
+        const sorted = (board.cards ?? []).slice().sort((a, b) => {
+          const ao = a.order ?? 99, bo = b.order ?? 99;
+          if (ao !== bo) return ao - bo;
+          return (b.updated ?? '').localeCompare(a.updated ?? '');
+        });
+        const cols = ['shipped', 'now', 'next', 'later'];
+        cols.forEach((col) => {
+          sorted.filter(c => c.status === col).forEach((c, idx) => {
+            const displayId = `${idPrefix[col]}-${pad2(idx + 1)}`;
+            cardIndex.set(displayId, { ...c, displayId });
+          });
+        });
+      } else {
+        renderMeta(site);
+        renderHero(profile);
+        renderBoard(board);
+        renderLens(lens);
+        renderContact(contact);
+      }
+      // Wire interactive behavior — needed in both prerendered and runtime
+      // modes since build-html.js only emits markup, not event listeners.
+      wireFilterChipClicks();
       wireModal();
     } catch (e) {
       console.error('[render]', e);

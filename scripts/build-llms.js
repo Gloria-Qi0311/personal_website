@@ -122,8 +122,12 @@ Generated ${new Date().toISOString().slice(0, 10)} from content/*.json. Last sit
 `;
 
 /* ── Write ────────────────────────────────────────────────────────────── */
-fs.writeFileSync(path.join(root, 'llms.txt'), short);
-fs.writeFileSync(path.join(root, 'llms-full.txt'), full);
+// Footer noting the file is generated, placed after content so it doesn't
+// interfere with the llmstxt.org top-of-file conventions.
+const footer = `\n\n---\nGenerated from content/*.json. To update: edit the JSON (or via /admin/) and run \`node scripts/build.js\`.\n`;
+
+fs.writeFileSync(path.join(root, 'llms.txt'),      short + footer);
+fs.writeFileSync(path.join(root, 'llms-full.txt'), full  + footer);
 
 const sz = (p) => fs.statSync(path.join(root, p)).size;
 console.log(`✓ wrote llms.txt       (${sz('llms.txt')} bytes)`);

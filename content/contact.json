@@ -8,7 +8,6 @@
   "items": [
     { "key": "email",    "label": "chenjy4@uw.edu", "href": "mailto:chenjy4@uw.edu" },
     { "key": "linkedin", "label": "Chenjie (Antares) Yuan",       "href": "#" },
-    { "key": "x",        "label": "@yourhandle",        "href": "#" },
     { "key": "github",   "label": "@AntaresYuan",       "href": "https://github.com/AntaresYuan" }
   ]
 }
