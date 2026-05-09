@@ -80,6 +80,10 @@
     });
   };
 
+  // Status → ID prefix used for the Linear-style "SHIP-01" badge on each card.
+  const idPrefix = { shipped: 'SHIP', now: 'NOW', next: 'NEXT', later: 'LATER' };
+  const pad2 = (n) => String(n).padStart(2, '0');
+
   const renderBoard = (board) => {
     const cards = (board.cards ?? []).slice().sort((a, b) => {
       const ao = a.order ?? 99, bo = b.order ?? 99;
@@ -88,11 +92,16 @@
     });
 
     const cols = ['shipped', 'now', 'next', 'later'];
+    let total = 0;
+    let shippedCount = 0;
+
     cols.forEach((col) => {
       const root = document.querySelector(`[data-cards="${col}"]`);
       const countEl = document.querySelector(`[data-count="${col}"]`);
       const filtered = cards.filter((c) => c.status === col);
       countEl.textContent = filtered.length;
+      total += filtered.length;
+      if (col === 'shipped') shippedCount = filtered.length;
       root.innerHTML = '';
 
       if (filtered.length === 0) {
@@ -101,22 +110,32 @@
         return;
       }
 
-      filtered.forEach((c) => {
+      filtered.forEach((c, idx) => {
         const tags = (c.tags ?? []).map((t, i) =>
           `<span class="tag${i % 2 ? ' tag-blue' : ''}">${escape(t)}</span>`
         ).join('');
 
         const links = (c.links ?? []).filter(l => l.href && l.href !== '#').map((l) =>
-          `<a href="${escape(l.href)}" target="_blank" rel="noopener">${escape(l.label)} →</a>`
+          `<a href="${escape(l.href)}" target="_blank" rel="noopener">${escape(l.label)} ↗</a>`
         ).join('');
 
+        const displayId = `${idPrefix[col]}-${pad2(idx + 1)}`;
+        const tagSlugs = (c.tags ?? []).map((t) => t.toLowerCase()).join('|');
+
         const html = `
-          <div class="card" data-id="${escape(c.id)}">
+          <div class="card" data-id="${escape(c.id)}" data-tags="${escape(tagSlugs)}">
+            <div class="card-meta-top">
+              <span class="card-id">${displayId}</span>
+              <span class="card-handle" aria-hidden="true">⋮⋮</span>
+            </div>
             <div class="card-title">${escape(c.title)}</div>
             ${c.summary ? `<div class="card-summary">${safeRich(c.summary)}</div>` : ''}
             ${tags ? `<div class="card-tags">${tags}</div>` : ''}
             <div class="card-footer">
-              <span>${escape(c.updated ?? '')}</span>
+              <span class="card-footer-left">
+                <span>${escape(c.updated ?? '')}</span>
+                <span class="card-comments">0</span>
+              </span>
               ${c.impact ? `<span class="card-impact">${escape(c.impact)}</span>` : ''}
             </div>
             ${links ? `<div class="card-links">${links}</div>` : ''}
@@ -124,6 +143,59 @@
         root.insertAdjacentHTML('beforeend', html);
       });
     });
+
+    // Toolbar counts
+    const totalEl = document.getElementById('board-total-count');
+    const shippedEl = document.getElementById('board-shipped-count');
+    if (totalEl) totalEl.textContent = total;
+    if (shippedEl) shippedEl.textContent = `${shippedCount} shipped`;
+
+    // Filter chips: derive top tags across all cards
+    renderFilterChips(cards);
+  };
+
+  const renderFilterChips = (cards) => {
+    const root = document.getElementById('board-filters');
+    if (!root) return;
+
+    // Count tag frequency, keep top 6.
+    const counts = new Map();
+    cards.forEach((c) => (c.tags ?? []).forEach((t) => {
+      counts.set(t, (counts.get(t) ?? 0) + 1);
+    }));
+    const top = [...counts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 6)
+      .map(([t]) => t);
+
+    // Append tag chips after the existing "All" chip
+    const allChip = root.querySelector('[data-filter="all"]');
+    root.querySelectorAll('[data-filter]:not([data-filter="all"])').forEach(n => n.remove());
+    top.forEach((tag) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'filter-chip';
+      b.dataset.filter = tag.toLowerCase();
+      b.textContent = tag;
+      root.appendChild(b);
+    });
+
+    // Click handler: filter cards by tag
+    root.addEventListener('click', (ev) => {
+      const chip = ev.target.closest('.filter-chip');
+      if (!chip) return;
+      root.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('is-active'));
+      chip.classList.add('is-active');
+      const f = chip.dataset.filter;
+      document.querySelectorAll('.card').forEach((card) => {
+        if (f === 'all') {
+          card.classList.remove('is-filtered');
+        } else {
+          const tags = (card.dataset.tags || '').split('|');
+          card.classList.toggle('is-filtered', !tags.includes(f));
+        }
+      });
+    }, { once: false });
   };
 
   const renderLens = (lens) => {

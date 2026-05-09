@@ -27,39 +27,71 @@
     <div class="hero-ctas" id="hero-ctas"></div>
   </header>
 
-  <!-- ── BOARD: Shipped / Now / Next / Later ─────────────────────── -->
-  <section class="board rise rise-2" aria-label="Project board">
-    <article class="column col-shipped" id="col-shipped" aria-labelledby="col-shipped-title">
-      <header class="col-head">
-        <h2 class="col-title" id="col-shipped-title"><span class="col-dot"></span>Shipped</h2>
-        <span class="col-count" data-count="shipped">0</span>
-      </header>
-      <div class="col-cards" data-cards="shipped"></div>
-    </article>
+  <!-- ── BOARD ───────────────────────────────────────────────────── -->
+  <section class="board-section rise rise-2" aria-label="Project board" id="shipped">
 
-    <article class="column col-now" id="col-now" aria-labelledby="col-now-title">
-      <header class="col-head">
-        <h2 class="col-title" id="col-now-title"><span class="col-dot"></span>Now</h2>
-        <span class="col-count" data-count="now">0</span>
-      </header>
-      <div class="col-cards" data-cards="now"></div>
-    </article>
+    <!-- toolbar: board name + view tabs + count -->
+    <div class="board-toolbar">
+      <div class="board-toolbar-left">
+        <h2 class="board-name">
+          <span class="board-icon" aria-hidden="true">⊞</span>
+          <span id="board-name-text">Roadmap</span>
+        </h2>
+        <div class="board-views" role="tablist" aria-label="Board view">
+          <button class="view-tab is-active" type="button" role="tab" aria-selected="true">Board</button>
+          <button class="view-tab is-disabled" type="button" role="tab" aria-selected="false" aria-disabled="true" title="coming soon">Timeline</button>
+          <button class="view-tab is-disabled" type="button" role="tab" aria-selected="false" aria-disabled="true" title="coming soon">Specs</button>
+        </div>
+      </div>
+      <div class="board-toolbar-right">
+        <span class="board-stat"><strong id="board-total-count">0</strong> cards</span>
+        <span class="board-stat sep">·</span>
+        <span class="board-stat" id="board-shipped-count">0 shipped</span>
+        <kbd class="kbd-hint" aria-hidden="true">⌘K</kbd>
+      </div>
+    </div>
 
-    <article class="column col-next" id="col-next" aria-labelledby="col-next-title">
-      <header class="col-head">
-        <h2 class="col-title" id="col-next-title"><span class="col-dot"></span>Next</h2>
-        <span class="col-count" data-count="next">0</span>
-      </header>
-      <div class="col-cards" data-cards="next"></div>
-    </article>
+    <!-- filter chips (click to filter by tag) -->
+    <div class="board-filters" id="board-filters" role="group" aria-label="Filter by tag">
+      <button class="filter-chip is-active" type="button" data-filter="all">All</button>
+      <!-- tag chips injected by render.js -->
+    </div>
 
-    <article class="column col-later" id="col-later" aria-labelledby="col-later-title">
-      <header class="col-head">
-        <h2 class="col-title" id="col-later-title"><span class="col-dot"></span>Later</h2>
-        <span class="col-count" data-count="later">0</span>
-      </header>
-      <div class="col-cards" data-cards="later"></div>
-    </article>
+    <!-- columns -->
+    <div class="board" id="board">
+      <article class="column col-shipped" id="col-shipped" aria-labelledby="col-shipped-title">
+        <header class="col-head">
+          <h3 class="col-title" id="col-shipped-title"><span class="col-dot"></span>Shipped</h3>
+          <span class="col-count" data-count="shipped">0</span>
+        </header>
+        <div class="col-cards" data-cards="shipped"></div>
+      </article>
+
+      <article class="column col-now" id="now" aria-labelledby="col-now-title">
+        <header class="col-head">
+          <h3 class="col-title" id="col-now-title"><span class="col-dot"></span>Now</h3>
+          <span class="col-count" data-count="now">0</span>
+        </header>
+        <div class="col-cards" data-cards="now"></div>
+      </article>
+
+      <article class="column col-next" id="col-next" aria-labelledby="col-next-title">
+        <header class="col-head">
+          <h3 class="col-title" id="col-next-title"><span class="col-dot"></span>Next</h3>
+          <span class="col-count" data-count="next">0</span>
+        </header>
+        <div class="col-cards" data-cards="next"></div>
+      </article>
+
+      <article class="column col-later" id="col-later" aria-labelledby="col-later-title">
+        <header class="col-head">
+          <h3 class="col-title" id="col-later-title"><span class="col-dot"></span>Later</h3>
+          <span class="col-count" data-count="later">0</span>
+        </header>
+        <div class="col-cards" data-cards="later"></div>
+      </article>
+    </div>
+
   </section>
 
   <!-- ── LENS: how I think ───────────────────────────────────────── -->
