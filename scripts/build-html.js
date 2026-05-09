@@ -251,6 +251,17 @@ const setMetaContent = (selector, content) => {
   const re = new RegExp(`(<meta\\s+${selector}\\s+content=")[^"]*(")`, 'i');
   html = html.replace(re, `$1${escape(content)}$2`);
 };
+const setLinkHref = (rel, value) => {
+  const re = new RegExp(`(<link\\s+rel=["']${rel}["'][^>]*\\shref=")[^"']*("[^>]*>)`, 'i');
+  html = html.replace(re, `$1${escape(value)}$2`);
+};
+const absoluteUrl = (relPath) => {
+  if (!relPath) return '';
+  if (/^https?:\/\//i.test(relPath)) return relPath;
+  const base = (site.meta?.url ?? '').replace(/\/+$/, '');
+  return base ? `${base}/${relPath.replace(/^\/+/, '')}` : relPath;
+};
+
 if (site.meta?.title) {
   html = html.replace(/<title>[^<]*<\/title>/i, `<title>${escape(site.meta.title)}</title>`);
   setMetaContent('property="og:title"',      site.meta.title);
@@ -261,6 +272,39 @@ if (site.meta?.description) {
   setMetaContent('property="og:description"',   site.meta.description);
   setMetaContent('name="twitter:description"',  site.meta.description);
 }
+if (site.meta?.author)   setMetaContent('name="author"',          site.meta.author);
+if (site.meta?.url) {
+  setMetaContent('property="og:url"', site.meta.url);
+  setLinkHref('canonical',            site.meta.url);
+}
+if (site.meta?.siteName) setMetaContent('property="og:site_name"', site.meta.siteName);
+if (site.meta?.locale)   setMetaContent('property="og:locale"',    site.meta.locale);
+if (site.meta?.ogImage) {
+  const ogUrl = absoluteUrl(site.meta.ogImage);
+  setMetaContent('property="og:image"',  ogUrl);
+  setMetaContent('name="twitter:image"', ogUrl);
+  setLinkHref('apple-touch-icon',        site.meta.ogImage);
+}
+if (site.meta?.ogImageWidth)  setMetaContent('property="og:image:width"',  site.meta.ogImageWidth);
+if (site.meta?.ogImageHeight) setMetaContent('property="og:image:height"', site.meta.ogImageHeight);
+
+// JSON-LD Person schema — rebuilt from profile + contact + site
+const sameAs = (contact.items ?? [])
+  .map((i) => i.href)
+  .filter((h) => h && /^https?:\/\//i.test(h));
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: [profile.name, profile.nameAccent].filter(Boolean).join(' '),
+  alternateName: site.meta?.author,
+  url: site.meta?.url,
+  jobTitle: profile.role,
+  description: profile.slogan,
+  image: absoluteUrl(site.meta?.ogImage ?? profile.avatar?.calm),
+  knowsAbout: profile.tags ?? [],
+  ...(sameAs.length ? { sameAs } : {}),
+};
+html = replaceInner(html, 'ld-person', JSON.stringify(personLd, null, 2));
 
 // Topnav brand + last-updated
 html = replaceInner(html, 'brand-name', escape(site.meta?.title?.split('—')[0]?.trim() ?? ''));

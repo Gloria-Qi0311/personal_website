@@ -2,6 +2,13 @@
   "meta": {
     "title": "Antares Yuan — AI PM",
     "lang": "en",
+    "locale": "en_US",
+    "siteName": "Antares Yuan",
+    "url": "https://antaresyuan.site",
+    "author": "Chenjie (Antares) Yuan",
+    "ogImage": "media/avatar-calm.png",
+    "ogImageWidth": "512",
+    "ogImageHeight": "512",
     "description": "AI Product Manager. A living roadmap of what I've shipped, what I'm building, and where I'm going."
   },
   "footer": {
