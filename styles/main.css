@@ -705,13 +705,12 @@ button:focus-visible,
 .card.is-filtered { display: none; }
 
 /* ════════════════════════════════════════════════════════════════════════
-   CARD DETAIL MODAL
+   CARD DETAIL PANEL — slides in from the right (Linear/Notion style)
    ════════════════════════════════════════════════════════════════════════ */
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(20, 20, 30, 0.45);
-  backdrop-filter: blur(2px);
+  background: rgba(20, 20, 30, 0.18);
   z-index: 80;
   opacity: 0;
   pointer-events: none;
@@ -722,49 +721,98 @@ button:focus-visible,
   pointer-events: auto;
 }
 
-.card-modal[open] {
-  display: block;
-}
 .card-modal {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.96);
-  width: min(640px, calc(100vw - 32px));
-  max-height: min(82vh, 800px);
-  overflow-y: auto;
-  z-index: 90;
+  top: 0;
+  right: 0;
+  bottom: 0;
   margin: 0;
-  padding: var(--sp-32) var(--sp-32) var(--sp-24);
+  width: min(480px, 100vw);
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;            /* inner .panel-body scrolls */
+  z-index: 90;
+  padding: 0;
   background: var(--color-surface);
-  border: var(--bw) solid var(--color-line);
-  border-radius: var(--r-lg);
-  box-shadow: 0 8px 16px rgba(20,20,30,0.10), 0 24px 60px rgba(20,20,30,0.18);
-  opacity: 0;
-  transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+  border: none;
+  border-left: var(--bw) solid var(--color-line);
+  border-radius: 0;
+  box-shadow: -16px 0 48px rgba(20,20,30,0.12);
+  transform: translateX(100%);
+  transition: transform var(--dur-base) var(--ease-out);
+  display: flex;
+  flex-direction: column;
 }
 .card-modal[open] {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
+  display: flex;
+  transform: translateX(0);
 }
 .card-modal::backdrop { background: transparent; }
 
-.modal-close {
-  position: absolute;
-  top: var(--sp-12);
-  right: var(--sp-12);
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: transparent;
-  font-size: 24px;
-  line-height: 1;
+/* ── Panel header: prev/next + close ───────────────────────────────── */
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-12) var(--sp-16);
+  border-bottom: var(--bw) solid var(--color-line-soft);
+  background: var(--color-bg-soft);
+  flex-shrink: 0;
+}
+.panel-nav-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+.panel-nav {
+  width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  border: var(--bw) solid var(--color-line);
+  background: var(--color-surface);
+  color: var(--color-text-dim);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: background var(--dur-quick), color var(--dur-quick), border-color var(--dur-quick);
+}
+.panel-nav:hover:not(:disabled) {
+  background: var(--color-yellow-glow);
+  color: var(--color-text);
+  border-color: var(--color-yellow);
+}
+.panel-nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.panel-position {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
   color: var(--color-text-faint);
+  margin-left: var(--sp-8);
+  letter-spacing: var(--tracking-wide);
+}
+
+.modal-close {
+  width: 28px;
+  height: 28px;
+  border: var(--bw) solid transparent;
+  background: transparent;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--color-text-dim);
   cursor: pointer;
   border-radius: var(--r-sm);
   transition: background var(--dur-quick), color var(--dur-quick);
 }
-.modal-close:hover { background: var(--color-bg-soft); color: var(--color-text); }
+.modal-close:hover { background: var(--color-surface); color: var(--color-text); border-color: var(--color-line); }
+
+/* ── Panel body: scrollable content ────────────────────────────────── */
+.panel-body {
+  padding: var(--sp-24) var(--sp-32) var(--sp-24);
+  overflow-y: auto;
+  flex: 1;
+}
 
 .modal-meta-top {
   display: flex;
@@ -873,12 +921,11 @@ button:focus-visible,
 /* When modal is open, lock body scroll */
 body.modal-open { overflow: hidden; }
 
-@media (max-width: 640px) {
-  .card-modal {
-    padding: var(--sp-24) var(--sp-20) var(--sp-20);
-    max-height: 90vh;
-  }
+@media (max-width: 768px) {
+  .card-modal { width: 100vw; border-left: none; }
+  .panel-body { padding: var(--sp-20) var(--sp-20) var(--sp-24); }
   .modal-title { font-size: var(--fs-22); }
+  .modal-backdrop { background: rgba(20, 20, 30, 0.4); }
 }
 
 /* ════════════════════════════════════════════════════════════════════════

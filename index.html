@@ -182,26 +182,41 @@
     </div>
   </section>
 
-  <!-- ── CARD DETAIL MODAL ──────────────────────────────────────────
-       Opened by clicking any board card. Closes on ESC, backdrop click,
-       or the X button. Hash sync — visiting #card/SHIP-01 opens directly.
+  <!-- ── CARD DETAIL PANEL ──────────────────────────────────────────
+       Slides in from the right when a card is clicked. Closes on ESC,
+       backdrop click, or X. ↑/↓ navigates between cards. URL hash syncs
+       (#card/SHIP-01) for deep linking.
+       On <768px viewports the panel becomes a full-screen sheet.
   ──────────────────────────────────────────────────────────────────── -->
   <div class="modal-backdrop" id="modal-backdrop" hidden></div>
   <dialog class="card-modal" id="card-modal" aria-labelledby="modal-title">
-    <button type="button" class="modal-close" id="modal-close" aria-label="Close">×</button>
-    <div class="modal-meta-top">
-      <span class="modal-id" id="modal-id"></span>
-      <span class="modal-status" id="modal-status"></span>
+    <header class="panel-header">
+      <div class="panel-nav-group">
+        <button type="button" class="panel-nav" id="panel-prev" aria-label="Previous card (↑)" title="↑ prev">
+          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 9l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" class="panel-nav" id="panel-next" aria-label="Next card (↓)" title="↓ next">
+          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <span class="panel-position" id="panel-position"></span>
+      </div>
+      <button type="button" class="modal-close" id="modal-close" aria-label="Close (Esc)" title="esc">×</button>
+    </header>
+    <div class="panel-body">
+      <div class="modal-meta-top">
+        <span class="modal-id" id="modal-id"></span>
+        <span class="modal-status" id="modal-status"></span>
+      </div>
+      <h2 class="modal-title" id="modal-title"></h2>
+      <p class="modal-summary" id="modal-summary"></p>
+      <div class="modal-tags" id="modal-tags"></div>
+      <div class="modal-details" id="modal-details"></div>
+      <div class="modal-foot">
+        <span class="modal-updated" id="modal-updated"></span>
+        <span class="modal-impact"  id="modal-impact"></span>
+      </div>
+      <div class="modal-links" id="modal-links"></div>
     </div>
-    <h2 class="modal-title" id="modal-title"></h2>
-    <p class="modal-summary" id="modal-summary"></p>
-    <div class="modal-tags" id="modal-tags"></div>
-    <div class="modal-details" id="modal-details"></div>
-    <div class="modal-foot">
-      <span class="modal-updated" id="modal-updated"></span>
-      <span class="modal-impact"  id="modal-impact"></span>
-    </div>
-    <div class="modal-links" id="modal-links"></div>
   </dialog>
 
   <!-- ── FOOTER ──────────────────────────────────────────────────── -->

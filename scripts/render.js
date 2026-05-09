@@ -105,8 +105,11 @@
   const pad2 = (n) => String(n).padStart(2, '0');
 
   // Card index keyed by display ID (e.g. SHIP-01) — populated during render,
-  // consumed by the modal/hash router.
+  // consumed by the panel/hash router. Map preserves insertion order, which
+  // is the visual board order (Shipped → Now → Next → Later, by render order
+  // within each column), so prev/next nav can iterate the keys directly.
   const cardIndex = new Map();
+  const orderedIds = () => Array.from(cardIndex.keys());
 
   // Tiny markdown renderer for card details. Handles: ## h2, ### h3,
   // - / * lists, paragraphs, inline `code`, **bold**, *italic*. No HTML
@@ -306,12 +309,14 @@
     });
   };
 
-  /* ── Card detail modal ─────────────────────────────────────────── */
+  /* ── Card detail panel ─────────────────────────────────────────── */
   const statusLabel = { shipped: 'Shipped', now: 'Now', next: 'Next', later: 'Later' };
+  let currentCardId = null;
 
   const openCardModal = (displayId) => {
     const c = cardIndex.get(displayId);
     if (!c) return;
+    currentCardId = displayId;
 
     const modal    = $('#card-modal');
     const backdrop = $('#modal-backdrop');
@@ -338,19 +343,31 @@
       .map((l) => `<a href="${escape(l.href)}" target="_blank" rel="noopener">${escape(l.label)} ↗</a>`)
       .join('');
 
-    backdrop.hidden = false;
-    backdrop.classList.add('is-open');
-    modal.setAttribute('open', '');
-    document.body.classList.add('modal-open');
+    // Position indicator + prev/next disabled state
+    const ids = orderedIds();
+    const idx = ids.indexOf(displayId);
+    $('#panel-position').textContent = `${idx + 1} / ${ids.length}`;
+    $('#panel-prev').disabled = idx <= 0;
+    $('#panel-next').disabled = idx >= ids.length - 1;
 
-    // Sync URL hash for deep-linking; don't trigger another open
+    // Reset scroll to top when navigating between cards
+    const body = $('.panel-body'); if (body) body.scrollTop = 0;
+
+    if (!document.body.classList.contains('modal-open')) {
+      backdrop.hidden = false;
+      // Force reflow so the transition fires from translateX(100%)
+      void backdrop.offsetHeight;
+      backdrop.classList.add('is-open');
+      modal.setAttribute('open', '');
+      document.body.classList.add('modal-open');
+      // Move focus to close on first open; keep focus on nav buttons during navigation
+      $('#modal-close')?.focus();
+    }
+
+    // Sync URL hash for deep-linking; don't re-trigger open
     if (location.hash !== `#card/${displayId}`) {
       history.replaceState(null, '', `#card/${displayId}`);
     }
-
-    // Move focus into the modal for keyboard users
-    const closeBtn = $('#modal-close');
-    if (closeBtn) closeBtn.focus();
   };
 
   const closeCardModal = () => {
@@ -360,12 +377,21 @@
     modal.removeAttribute('open');
     backdrop.classList.remove('is-open');
     document.body.classList.remove('modal-open');
-    // Hide backdrop after the transition so it doesn't trap clicks
+    currentCardId = null;
     setTimeout(() => { if (!backdrop.classList.contains('is-open')) backdrop.hidden = true; }, 250);
 
     if (location.hash.startsWith('#card/')) {
       history.replaceState(null, '', location.pathname + location.search);
     }
+  };
+
+  const navCard = (delta) => {
+    if (!currentCardId) return;
+    const ids = orderedIds();
+    const idx = ids.indexOf(currentCardId);
+    const nextIdx = idx + delta;
+    if (nextIdx < 0 || nextIdx >= ids.length) return;
+    openCardModal(ids[nextIdx]);
   };
 
   const wireModal = () => {
@@ -377,15 +403,18 @@
       openCardModal(card.dataset.cardId);
     });
 
-    // X button + backdrop close
+    // Header buttons
     $('#modal-close')?.addEventListener('click', closeCardModal);
+    $('#panel-prev') ?.addEventListener('click', () => navCard(-1));
+    $('#panel-next') ?.addEventListener('click', () => navCard(+1));
     $('#modal-backdrop')?.addEventListener('click', closeCardModal);
 
-    // ESC close
+    // Keyboard: ESC close, ↑ prev, ↓ next
     document.addEventListener('keydown', (ev) => {
-      if (ev.key === 'Escape' && document.body.classList.contains('modal-open')) {
-        closeCardModal();
-      }
+      if (!document.body.classList.contains('modal-open')) return;
+      if (ev.key === 'Escape')   { ev.preventDefault(); closeCardModal(); }
+      if (ev.key === 'ArrowUp')  { ev.preventDefault(); navCard(-1); }
+      if (ev.key === 'ArrowDown'){ ev.preventDefault(); navCard(+1); }
     });
 
     // Hash router: open on initial load + on navigation
@@ -395,7 +424,6 @@
       else if (document.body.classList.contains('modal-open')) closeCardModal();
     };
     window.addEventListener('hashchange', handleHash);
-    // Run once on boot, after cards are indexed
     setTimeout(handleHash, 0);
   };
 
