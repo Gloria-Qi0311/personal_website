@@ -5,11 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Esther Yuan — AI PM</title>
 <meta name="description" content="A living roadmap of what I've shipped, what I'm building, and where I'm going.">
+
+<!-- ── Theme + favicon ───────────────────────────────────────────── -->
+<meta name="theme-color" content="#FAF7F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1A1F" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+<!-- ── Open Graph / Twitter ──────────────────────────────────────── -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Esther Yuan — AI PM">
+<meta property="og:description" content="A living roadmap of what I've shipped, what I'm building, and where I'm going.">
+<meta property="og:image" content="og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Esther Yuan — AI PM">
+<meta name="twitter:description" content="A living roadmap of what I've shipped, what I'm building, and where I'm going.">
+<meta name="twitter:image" content="og-image.png">
+
 <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
 
-<main class="page">
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<main class="page" id="main-content">
 
   <!-- ── TOP NAV ─────────────────────────────────────────────────── -->
   <nav class="topnav rise">
@@ -113,6 +131,45 @@
     <div class="contact">
       <p class="contact-intro" id="contact-intro"></p>
       <div class="contact-list" id="contact-list"></div>
+    </div>
+  </section>
+
+  <!-- ── COMMENTS (Giscus) ───────────────────────────────────────────
+       Setup (one-time, owner only):
+       1. Enable GitHub Discussions on the repo
+       2. Visit https://giscus.app and configure for AntaresYuan/personal_website
+       3. Paste the generated data-repo-id and data-category-id below
+       4. Uncomment the <script> block
+       Until then, this section renders the empty-state placeholder.
+  ──────────────────────────────────────────────────────────────────── -->
+  <section class="section comments-section" aria-label="Comments">
+    <header class="sec-head">
+      <span class="sec-cmd">$ comments</span>
+      <span class="sec-title">notes from readers</span>
+      <span class="sec-meta">via GitHub Discussions</span>
+    </header>
+    <div id="giscus-container">
+      <p class="comments-placeholder">
+        Comments will appear here once Giscus is wired up — see
+        <a href="https://github.com/AntaresYuan/personal_website/issues/49">#49</a>.
+      </p>
+      <!--
+      <script src="https://giscus.app/client.js"
+              data-repo="AntaresYuan/personal_website"
+              data-repo-id="REPLACE_WITH_REPO_ID"
+              data-category="General"
+              data-category-id="REPLACE_WITH_CATEGORY_ID"
+              data-mapping="pathname"
+              data-strict="0"
+              data-reactions-enabled="1"
+              data-emit-metadata="0"
+              data-input-position="top"
+              data-theme="light"
+              data-lang="en"
+              crossorigin="anonymous"
+              async>
+      </script>
+      -->
     </div>
   </section>
 

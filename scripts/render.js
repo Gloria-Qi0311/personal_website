@@ -169,23 +169,32 @@
       .map(([t]) => t);
 
     // Append tag chips after the existing "All" chip
-    const allChip = root.querySelector('[data-filter="all"]');
     root.querySelectorAll('[data-filter]:not([data-filter="all"])').forEach(n => n.remove());
+
+    // Initialize aria-pressed on the always-present "All" chip
+    const allChip = root.querySelector('[data-filter="all"]');
+    if (allChip) allChip.setAttribute('aria-pressed', 'true');
+
     top.forEach((tag) => {
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'filter-chip';
       b.dataset.filter = tag.toLowerCase();
+      b.setAttribute('aria-pressed', 'false');
       b.textContent = tag;
       root.appendChild(b);
     });
 
-    // Click handler: filter cards by tag
+    // Click handler: filter cards by tag (idempotent — re-attaching is fine)
     root.addEventListener('click', (ev) => {
       const chip = ev.target.closest('.filter-chip');
       if (!chip) return;
-      root.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('is-active'));
+      root.querySelectorAll('.filter-chip').forEach(c => {
+        c.classList.remove('is-active');
+        c.setAttribute('aria-pressed', 'false');
+      });
       chip.classList.add('is-active');
+      chip.setAttribute('aria-pressed', 'true');
       const f = chip.dataset.filter;
       document.querySelectorAll('.card').forEach((card) => {
         if (f === 'all') {
@@ -195,7 +204,7 @@
           card.classList.toggle('is-filtered', !tags.includes(f));
         }
       });
-    }, { once: false });
+    });
   };
 
   const renderLens = (lens) => {
