@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "title": "~ / ai pm",
+    "lang": "en"
+  },
+  "identity": {
+    "name": "Your Name",
+    "nameAccent": ".",
+    "role": "AI Product Manager",
+    "location": "Shanghai",
+    "status": "building something"
+  },
+  "boot": [
+    { "text": "init session …",       "kind": "default" },
+    { "text": "loading profile.json", "kind": "default" },
+    { "text": "eval suite passed",    "kind": "ok" },
+    { "text": "avatar mounted ",      "kind": "ok" },
+    { "text": "launch →",             "kind": "arrow" }
+  ],
+  "about": {
+    "head": { "cmd": "$ cat", "title": "about.md", "meta": "~/profile" },
+    "paragraphs": [
+      "I build AI products that people actually use. Five years across <strong>consumer chat</strong>, <strong>developer tools</strong>, and <strong>enterprise copilots</strong> — shipping features end-to-end from research to launch.",
+      "I think a lot about evaluation, the gap between demo and production, and where models help vs. where they get in the way."
+    ]
+  },
+  "cases": {
+    "head": { "cmd": "$ ls", "title": "case_studies/", "meta": "04 entries" },
+    "items": [
+      {
+        "id": "001",
+        "title": "Inline AI assistant for SaaS editor",
+        "description": "Designed prompt UX, eval framework, rollout strategy. Cut user task time by ~38%.",
+        "tags": ["RAG", "eval", "0→1"],
+        "year": "2024",
+        "impact": "+38% speed"
+      },
+      {
+        "id": "002",
+        "title": "Multi-step agent for ops automation",
+        "description": "Internal tool replacing manual triage. Owned scope, model selection, HITL checkpoints.",
+        "tags": ["agents", "tool-use"],
+        "year": "2024",
+        "impact": "12 hrs/wk"
+      },
+      {
+        "id": "003",
+        "title": "Voice-to-action mobile feature",
+        "description": "Cross-functional with iOS, ASR, design. Shipped to 2M+ users with 91% intent accuracy.",
+        "tags": ["multimodal", "consumer"],
+        "year": "2023",
+        "impact": "2M users"
+      },
+      {
+        "id": "004",
+        "title": "LLM-powered search relevance",
+        "description": "Re-ranked top-K with embeddings. A/B'd vs keyword baseline; +21% CTR on long-tail.",
+        "tags": ["embeddings", "A/B"],
+        "year": "2023",
+        "impact": "+21% CTR"
+      }
+    ]
+  },
+  "lens": {
+    "head": { "cmd": "$ grep -i", "title": "how_i_think.txt", "meta": "principles" },
+    "items": [
+      { "num": "/ 01", "main": "Evals before features.",          "aside": "If you can't measure it, you're shipping vibes." },
+      { "num": "/ 02", "main": "The model is one input.",          "aside": "Latency, UX, trust often matter more." },
+      { "num": "/ 03", "main": "Demos lie. Production tells the truth.", "aside": "Watch the long tail." },
+      { "num": "/ 04", "main": "A great PM removes ambiguity.",    "aside": "Models add it back. The job is balance." }
+    ]
+  },
+  "contact": {
+    "head": { "cmd": "$ ./contact", "title": "--reach-out" },
+    "items": [
+      { "label": "email",    "value": "hello@yourname.dev", "href": "mailto:hello@yourname.dev" },
+      { "label": "x",        "value": "@yourhandle",        "href": "#" },
+      { "label": "linkedin", "value": "/in/yourname",       "href": "#" },
+      { "label": "writing",  "value": "notes.yourname.dev", "href": "#", "id": "contact-input-target" }
+    ],
+    "messageInputPlaceholder": "leave me a note ↵"
+  },
+  "footer": "© 2026 — built with Pretext-style text layout",
+  "avatar": {
+    "label": "online · click me",
+    "tryHint": ["hover", "click", "scroll", "type"],
+    "words": [
+      "eval", "prompt", "spec", "ship", "build", "rag", "agent", "token",
+      "why", "what", "how", "demo", "prod", "user", "metric", "iterate",
+      "pm", "ai", "craft", "taste", "judgment", "context", "k=8", "p=0.9",
+      "0→1", "long-tail", "review", "ship", "measure", "launch",
+      "<eos>", "<bos>", "0.94", "-0.21", "cosine", "rerank"
+    ],
+    "highlightWords": ["ship", "eval", "pm", "ai", "0→1"]
+  }
+}

@@ -15,117 +15,36 @@
     <div class="boot" id="boot"></div>
 
     <div class="identity">
-      <h1 class="name">Your Name<em>.</em></h1>
+      <h1 class="name" id="identity-name"></h1>
       <div class="role-row">
-        <span>AI Product Manager</span>
+        <span id="identity-role"></span>
         <span class="dot">·</span>
-        <span>Shanghai</span>
+        <span id="identity-location"></span>
         <span class="dot">·</span>
-        <span class="now"><span class="pulse"></span>building something</span>
+        <span class="now"><span class="pulse"></span><span id="identity-status"></span></span>
       </div>
     </div>
 
     <section class="section s1" data-section="about">
-      <div class="sec-head">
-        <span class="sec-cmd">$ cat</span>
-        <span class="sec-title">about.md</span>
-        <span class="sec-meta">~/profile</span>
-      </div>
-      <div class="prose">
-        <p>I build AI products that people actually use. Five years across <strong>consumer chat</strong>, <strong>developer tools</strong>, and <strong>enterprise copilots</strong> — shipping features end-to-end from research to launch.</p>
-        <p>I think a lot about evaluation, the gap between demo and production, and where models help vs. where they get in the way.</p>
-      </div>
+      <div class="sec-head"></div>
+      <div class="prose" id="about-body"></div>
     </section>
 
     <section class="section s2" data-section="cases">
-      <div class="sec-head">
-        <span class="sec-cmd">$ ls</span>
-        <span class="sec-title">case_studies/</span>
-        <span class="sec-meta">04 entries</span>
-      </div>
-      <div class="cases">
-        <div class="case">
-          <div class="case-id">001</div>
-          <div>
-            <div class="case-title">Inline AI assistant for SaaS editor</div>
-            <div class="case-desc">Designed prompt UX, eval framework, rollout strategy. Cut user task time by ~38%.</div>
-            <div class="case-tags"><span class="tag">RAG</span><span class="tag">eval</span><span class="tag">0→1</span></div>
-          </div>
-          <div class="case-meta">2024<span class="impact">+38% speed</span></div>
-        </div>
-        <div class="case">
-          <div class="case-id">002</div>
-          <div>
-            <div class="case-title">Multi-step agent for ops automation</div>
-            <div class="case-desc">Internal tool replacing manual triage. Owned scope, model selection, HITL checkpoints.</div>
-            <div class="case-tags"><span class="tag">agents</span><span class="tag">tool-use</span></div>
-          </div>
-          <div class="case-meta">2024<span class="impact">12 hrs/wk</span></div>
-        </div>
-        <div class="case">
-          <div class="case-id">003</div>
-          <div>
-            <div class="case-title">Voice-to-action mobile feature</div>
-            <div class="case-desc">Cross-functional with iOS, ASR, design. Shipped to 2M+ users with 91% intent accuracy.</div>
-            <div class="case-tags"><span class="tag">multimodal</span><span class="tag">consumer</span></div>
-          </div>
-          <div class="case-meta">2023<span class="impact">2M users</span></div>
-        </div>
-        <div class="case">
-          <div class="case-id">004</div>
-          <div>
-            <div class="case-title">LLM-powered search relevance</div>
-            <div class="case-desc">Re-ranked top-K with embeddings. A/B'd vs keyword baseline; +21% CTR on long-tail.</div>
-            <div class="case-tags"><span class="tag">embeddings</span><span class="tag">A/B</span></div>
-          </div>
-          <div class="case-meta">2023<span class="impact">+21% CTR</span></div>
-        </div>
-      </div>
+      <div class="sec-head"></div>
+      <div class="cases" id="cases-list"></div>
     </section>
 
     <section class="section s3" data-section="lens">
-      <div class="sec-head">
-        <span class="sec-cmd">$ grep -i</span>
-        <span class="sec-title">how_i_think.txt</span>
-        <span class="sec-meta">principles</span>
-      </div>
-      <div class="lens">
-        <div class="lens-card">
-          <div class="lens-num">/ 01</div>
-          <div class="lens-text">Evals before features. <em>If you can't measure it, you're shipping vibes.</em></div>
-        </div>
-        <div class="lens-card">
-          <div class="lens-num">/ 02</div>
-          <div class="lens-text">The model is one input. <em>Latency, UX, trust often matter more.</em></div>
-        </div>
-        <div class="lens-card">
-          <div class="lens-num">/ 03</div>
-          <div class="lens-text">Demos lie. Production tells the truth. <em>Watch the long tail.</em></div>
-        </div>
-        <div class="lens-card">
-          <div class="lens-num">/ 04</div>
-          <div class="lens-text">A great PM removes ambiguity. <em>Models add it back. The job is balance.</em></div>
-        </div>
-      </div>
+      <div class="sec-head"></div>
+      <div class="lens" id="lens-list"></div>
     </section>
 
     <section class="section s4" data-section="contact">
-      <div class="sec-head">
-        <span class="sec-cmd">$ ./contact</span>
-        <span class="sec-title">--reach-out</span>
-      </div>
-      <div class="contact-grid">
-        <div class="contact-key">email</div>
-        <div class="contact-val"><a href="mailto:hello@yourname.dev">hello@yourname.dev</a></div>
-        <div class="contact-key">x</div>
-        <div class="contact-val"><a href="#">@yourhandle</a></div>
-        <div class="contact-key">linkedin</div>
-        <div class="contact-val"><a href="#">/in/yourname</a></div>
-        <div class="contact-key">writing</div>
-        <div class="contact-val"><a href="#" id="contact-input-target">notes.yourname.dev</a></div>
-      </div>
+      <div class="sec-head"></div>
+      <div class="contact-grid" id="contact-grid"></div>
       <div style="margin-top:24px">
-        <input type="text" id="message-input" placeholder="leave me a note ↵"
+        <input type="text" id="message-input"
           style="width:100%;max-width:400px;background:transparent;border:none;
                  border-bottom:1px solid var(--line);padding:8px 0;color:var(--text);
                  font-family:inherit;font-size:13px;outline:none;"
@@ -134,7 +53,7 @@
       </div>
     </section>
 
-    <footer>© 2026 — built with Pretext-style text layout</footer>
+    <footer id="site-footer"></footer>
 
   </div>
 
@@ -142,15 +61,16 @@
   <div class="avatar-col">
     <div class="avatar-wrap">
       <canvas id="avatar"></canvas>
-      <div class="avatar-label"><span class="blink-dot"></span>online · click me</div>
+      <div class="avatar-label"><span class="blink-dot"></span><span id="avatar-label-text"></span></div>
       <div class="try-hint">
-        try: <kbd>hover</kbd> <kbd>click</kbd> <kbd>scroll</kbd> <kbd>type</kbd>
+        try: <span id="try-hint-keys"></span>
       </div>
     </div>
   </div>
 
 </div>
 
+<script src="scripts/render.js"></script>
 <script src="scripts/avatar.js"></script>
 <script src="scripts/boot.js"></script>
 </body>
