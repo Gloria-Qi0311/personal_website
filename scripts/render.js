@@ -323,38 +323,49 @@
 
     const modal    = $('#card-modal');
     const backdrop = $('#modal-backdrop');
-    if (!modal || !backdrop) return;
+    const panelBody = $('.panel-body');
+    if (!modal || !backdrop || !panelBody) return;
 
-    $('#modal-id').textContent     = displayId;
-    const statusEl = $('#modal-status');
-    statusEl.className = 'modal-status s-' + c.status;
-    statusEl.textContent = statusLabel[c.status] ?? c.status;
-    $('#modal-title').textContent  = c.title ?? '';
-    $('#modal-summary').textContent = c.summary ?? '';
-
-    $('#modal-tags').innerHTML = (c.tags ?? []).map((t, i) =>
+    // Build the entire panel body in a single string + commit with one
+    // innerHTML write. The previous code did 9 separate textContent /
+    // innerHTML mutations which each forced style recalc; combined with
+    // the slide-in transition that pushed card-open INP to ~1s. One write
+    // collapses the layout work into a single frame.
+    const tagsHtml = (c.tags ?? []).map((t, i) =>
       `<span class="tag${i % 2 ? ' tag-blue' : ''}">${escape(t)}</span>`
     ).join('');
 
-    $('#modal-details').innerHTML = mini(c.details);
-
-    $('#modal-updated').textContent = c.updated ? `updated ${c.updated}` : '';
-    $('#modal-impact').textContent  = c.impact ?? '';
-
-    $('#modal-links').innerHTML = (c.links ?? [])
+    const linksHtml = (c.links ?? [])
       .filter(l => l.href && l.href !== '#')
       .map((l) => `<a href="${escape(l.href)}" target="_blank" rel="noopener">${escape(l.label)} ↗</a>`)
       .join('');
 
-    // Position indicator + prev/next disabled state
+    const detailsHtml = mini(c.details);
+    const statusText  = statusLabel[c.status] ?? c.status;
+
+    panelBody.innerHTML = `
+      <div class="modal-meta-top">
+        <span class="modal-id" id="modal-id">${escape(displayId)}</span>
+        <span class="modal-status s-${escape(c.status)}" id="modal-status">${escape(statusText)}</span>
+      </div>
+      <h2 class="modal-title" id="modal-title">${escape(c.title ?? '')}</h2>
+      <p class="modal-summary" id="modal-summary">${escape(c.summary ?? '')}</p>
+      <div class="modal-tags" id="modal-tags">${tagsHtml}</div>
+      <div class="modal-details" id="modal-details">${detailsHtml}</div>
+      <div class="modal-foot">
+        <span class="modal-updated" id="modal-updated">${c.updated ? `updated ${escape(c.updated)}` : ''}</span>
+        <span class="modal-impact" id="modal-impact">${escape(c.impact ?? '')}</span>
+      </div>
+      <div class="modal-links" id="modal-links">${linksHtml}</div>`;
+
+    // Position indicator + prev/next disabled state (3 small writes; cheap)
     const ids = orderedIds();
     const idx = ids.indexOf(displayId);
     $('#panel-position').textContent = `${idx + 1} / ${ids.length}`;
     $('#panel-prev').disabled = idx <= 0;
     $('#panel-next').disabled = idx >= ids.length - 1;
 
-    // Reset scroll to top when navigating between cards
-    const body = $('.panel-body'); if (body) body.scrollTop = 0;
+    panelBody.scrollTop = 0;
 
     if (!document.body.classList.contains('modal-open')) {
       backdrop.hidden = false;
@@ -364,7 +375,6 @@
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.classList.add('modal-open');
-      // Move focus to close on first open; navigation keeps focus naturally
       $('#modal-close')?.focus();
     }
 
