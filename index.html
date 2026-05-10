@@ -517,6 +517,39 @@
     </div>
   </section>
 
+  <!-- ── COMMAND PALETTE ─────────────────────────────────────────────
+       Floating ⌘K-summonable palette. Search anything: sections, cards,
+       terminal commands, agent endpoints. Owns the ⌘K global shortcut.
+       Behavior lives in scripts/palette.js.
+  ──────────────────────────────────────────────────────────────────── -->
+  <div class="palette-backdrop" id="palette-backdrop" hidden></div>
+  <div class="palette" id="palette" role="dialog" aria-modal="true" aria-label="Command palette" hidden>
+    <div class="palette-header">
+      <span class="palette-icon" aria-hidden="true">⌘</span>
+      <input
+        type="text"
+        class="palette-input"
+        id="palette-input"
+        placeholder="Search sections · cards · commands…"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        aria-label="Search"
+        aria-controls="palette-results"
+        aria-autocomplete="list"
+      />
+      <kbd class="palette-kbd" aria-hidden="true">esc</kbd>
+    </div>
+    <ul class="palette-results" id="palette-results" role="listbox" aria-label="Results"></ul>
+    <div class="palette-footer">
+      <span><kbd>↑↓</kbd> navigate</span>
+      <span><kbd>↵</kbd> open</span>
+      <span><kbd>esc</kbd> close</span>
+      <span class="palette-spacer"></span>
+      <span class="palette-hint">⌘K from anywhere</span>
+    </div>
+  </div>
+
   <!-- ── CARD DETAIL PANEL ──────────────────────────────────────────
        Slides in from the right when a card is clicked. Closes on ESC,
        backdrop click, or X. ↑/↓ navigates between cards. URL hash syncs
@@ -568,5 +601,6 @@
 
 <script src="scripts/render.js"></script>
 <script src="scripts/terminal.js"></script>
+<script src="scripts/palette.js"></script>
 </body>
 </html>
