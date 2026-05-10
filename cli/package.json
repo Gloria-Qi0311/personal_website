@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "description": "Antares Yuan's resume in your terminal — fetched live from antaresyuan.site.",
   "bin": {
-    "antares-cv": "./cv.js"
+    "antares-cv": "cv.js"
   },
   "main": "cv.js",
-  "files": ["cv.js", "README.md"],
+  "files": [
+    "cv.js",
+    "README.md"
+  ],
   "engines": {
     "node": ">=18"
   },
@@ -21,5 +24,11 @@
     "url": "https://github.com/AntaresYuan/personal_website/issues"
   },
   "author": "Antares Yuan",
-  "keywords": ["cv", "resume", "ai-pm", "cli", "antares"]
+  "keywords": [
+    "cv",
+    "resume",
+    "ai-pm",
+    "cli",
+    "antares"
+  ]
 }
