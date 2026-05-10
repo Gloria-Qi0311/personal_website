@@ -165,3 +165,14 @@ Spec/Table/kanban unaffected; #75 rebuild Action found no diff). Commented on
   prerendered kanban card order unchanged; rebuild idempotent.
 
 **Status:** branch pushed → PR opened → awaiting sub-agent review → merge → verify.
+
+**Review:** independent sub-agent code review → verdict "OK to merge" (no bugs).
+Two clarifying comments added pre-merge (053a88a): the audience lens vs
+card-panel-nav order tradeoff; persona order vs an explicit table column sort.
+
+**Status: ✅ DONE.** PR #82 squash-merged → `e8744f6` on main → CF redeployed →
+verified live (`id="audience-lens"` present, `aria-label` intact; Timeline tab
+still present; #75 rebuild Action found no diff). **#78 CLOSED** — all four parts
+shipped (Board · Table · Timeline · Specs view modes + the audience lens; PRs
+#79 #80 #81 #82). The "filter chips: frequency vs curated featuredTags"
+sub-decision left for the owner.
