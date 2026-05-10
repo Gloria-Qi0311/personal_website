@@ -581,24 +581,15 @@
   body.addEventListener('click', () => input.focus());
   clearBtn?.addEventListener('click', () => { cmds.clear(); input.focus(); });
 
-  /* ── ⌘K / Ctrl+K — global jump-to-terminal shortcut ────────────── */
-  // Also used by the "for agents" hero CTA: any anchor pointing at
-  // #terminal triggers the same focus behavior on click.
+  /* ── Hero "for agents" CTA → focus terminal input ─────────────── */
+  // ⌘K now opens the global command palette (scripts/palette.js).
+  // Anchors pointing at #terminal still focus the input on click so the
+  // hero CTA continues to "land you ready to type".
   const focusTerminal = () => {
     const section = document.getElementById('terminal');
     if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    // Wait a tick for scroll, then focus input
     setTimeout(() => input.focus({ preventScroll: true }), 350);
   };
-
-  window.addEventListener('keydown', (ev) => {
-    if ((ev.metaKey || ev.ctrlKey) && ev.key.toLowerCase() === 'k') {
-      ev.preventDefault();
-      focusTerminal();
-    }
-  });
-
-  // Hook any link pointing to #terminal — including the "for agents" CTA.
   document.addEventListener('click', (ev) => {
     const a = ev.target.closest('a[href="#terminal"]');
     if (a) focusTerminal();

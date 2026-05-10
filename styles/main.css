@@ -1055,6 +1055,184 @@ body.modal-open { overflow: hidden; }
 }
 
 /* ════════════════════════════════════════════════════════════════════════
+   COMMAND PALETTE — Cmd+K overlay
+   ════════════════════════════════════════════════════════════════════════ */
+.palette-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 20, 30, 0.32);
+  backdrop-filter: blur(3px);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease-out;
+}
+.palette-backdrop.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.palette {
+  position: fixed;
+  top: 14vh;
+  left: 50%;
+  transform: translateX(-50%) scale(0.97);
+  width: min(620px, calc(100vw - 32px));
+  max-height: 70vh;
+  z-index: 210;
+  background: var(--color-surface);
+  border: var(--bw) solid var(--color-line);
+  border-radius: var(--r-lg);
+  box-shadow: 0 8px 16px rgba(20,20,30,0.10), 0 24px 60px rgba(20,20,30,0.20);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+}
+.palette.is-open {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.palette-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-12);
+  padding: var(--sp-14) var(--sp-16);
+  border-bottom: var(--bw) solid var(--color-line-soft);
+  background: var(--color-surface);
+}
+.palette-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  background: var(--color-yellow-soft);
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+}
+.palette-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: var(--fs-15);
+  color: var(--color-text);
+  padding: 0;
+}
+.palette-input::placeholder { color: var(--color-text-faint); }
+.palette-kbd {
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  padding: 2px var(--sp-8);
+  background: var(--color-bg-soft);
+  border: var(--bw) solid var(--color-line);
+  border-radius: var(--r-sm);
+  color: var(--color-text-faint);
+}
+
+.palette-results {
+  list-style: none;
+  margin: 0;
+  padding: var(--sp-6);
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+.palette-result {
+  display: grid;
+  grid-template-columns: 26px 1fr auto;
+  align-items: center;
+  gap: var(--sp-12);
+  padding: var(--sp-8) var(--sp-10);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  user-select: none;
+}
+.palette-result.is-selected {
+  background: var(--color-yellow-glow);
+}
+.palette-result-icon {
+  font-family: var(--font-mono);
+  font-size: var(--fs-13);
+  color: var(--color-text-dim);
+  text-align: center;
+}
+.palette-result-body {
+  min-width: 0;
+}
+.palette-result-label {
+  font-family: var(--font-sans);
+  font-size: var(--fs-13);
+  color: var(--color-text);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.palette-result-desc {
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  color: var(--color-text-faint);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.palette-result-meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  color: var(--color-text-faint);
+}
+.palette-result.is-selected .palette-result-icon { color: var(--color-text); }
+.palette-result.is-selected .palette-result-meta { color: var(--color-text-dim); }
+
+.palette-empty {
+  text-align: center;
+  padding: var(--sp-32) var(--sp-20);
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+}
+
+.palette-footer {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-14);
+  padding: var(--sp-8) var(--sp-16);
+  border-top: var(--bw) solid var(--color-line-soft);
+  background: var(--color-bg-soft);
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  color: var(--color-text-faint);
+  letter-spacing: var(--tracking-wide);
+}
+.palette-footer kbd {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 1px var(--sp-6);
+  background: var(--color-surface);
+  border: var(--bw) solid var(--color-line);
+  border-radius: 3px;
+  color: var(--color-text-dim);
+  margin-right: 4px;
+}
+.palette-spacer { flex: 1; }
+.palette-hint { color: var(--color-text-faint); }
+
+@media (max-width: 640px) {
+  .palette { top: 5vh; max-height: 88vh; width: calc(100vw - 16px); }
+  .palette-footer { flex-wrap: wrap; }
+}
+
+body.palette-open { overflow: hidden; }
+
+/* ════════════════════════════════════════════════════════════════════════
    AGENT TERMINAL — embedded CLI (dark panel inside light page)
    ════════════════════════════════════════════════════════════════════════ */
 .terminal-section { margin-bottom: var(--sp-80); }
