@@ -429,7 +429,10 @@ button:focus-visible,
 .view-tab {
   font-family: var(--font-mono);
   font-size: var(--fs-12);
-  padding: var(--sp-4) var(--sp-10);
+  padding: var(--sp-6) var(--sp-12);
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
   border: none;
   background: transparent;
   color: var(--color-text-dim);
@@ -489,12 +492,18 @@ button:focus-visible,
 .filter-chip {
   font-family: var(--font-mono);
   font-size: var(--fs-11);
-  padding: var(--sp-4) var(--sp-10);
+  /* Bumped padding-y so the touch target hits 24×24 minimum without
+     visually fattening the chip — Lighthouse's touch-target audit was
+     failing on the previous 4px-y padding. */
+  padding: var(--sp-6) var(--sp-12);
+  min-height: 28px;
   background: var(--color-bg-soft);
   border: var(--bw) solid transparent;
   border-radius: 999px;
   color: var(--color-text-dim);
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
   transition: background var(--dur-quick), color var(--dur-quick), border-color var(--dur-quick);
 }
 .filter-chip:hover { color: var(--color-text); border-color: var(--color-line); }
@@ -789,8 +798,8 @@ button:focus-visible,
   gap: var(--sp-4);
 }
 .panel-nav {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   display: inline-grid;
   place-items: center;
   border: var(--bw) solid var(--color-line);
@@ -818,8 +827,8 @@ button:focus-visible,
 }
 
 .modal-close {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border: var(--bw) solid transparent;
   background: transparent;
   font-size: 20px;
@@ -1313,7 +1322,10 @@ body.palette-open { overflow: hidden; }
   background: transparent;
   border: var(--bw) solid var(--term-line);
   color: var(--term-dim);
-  padding: 2px var(--sp-8);
+  padding: var(--sp-6) var(--sp-10);
+  min-height: 26px;
+  display: inline-flex;
+  align-items: center;
   border-radius: var(--r-sm);
   cursor: pointer;
   transition: border-color var(--dur-quick), color var(--dur-quick);
