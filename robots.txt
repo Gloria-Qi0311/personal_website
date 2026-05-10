@@ -1,0 +1,12 @@
+# https://antaresyuan.site
+# Source: github.com/AntaresYuan/personal_website
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+Sitemap: https://antaresyuan.site/sitemap.xml
+
+# AI agents — there's a structured entry point for you:
+# https://antaresyuan.site/llms.txt        (short summary)
+# https://antaresyuan.site/llms-full.txt   (full content)
