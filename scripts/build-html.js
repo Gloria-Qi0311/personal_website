@@ -246,6 +246,40 @@ html = html.replace(/<html\b[^>]*>/, (m) => {
   return m.replace(/<html/, '<html data-prerendered="true"');
 });
 
+// ── Cloudflare Web Analytics ──────────────────────────────────────────
+// Strip any prior beacon (idempotent), then inject before </head> if
+// site.analytics.cfAnalyticsToken is set. No script when empty — the
+// page loads without any tracking until the token is configured.
+html = html.replace(/[ \t]*<!--\s*cf-analytics\s*-->[\s\S]*?<!--\s*\/cf-analytics\s*-->\n?/g, '');
+const cfToken = site.analytics?.cfAnalyticsToken?.trim();
+if (cfToken) {
+  const block = `  <!-- cf-analytics -->\n  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${escape(cfToken)}"}'></script>\n  <!-- /cf-analytics -->\n`;
+  html = html.replace('</head>', `${block}</head>`);
+}
+
+// ── Giscus (GitHub Discussions comments) ──────────────────────────────
+// Replace the @giscus marker (or any prior injected block) inside the
+// #giscus-container with either the live script or the placeholder.
+const giscus = site.giscus ?? {};
+const giscusReady = giscus.repo && giscus.repoId && giscus.category && giscus.categoryId;
+const giscusInner = giscusReady
+  ? `<script src="https://giscus.app/client.js"
+        data-repo="${escape(giscus.repo)}"
+        data-repo-id="${escape(giscus.repoId)}"
+        data-category="${escape(giscus.category)}"
+        data-category-id="${escape(giscus.categoryId)}"
+        data-mapping="${escape(giscus.mapping ?? 'pathname')}"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="${escape(giscus.theme ?? 'light')}"
+        data-lang="en"
+        crossorigin="anonymous"
+        async></script>`
+  : `<p class="comments-placeholder">Comments will appear here once Giscus is wired up — see <a href="https://github.com/AntaresYuan/personal_website/issues/49">#49</a>.</p>`;
+html = replaceInner(html, 'giscus-container', `\n      ${giscusInner}\n    `);
+
 // <title> + description / OG / Twitter meta from site.json
 const setMetaContent = (selector, content) => {
   const re = new RegExp(`(<meta\\s+${selector}\\s+content=")[^"]*(")`, 'i');

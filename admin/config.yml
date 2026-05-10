@@ -43,6 +43,21 @@ collections:
           - { label: "Footer copyright",  name: "footer.copyright",  widget: "string" }
           - { label: "Footer tagline",    name: "footer.tagline",    widget: "string" }
           - { label: "Last updated (YYYY-MM-DD)", name: "footer.lastUpdated", widget: "string" }
+          # ── Cloudflare Web Analytics ─────────────────────────────────
+          # Get the token from dash.cloudflare.com → Web Analytics →
+          # Add a site → copy the value from the data-cf-beacon JSON.
+          # Leave empty to disable.
+          - { label: "Cloudflare Analytics Token", name: "analytics.cfAnalyticsToken", widget: "string", required: false, hint: "From dash.cloudflare.com → Web Analytics. Empty = disabled." }
+          # ── Giscus comments ──────────────────────────────────────────
+          # Setup: enable Discussions on the GitHub repo, then visit
+          # giscus.app, configure for AntaresYuan/personal_website, and
+          # paste the generated repo-id and category-id below.
+          - { label: "Giscus repo (owner/name)", name: "giscus.repo",       widget: "string", required: false, default: "AntaresYuan/personal_website" }
+          - { label: "Giscus repo ID",           name: "giscus.repoId",     widget: "string", required: false, hint: "From giscus.app — empty = comments disabled" }
+          - { label: "Giscus category",          name: "giscus.category",   widget: "string", required: false, default: "General" }
+          - { label: "Giscus category ID",       name: "giscus.categoryId", widget: "string", required: false, hint: "From giscus.app" }
+          - { label: "Giscus mapping",           name: "giscus.mapping",    widget: "select", options: ["pathname","url","title","og:title","specific","number"], required: false, default: "pathname" }
+          - { label: "Giscus theme",             name: "giscus.theme",      widget: "select", options: ["light","dark","preferred_color_scheme"], required: false, default: "light" }
 
   # ── Hero / profile ─────────────────────────────────────────────────
   - name: "profile"

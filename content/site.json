@@ -15,5 +15,16 @@
     "copyright": "© 2026 Antares Yuan",
     "tagline": "This site is a roadmap of how Antares is growing as an AI Builder, not only a resume.",
     "lastUpdated": "2026-05-09"
+  },
+  "analytics": {
+    "cfAnalyticsToken": ""
+  },
+  "giscus": {
+    "repo": "AntaresYuan/personal_website",
+    "repoId": "",
+    "category": "General",
+    "categoryId": "",
+    "mapping": "pathname",
+    "theme": "light"
   }
 }
