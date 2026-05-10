@@ -1,6 +1,33 @@
 {
   "cards": [
     {
+      "details": "## Context\n\nReplace this with the longer story. Two or three short paragraphs is plenty.\n\n## What I owned\n\n- Decision X\n- Decision Y\n- Trade-off Z\n-  I am very good.\n\n## Outcome\n\nWhat happened. What you'd do differently.",
+      "impact": "",
+      "summary": "WorthFly currently focuses on search, decision support, alert drafts, and external purchase handoff. Final fare, inventory, and ticketing still belong to the real booking channel.",
+      "order": 1,
+      "status": "shipped",
+      "title": "Worth Fly",
+      "tags": [
+        "SIDE PROJECT",
+        "AI PM",
+        "0→1",
+        "Explainable AI",
+        "Website"
+      ],
+      "links": [
+        {
+          "label": "Demo",
+          "href": "https://worthfly.vercel.app"
+        },
+        {
+          "label": "GitHub",
+          "href": "https://github.com/AntaresYuan/Worthfly"
+        }
+      ],
+      "updated": "2026-04-10",
+      "id": "shipped-1"
+    },
+    {
       "details": "",
       "impact": "saved me 10 hrs+ of sleep",
       "summary": "A lightweight menu bar watchdog that monitors your Claude Code sessions, alerts you the moment credits renew, and automatically resumes your work.",
@@ -26,33 +53,6 @@
       ],
       "updated": "2026-04-15",
       "id": "shipped-2"
-    },
-    {
-      "details": "## Context\n\nReplace this with the longer story. Two or three short paragraphs is plenty.\n\n## What I owned\n\n- Decision X\n- Decision Y\n- Trade-off Z\n\n## Outcome\n\nWhat happened. What you'd do differently.",
-      "impact": "",
-      "summary": "WorthFly currently focuses on search, decision support, alert drafts, and external purchase handoff. Final fare, inventory, and ticketing still belong to the real booking channel.",
-      "order": 1,
-      "status": "shipped",
-      "title": "Worth Fly",
-      "tags": [
-        "SIDE PROJECT",
-        "AI PM",
-        "0→1",
-        "Explainable AI",
-        "Website"
-      ],
-      "links": [
-        {
-          "label": "Demo",
-          "href": "https://worthfly.vercel.app"
-        },
-        {
-          "label": "GitHub",
-          "href": "https://github.com/AntaresYuan/Worthfly"
-        }
-      ],
-      "updated": "2026-04-10",
-      "id": "shipped-1"
     },
     {
       "details": "",
