@@ -61,6 +61,21 @@
   // dumping the full resume took ~3s of blocked main thread.
   let _buf = null;
 
+  // Scroll to bottom on the next frame instead of synchronously. Reading
+  // scrollHeight right after a DOM insert forces the browser to compute
+  // layout immediately — Lighthouse measured this at 204ms per print on
+  // mobile (terminal.js:71:26). Deferring to rAF lets the browser
+  // batch the insert with its normal layout pass.
+  let _scrollPending = false;
+  const scrollToBottom = () => {
+    if (_scrollPending) return;
+    _scrollPending = true;
+    requestAnimationFrame(() => {
+      _scrollPending = false;
+      body.scrollTop = body.scrollHeight;
+    });
+  };
+
   const print = (html, cls = 'term-out') => {
     const lineHtml = `<div class="terminal-line ${cls}">${html}</div>`;
     if (_buf) {
@@ -68,7 +83,7 @@
       return;
     }
     promptLine.insertAdjacentHTML('beforebegin', lineHtml);
-    body.scrollTop = body.scrollHeight;
+    scrollToBottom();
   };
 
   const printBatch = (cb) => {
@@ -81,7 +96,7 @@
       _buf = null;
       if (chunks.length) {
         promptLine.insertAdjacentHTML('beforebegin', chunks.join(''));
-        body.scrollTop = body.scrollHeight;
+        scrollToBottom();
       }
     }
   };
