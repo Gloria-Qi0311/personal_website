@@ -57,6 +57,14 @@ This adds a `pre-commit` hook that detects changes to `content/*.json`, runs `bu
 
 > Note: this is a "stay simple now, switch to deploy-time builds later" choice (issue #X). When the site moves to Cloudflare Pages / Vercel, the build will run on the host instead and the artifacts won't need to live in git.
 
+## Resume in your terminal
+
+```bash
+npx antares-cv
+```
+
+Single-file Node CLI in `cli/` that fetches `content/*.json` from the live site and prints a colored resume. Same data as the website, terminal-shaped. See [`cli/README.md`](cli/README.md) for options (`--full`, `--json`, `--no-color`).
+
 ## How agent-friendly is this?
 
 The site exposes three machine-readable surfaces backed by the same JSON:
