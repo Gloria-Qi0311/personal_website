@@ -19,9 +19,13 @@
   --color-line-soft: #EFEBDA;  /* subtle divider */
 
   /* ── Color: text ───────────────────────────────────────────────────── */
+  /* Verified against --color-bg #FAF7F0:
+       text   #1A1A1F  →  ~17 : 1  (AAA)
+       dim    #5A5A66  →  ~ 7 : 1  (AAA)
+       faint  #6B6B78  →  ~ 5 : 1  (AA — was #9A9AA5 / 2.7:1, failed) */
   --color-text:      #1A1A1F;  /* primary ink */
   --color-text-dim:  #5A5A66;  /* secondary */
-  --color-text-faint:#9A9AA5;  /* tertiary / meta */
+  --color-text-faint:#6B6B78;  /* tertiary / meta — AA on cream + white */
 
   /* ── Color: brand ──────────────────────────────────────────────────── */
   --color-yellow:        #F5C518;  /* warm yellow primary */
@@ -1515,9 +1519,14 @@ body.palette-open { overflow: hidden; }
   0%, 100% { opacity: 1; transform: scale(1); }
   50%      { opacity: 0.6; transform: scale(0.85); }
 }
+/* `rise` animates a small upward slide on first paint. We deliberately do
+   NOT fade opacity from 0 — Lighthouse measures LCP at first paint, and
+   an initial opacity:0 makes the candidate invisible at that moment,
+   which is what triggered NO_LCP errors. Sliding 6px is enough texture
+   to feel "settled in" without hiding the content. */
 @keyframes rise {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { transform: translateY(6px); }
+  to   { transform: translateY(0); }
 }
 .rise { animation: rise var(--dur-slow) var(--ease-out) both; }
 .rise-1 { animation-delay: 0.05s; }

@@ -8,3 +8,4 @@
    ════════════════════════════════════════════════════════════════════════ */
 require('./build-html');
 require('./build-llms');
+require('./build-sitemap');
