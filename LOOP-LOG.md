@@ -85,4 +85,9 @@ not regressed; #75 rebuild Action found no diff). Commented on #78.
 markdown headings, which land under the card's `<h4>` title — a heading-order
 quirk (the modal has the same). Revisit in the a11y pass.
 
-**Status:** branch pushed → PR opened → awaiting sub-agent review → merge → verify.
+**Review:** independent sub-agent code review → verdict "OK to merge" (no
+critical/should-fix; only pre-existing nits noted). No changes needed.
+
+**Status: ✅ DONE.** PR #80 squash-merged → `a74cd32` on main → CF redeployed →
+verified live (`data-view="specs"` tab + `#view-specs` panel present; Table view
++ kanban unaffected; #75 rebuild Action found no diff). Commented on #78.
