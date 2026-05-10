@@ -209,3 +209,15 @@ sub-decision left for the owner.
 - `node scripts/build.js` → passes; rebuild idempotent.
 
 **Status:** branch pushed → PR opened → awaiting sub-agent review → merge → verify.
+
+**Review:** independent sub-agent code review → verdict "OK to merge" (no
+critical/should-fix). Verified: no LLM/network calls (deterministic string
+matching); the new token-overlap tier never demotes a prefix/substring hit and
+single-word queries are unchanged; FAQ cardIds (SHIP-01/SHIP-03/NOW-02) resolve
+correctly against content/board.json's order; FAQ label + answer escaped on
+render. No changes needed.
+
+**Status: ✅ DONE.** PR #83 squash-merged → `143bfc7` on main → CF redeployed →
+verified live (palette placeholder = "Search · or just ask…"; audience-lens
+still present; #75 rebuild Action found no diff). Commented on #76 (kept open —
+Phase 2 [embeddings] / Phase 3 [Workers AI] left for the owner).
