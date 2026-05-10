@@ -59,6 +59,39 @@ const red     = (s) => c('31',    s);
 const cyan    = (s) => c('36',    s);
 const magenta = (s) => c('35',    s);
 
+// Strip the small set of inline tags the website allows (em / strong / br)
+// so contact.intro etc. render cleanly in plain text.
+const stripTags = (s) => String(s ?? '')
+  .replace(/<\/?(em|strong)>/gi, '')
+  .replace(/<br\s*\/?>/gi, ' ')
+  .trim();
+
+// Wrap a long string to a max width, indented by `pad` on continuation lines.
+const wrap = (s, width, pad = '') => {
+  if (!s) return '';
+  const words = s.split(/\s+/);
+  const lines = [];
+  let cur = '';
+  for (const w of words) {
+    if ((cur + ' ' + w).trim().length > width && cur) {
+      lines.push(cur);
+      cur = w;
+    } else {
+      cur = cur ? cur + ' ' + w : w;
+    }
+  }
+  if (cur) lines.push(cur);
+  return lines.map((l, i) => (i === 0 ? '' : pad) + l).join('\n');
+};
+
+// Status → glyph used as a left-margin marker on every card line.
+const STATUS_GLYPH = {
+  shipped: green('✓'),
+  now:     yellow('→'),
+  next:    blue('◇'),
+  later:   dim('○'),
+};
+
 /* ── Fetch ──────────────────────────────────────────────────────────── */
 const fetchJson = async (path) => {
   const res = await fetch(`${SITE}${path}`);
@@ -87,10 +120,12 @@ const allCards = (board) => {
 
 /* ── Render ─────────────────────────────────────────────────────────── */
 const cols = process.stdout.columns || 80;
+const W = Math.min(cols, 72);  // soft max for body text wrap
+
 const rule = (label) => {
   const tag = ` ${label.toUpperCase()} `;
-  const remain = Math.max(2, Math.min(cols, 60) - tag.length - 4);
-  return dim('─── ') + bold(tag) + dim('─'.repeat(remain));
+  const remain = Math.max(2, W - tag.length - 4);
+  return dim('═══') + bold(tag) + dim('═'.repeat(remain));
 };
 
 const renderHero = (profile) => {
@@ -98,30 +133,72 @@ const renderHero = (profile) => {
   const fullName = `${profile.name ?? ''}${profile.nameAccent ? ' ' + profile.nameAccent : ''}`;
   lines.push(bold(yellow(fullName.trim().toUpperCase())));
   if (profile.slogan) lines.push(italic(profile.slogan));
+  if (profile.manifesto) {
+    lines.push('');
+    lines.push(dim(wrap(profile.manifesto, W)));
+  }
   lines.push('');
   const sub = [profile.role, profile.location].filter(Boolean).join('  ·  ');
   if (sub) lines.push(dim(sub));
-  if (profile.status) lines.push(dim('● ') + green(profile.status));
-  if (profile.tags?.length) lines.push(dim('tags  ') + profile.tags.join(' · '));
+  if (profile.status) lines.push(green('● ') + profile.status);
+  if (profile.tags?.length) lines.push(dim('tags  ') + profile.tags.map(yellow).join(dim(' · ')));
   return lines.join('\n');
+};
+
+// Single line opening the "what I'm open to" stance, sourced from
+// contact.intro so it stays in sync with the website's contact card.
+// Strips a leading "(Currently )open to:" so the CLI doesn't double up
+// the label with our own "open to ·" prefix.
+const renderOpenTo = (contact) => {
+  let intro = stripTags(contact.intro);
+  if (!intro) return null;
+  intro = intro.replace(/^\s*(?:currently\s+)?open\s+to\s*[:·]\s*/i, '');
+  const prefix = 'open to · ';
+  const pad = ' '.repeat(prefix.length);
+  return dim(prefix) + wrap(intro, W - prefix.length, pad);
 };
 
 const renderCards = (cards, status, { full }) => {
   const list = cards.filter(c => c.status === status);
   if (list.length === 0) return null;
+
   const lines = [rule(status)];
   const idWidth = Math.max(...list.map(c => c.displayId.length));
+  // Visual cell budget per row prefix: glyph(1) + space(1) + idWidth + 2 spaces
+  // = idWidth + 4. Continuation lines indent to this column so they line up
+  // exactly under the title.
+  const indent = ' '.repeat(idWidth + 4);
+
   list.forEach(card => {
-    const id = bold(yellow(card.displayId.padEnd(idWidth)));
-    const title = card.title ?? '';
-    const impact = card.impact ? '  ' + green(card.impact) : '';
-    const date = card.updated ? '  ' + dim(card.updated) : '';
-    lines.push(`${id}  ${title}${impact}${date}`);
-    if (full && card.summary) {
-      lines.push(' '.repeat(idWidth + 2) + dim(card.summary));
+    const glyph = STATUS_GLYPH[status] ?? ' ';
+    const id    = bold(yellow(card.displayId.padEnd(idWidth)));
+    const title = bold(card.title ?? '');
+    const date  = card.updated ? '  ' + dim(card.updated) : '';
+    lines.push(`${glyph} ${id}  ${title}${date}`);
+
+    // Summary (one line wrapped) — show on full mode only for shipped/now,
+    // always for next/later (those don't have impact metrics so the
+    // summary IS the value)
+    const showSummary = full || status === 'next' || status === 'later';
+    if (showSummary && card.summary) {
+      lines.push(indent + dim(wrap(card.summary, W - indent.length, indent)));
     }
+
+    // Impact pill on its own line (visual emphasis)
+    if (card.impact) {
+      lines.push(indent + green('· ') + green(card.impact));
+    }
+
+    // Inline links — compact "[label →]" form
+    const links = (card.links ?? []).filter(l => l.href && l.href !== '#');
+    if (links.length) {
+      const compact = links.map(l => blue(`[${l.label} →]`)).join(' ');
+      lines.push(indent + compact);
+    }
+
+    // Tags — full mode only (default keeps the listing dense)
     if (full && card.tags?.length) {
-      lines.push(' '.repeat(idWidth + 2) + dim('  ' + card.tags.join(', ')));
+      lines.push(indent + dim(card.tags.join(' · ')));
     }
   });
   return lines.join('\n');
@@ -130,11 +207,12 @@ const renderCards = (cards, status, { full }) => {
 const renderLens = (lens, { full }) => {
   const items = lens.items ?? [];
   if (!items.length) return null;
-  const lines = [rule('lens')];
+  const lines = [rule('how i think')];
   items.forEach(it => {
     const num = bold(yellow((it.num ?? '').padEnd(5)));
     lines.push(`${num} ${it.main ?? ''}`);
-    if (full && it.aside) lines.push('      ' + dim(italic(it.aside)));
+    // Asides are one of the better parts of the lens — show them by default
+    if (it.aside) lines.push('      ' + dim(italic(it.aside)));
   });
   return lines.join('\n');
 };
@@ -148,15 +226,40 @@ const renderContact = (contact) => {
     const key = dim((it.key ?? '').padEnd(keyWidth));
     const link = blue(it.label ?? '');
     const url  = it.href && it.href !== '#' && it.label !== it.href
-      ? '  ' + dim(`(${it.href})`) : '';
+      ? '  ' + dim(it.href) : '';
     lines.push(`  ${key}  ${link}${url}`);
   });
   return lines.join('\n');
 };
 
+// Audience navigation — mirrors the four hero CTAs on the website so the
+// CLI ends with the same "pick your path" framing.
+const renderAudienceNav = (profile) => {
+  const ctas = profile.ctas ?? [];
+  if (!ctas.length) return null;
+  const lines = [rule('pick your path')];
+  const widthAud = Math.max(...ctas.map(c => (c.audience ?? '').length));
+  ctas.forEach(c => {
+    const aud   = bold((c.audience ?? '').padEnd(widthAud));
+    const label = c.label ?? '';
+    lines.push(`  ${aud}  ${label}`);
+    if (c.note) lines.push(' '.repeat(widthAud + 4) + dim(c.note));
+  });
+  return lines.join('\n');
+};
+
 const renderFooter = (site) => {
-  const lines = ['', dim(`→ live   ${SITE}`), dim(`→ source github.com/AntaresYuan/personal_website`)];
-  if (site.footer?.lastUpdated) lines.push(dim(`  last updated ${site.footer.lastUpdated}`));
+  const lines = [
+    '',
+    dim('→ live    ') + cyan(SITE),
+    dim('→ source  ') + cyan('github.com/AntaresYuan/personal_website'),
+    dim('→ json    ') + cyan('npx antares-cv --json'),
+    dim('→ agents  ') + cyan(SITE + '/llms.txt'),
+  ];
+  if (site.footer?.lastUpdated) {
+    lines.push('');
+    lines.push(dim('updated ' + site.footer.lastUpdated));
+  }
   return lines.join('\n');
 };
 
@@ -198,12 +301,14 @@ const renderFooter = (site) => {
   const cards = allCards(board);
   const sections = [
     renderHero(profile),
+    renderOpenTo(contact),
     renderCards(cards, 'shipped', flags),
     renderCards(cards, 'now',     flags),
     renderCards(cards, 'next',    flags),
     renderCards(cards, 'later',   flags),
     renderLens(lens, flags),
     renderContact(contact),
+    renderAudienceNav(profile),
     renderFooter(site),
   ].filter(Boolean);
 
