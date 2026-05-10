@@ -6,6 +6,9 @@ dist/
 *.log
 .env
 
+# Claude Code — personal/local settings (allowlist for the autonomous loop)
+.claude/settings.local.json
+
 # wrangler (Cloudflare Workers CLI) local state
 .wrangler/
 .dev.vars
