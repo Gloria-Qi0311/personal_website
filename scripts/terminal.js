@@ -54,12 +54,36 @@
   // Insert lines BEFORE the prompt line so the input always stays at bottom.
   const promptLine = body.querySelector('.term-prompt-line');
 
+  // Print buffering: when buffer is non-null, print() pushes into it instead
+  // of mutating the DOM. printBatch(cb) sets it up and flushes at the end as
+  // a single insertAdjacentHTML — turning N DOM mutations into 1. This is
+  // the main INP fix for `cv` and other multi-section commands; without it,
+  // dumping the full resume took ~3s of blocked main thread.
+  let _buf = null;
+
   const print = (html, cls = 'term-out') => {
-    const div = document.createElement('div');
-    div.className = `terminal-line ${cls}`;
-    div.innerHTML = html;
-    body.insertBefore(div, promptLine);
+    const lineHtml = `<div class="terminal-line ${cls}">${html}</div>`;
+    if (_buf) {
+      _buf.push(lineHtml);
+      return;
+    }
+    promptLine.insertAdjacentHTML('beforebegin', lineHtml);
     body.scrollTop = body.scrollHeight;
+  };
+
+  const printBatch = (cb) => {
+    const outer = _buf;            // support nesting (no-op if already buffered)
+    if (outer) { cb(); return; }
+    _buf = [];
+    try { cb(); }
+    finally {
+      const chunks = _buf;
+      _buf = null;
+      if (chunks.length) {
+        promptLine.insertAdjacentHTML('beforebegin', chunks.join(''));
+        body.scrollTop = body.scrollHeight;
+      }
+    }
   };
 
   const printCmd = (cmd) =>
@@ -92,8 +116,13 @@
   const idPrefix = { shipped: 'SHIP', now: 'NOW', next: 'NEXT', later: 'LATER' };
   const pad2 = (n) => String(n).padStart(2, '0');
 
-  // Build [{...card, displayId}] in the same order render.js uses.
+  // Memoized — board doesn't mutate during a session. The cache key is the
+  // board reference; replaced if state.board itself changes (which only
+  // happens once at boot today, but this keeps us safe for live-reload).
+  let _cardsCacheFor = null;
+  let _cardsCache = null;
   const allCards = () => {
+    if (_cardsCacheFor === state.board && _cardsCache) return _cardsCache;
     const cards = (state.board?.cards ?? []).slice().sort((a, b) => {
       const ao = a.order ?? 99, bo = b.order ?? 99;
       if (ao !== bo) return ao - bo;
@@ -105,6 +134,8 @@
       const inCol = cards.filter((c) => c.status === col);
       inCol.forEach((c, idx) => out.push({ ...c, displayId: `${idPrefix[col]}-${pad2(idx + 1)}` }));
     });
+    _cardsCacheFor = state.board;
+    _cardsCache = out;
     return out;
   };
 
@@ -477,23 +508,29 @@
   });
 
   /* ── Input handling ────────────────────────────────────────────── */
+  // Wraps every command's output in a single printBatch so even a heavy
+  // command like `cv` (which transitively calls 6+ sub-commands and prints
+  // dozens of lines) results in exactly one DOM mutation + one scroll —
+  // turning multi-second INP into one frame.
   const exec = (raw) => {
     const trimmed = raw.trim();
     if (!trimmed) return;
-    printCmd(trimmed);
-    history.push(trimmed);
-    historyIdx = -1;
-    saveHistory();
+    printBatch(() => {
+      printCmd(trimmed);
+      history.push(trimmed);
+      historyIdx = -1;
+      saveHistory();
 
-    const [name, ...rest] = trimmed.split(/\s+/);
-    const fn = cmds[name.toLowerCase()];
-    if (!fn) {
-      print(`<span class="term-err">command not found:</span> ${escape(name)} <span class="term-dim">— try \`help\`</span>`);
-      return;
-    }
-    const { args, opts } = parseFlags(rest);
-    try { fn(args, opts); }
-    catch (e) { print(`<span class="term-err">error:</span> ${escape(e.message)}`); }
+      const [name, ...rest] = trimmed.split(/\s+/);
+      const fn = cmds[name.toLowerCase()];
+      if (!fn) {
+        print(`<span class="term-err">command not found:</span> ${escape(name)} <span class="term-dim">— try \`help\`</span>`);
+        return;
+      }
+      const { args, opts } = parseFlags(rest);
+      try { fn(args, opts); }
+      catch (e) { print(`<span class="term-err">error:</span> ${escape(e.message)}`); }
+    });
   };
 
   input.addEventListener('keydown', (ev) => {
