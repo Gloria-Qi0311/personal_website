@@ -90,16 +90,52 @@ Two paths — pick whichever's faster for the moment.
 
 Edit any `content/*.json` file in your editor or the GitHub web UI. Same outcome.
 
+## Live
+
+Production: <https://antaresyuan.site> on Cloudflare Pages.
+OAuth proxy for Decap CMS: a Cloudflare Worker in `workers/decap-oauth/`.
+
+## Add-ons (configured via `content/site.json` or `/admin/`)
+
+### Cloudflare Web Analytics
+
+1. Go to **dash.cloudflare.com → Web Analytics → Add a site** (or pick the existing Pages site).
+2. Copy the token from the embedded `data-cf-beacon='{"token": "..."}'` snippet.
+3. Paste into `site.json → analytics.cfAnalyticsToken` (or in `/admin/` → Site meta).
+4. Run `node scripts/build.js` and commit. The beacon script gets injected into `<head>` automatically.
+
+Empty token = no script, no tracking.
+
+### Giscus comments
+
+1. **Enable Discussions** on the GitHub repo (Settings → Features → Discussions).
+2. Visit <https://giscus.app>, configure for `AntaresYuan/personal_website`, pick a category.
+3. Copy the generated `data-repo-id` and `data-category-id` into `site.json → giscus.repoId` and `giscus.categoryId` (or via `/admin/`).
+4. Run `node scripts/build.js` and commit. The comments section auto-activates.
+
+While unconfigured, the comments section shows a placeholder.
+
+## Switching to deploy-time builds (when ready)
+
+Right now the artifacts (`index.html`, `llms.txt`, `llms-full.txt`) live in git so any clone can deploy without building. Once you're comfortable with the flow:
+
+1. In **Cloudflare Pages → Settings → Builds & deployments**, set:
+   - Build command: `node scripts/build.js`
+   - Build output directory: `/`
+2. Trigger a deploy and confirm the site rebuilds correctly.
+3. Then in a follow-up PR: add the artifacts to `.gitignore`, run `git rm --cached index.html llms.txt llms-full.txt`, and commit. From then on, the source-of-truth is JSON only and the artifacts are generated at every deploy.
+
 ## Roadmap
 
 See [Issue #39](https://github.com/AntaresYuan/personal_website/issues/39) for the live phase plan.
 
 ## Tech stack
 
-- Vanilla HTML / CSS / JS (no build step)
-- [Decap CMS](https://decapcms.org) for in-browser editing
-- [Giscus](https://giscus.app) for comments (planned, see #49)
-- Hosting: TBD — Cloudflare Pages / Vercel / GitHub Pages (see #53)
+- Vanilla HTML / CSS / JS, single-file build script
+- [Decap CMS](https://decapcms.org) for in-browser editing (vendored locally — `admin/decap-cms.min.js`)
+- Cloudflare Pages (hosting) + Cloudflare Worker (OAuth proxy)
+- [Giscus](https://giscus.app) for comments (config-driven via `site.json`)
+- [Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/) (config-driven via `site.json`)
 
 ## Design
 
