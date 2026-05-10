@@ -4,6 +4,7 @@ dist/
 .vscode/
 .idea/
 *.log
+.env
 
 # wrangler (Cloudflare Workers CLI) local state
 .wrangler/
