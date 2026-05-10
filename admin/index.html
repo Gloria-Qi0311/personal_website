@@ -15,28 +15,28 @@
       background: rgba(0,0,0,0.06); padding: 1px 6px; border-radius: 4px;
     }
   </style>
-  <!-- Decap CMS: in-browser CMS that commits content edits to the GitHub repo.
-       Single editor: only repo collaborators (i.e. the owner) can authenticate
-       through GitHub OAuth. Public visitors hit /admin/ but cannot log in.
-
-       The Decap bundle is vendored (admin/decap-cms.js, v3.12.2) instead of
-       loaded from a public npm CDN — jsDelivr and unpkg are unreliable from
-       mainland CN, which left /admin/ blank. The onload handler removes the
-       fallback message once the CMS boots. -->
-  <script
-    src="./decap-cms.js"
-    onload="document.getElementById('cms-loading-msg')?.remove()">
-  </script>
 </head>
 <body>
-  <!-- Fallback message — visible only if Decap fails to mount (e.g. CDN
-       blocked, JS error). Removed by the onload handler above on success. -->
+  <!-- Fallback message — visible only if Decap fails to mount (e.g. bundle
+       failed to load, JS error). Removed by the script's onload handler. -->
   <div id="cms-loading-msg">
     <strong>Loading the CMS…</strong><br>
     If this message stays for more than 10 seconds, the CMS bundle failed to
     load. Open your browser's Web Inspector → Console tab and report the red
     error to <code>chenjy4@uw.edu</code>.
   </div>
-  <!-- Decap auto-mounts here when the script loads. -->
+
+  <!-- Decap CMS: in-browser CMS that commits content edits to the GitHub repo.
+       Single editor: only repo collaborators (i.e. the owner) can authenticate
+       through GitHub OAuth. Public visitors hit /admin/ but cannot log in.
+
+       The bundle is vendored (admin/decap-cms.js, v3.12.2) instead of loaded
+       from a public npm CDN — jsDelivr and unpkg are unreliable from mainland
+       CN. The script MUST sit at the end of <body>: Decap's init() calls
+       document.body.appendChild(), so document.body has to exist already.
+       The onload handler removes the fallback message once the CMS boots. -->
+  <script
+    src="./decap-cms.js"
+    onload="document.getElementById('cms-loading-msg')?.remove()"></script>
 </body>
 </html>
