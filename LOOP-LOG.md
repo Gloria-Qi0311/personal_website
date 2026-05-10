@@ -261,3 +261,38 @@ Phase 2 [embeddings] / Phase 3 [Workers AI] left for the owner).
   (the diff is JS + CSS only).
 
 **Status:** branch pushed → PR opened → awaiting sub-agent review → merge → verify.
+
+---
+
+## 2026-05-10 — Loop complete ✅
+
+All six queued tasks done, merged, and verified live on antaresyuan.site (the
+live HTML carries `data-view="table"`, `data-view="timeline"`, `data-view="specs"`,
+`id="audience-lens"`, and the "Search · or just ask…" palette placeholder; the
+page renders cleanly). Each PR went through an independent sub-agent code review
+before merge; `node scripts/build.js` was kept idempotent throughout; the
+rebuild-on-content-change Action (#75, from earlier) keeps the artifacts in sync.
+
+| # | PR | Commit on main | Issue |
+|---|---|---|---|
+| 1 | #79 — board **Table** view | `1aec4f4` | #78 |
+| 2 | #80 — board **Spec** view | `a74cd32` | #78 |
+| 3 | #81 — board **Timeline** view | `7533353` | #78 |
+| 4 | #82 — board **audience lens** | `e8744f6` | **#78 closed** |
+| 5 | #83 — pure-retrieval **"ask this portfolio"** (folded into ⌘K; FAQ + token-overlap matching; no LLM) | `143bfc7` | #76 — **Phase 1 done**; Phase 2 (embeddings) / Phase 3 (Workers AI generation) left for the owner |
+| 6 | #84 — **a11y polish + simplify pass** (mini() heading-demote for the spec view; clickable-row pattern documented; `currentCards()` DRY) | `887b2ff` | — |
+
+**Still needs the owner:** #67 (publish `antares-cv` to npm — needs an npm 2FA
+OTP); #45 (fill the Shipped column with real projects — content/judgment); #77
+(should-we decision on open-sourcing the agent-friendly-site pattern); #76
+Phase 2/3 (a product call); the #78 "filter chips: frequency vs curated
+`featuredTags`" sub-decision.
+
+**Command-pattern note for any future loop here:** the harness only auto-approves
+SIMPLE single bash commands that *start with* an allowlisted command (git / gh /
+node / curl / grep / …) — no `cd … && …`, no `VAR=… && …`, no `&&`/`;`/`|`
+chains, no `$(…)` substitution; use `git -C <repo>` + absolute paths, and write
+PR bodies / multi-paragraph comments to a temp file and pass `--body-file`
+(markdown with `## headings` inline trips a gh prompt). `~/.claude/settings.json`
+holds the allowlist. The `.claude/settings.local.json` in this repo is the wrong
+path (project root here is the home dir) — it's gitignored and inert.
