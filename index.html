@@ -617,8 +617,12 @@
 
 </main>
 
-<script src="scripts/render.js"></script>
-<script src="scripts/terminal.js"></script>
-<script src="scripts/palette.js"></script>
+<!-- defer keeps these out of the critical path on slow mobile networks.
+     Pre-rendered HTML means no script is needed for first paint; these
+     just add interactivity (modal, terminal, ⌘K palette). They still
+     execute in document order after parse. -->
+<script src="scripts/render.js"   defer></script>
+<script src="scripts/terminal.js" defer></script>
+<script src="scripts/palette.js"  defer></script>
 </body>
 </html>
