@@ -1,7 +1,8 @@
 /* ════════════════════════════════════════════════════════════════════════
    palette.js — Cmd+K command palette.
 
-   Owns the global ⌘K / Ctrl+K shortcut. Opens a centered overlay with a
+   Owns the global ⌘K / Ctrl+K shortcut and the floating bottom-right
+   trigger (#palette-fab). Opens a centered overlay with a
    search input. Items are derived from the same content/*.json the rest
    of the site renders from, plus a static set of section anchors,
    terminal commands, and external links.
@@ -334,6 +335,9 @@
   });
 
   backdrop.addEventListener('click', close);
+
+  // Floating bottom-right trigger (also the visible cue for the ⌘K shortcut).
+  document.getElementById('palette-fab')?.addEventListener('click', open);
 
   /* ── Boot ──────────────────────────────────────────────────────── */
   (async () => {

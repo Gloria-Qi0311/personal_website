@@ -15,7 +15,7 @@
   "ctas": [
         {
       "audience": "for agents",
-      "label": "use the CLI · ⌘K",
+      "label": "use the CLI",
       "anchor": "#terminal",
       "note": "/llms.txt also available"
     },

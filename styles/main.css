@@ -467,15 +467,6 @@ button:focus-visible,
   font-weight: var(--fw-semibold);
 }
 .board-stat.sep { color: var(--color-text-faint); }
-.kbd-hint {
-  font-family: var(--font-mono);
-  font-size: var(--fs-11);
-  padding: 2px var(--sp-6);
-  background: var(--color-bg-soft);
-  border: var(--bw) solid var(--color-line);
-  border-radius: var(--r-sm);
-  color: var(--color-text-faint);
-}
 
 /* ── Filter chips ──────────────────────────────────────────────────── */
 .board-filters {
@@ -1253,6 +1244,51 @@ body.modal-open { overflow: hidden; }
 
 body.palette-open { overflow: hidden; }
 
+/* Floating command-palette trigger (bottom-right). Also the visible cue that
+   the ⌘K shortcut exists. Hidden while the palette is open; hidden on touch /
+   narrow viewports (no physical keyboard — the palette's content is reachable
+   through the visible UI there). */
+.palette-fab {
+  position: fixed;
+  right: var(--sp-20);
+  bottom: var(--sp-20);
+  z-index: 150;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-8);
+  padding: var(--sp-8) var(--sp-12);
+  background: var(--color-surface);
+  border: var(--bw) solid var(--color-line);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.08));
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--color-text-dim);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, transform 0.15s;
+}
+.palette-fab:hover,
+.palette-fab:focus-visible {
+  border-color: var(--color-blue);
+  color: var(--color-text);
+  transform: translateY(-1px);
+}
+.palette-fab-kbd {
+  font-family: inherit;
+  font-size: var(--fs-11);
+  padding: 1px var(--sp-6);
+  background: var(--color-bg-soft);
+  border: var(--bw) solid var(--color-line);
+  border-radius: var(--r-sm);
+  color: var(--color-text-faint);
+}
+body.palette-open .palette-fab,
+body.modal-open .palette-fab { opacity: 0; pointer-events: none; }
+
+@media (max-width: 768px) {
+  .palette-fab { display: none; }
+}
+
 /* ════════════════════════════════════════════════════════════════════════
    AGENT TERMINAL — embedded CLI (dark panel inside light page)
    ════════════════════════════════════════════════════════════════════════ */
@@ -1565,8 +1601,7 @@ body.palette-open { overflow: hidden; }
 }
 
 @media (max-width: 768px) {
-  /* Toolbar density: drop kbd hint, allow wrapping */
-  .kbd-hint { display: none; }
+  /* Toolbar density: allow wrapping */
   .board-toolbar-left { flex-wrap: wrap; gap: var(--sp-12); }
   /* Make view tabs scrollable if cramped */
   .board-views { overflow-x: auto; -webkit-overflow-scrolling: touch; }
