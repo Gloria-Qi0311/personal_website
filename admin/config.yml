@@ -58,6 +58,7 @@ collections:
           - { label: "Giscus category ID",       name: "giscus.categoryId", widget: "string", required: false, hint: "From giscus.app" }
           - { label: "Giscus mapping",           name: "giscus.mapping",    widget: "select", options: ["pathname","url","title","og:title","specific","number"], required: false, default: "pathname" }
           - { label: "Giscus theme",             name: "giscus.theme",      widget: "select", options: ["light","dark","preferred_color_scheme"], required: false, default: "light" }
+          - { label: "Giscus input position",    name: "giscus.inputPosition", widget: "select", options: ["top","bottom"], required: false, default: "top" }
 
   # ── Hero / profile ─────────────────────────────────────────────────
   - name: "profile"

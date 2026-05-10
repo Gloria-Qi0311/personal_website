@@ -21,10 +21,11 @@
   },
   "giscus": {
     "repo": "AntaresYuan/personal_website",
-    "repoId": "",
+    "repoId": "R_kgDOSYXV8Q",
     "category": "General",
-    "categoryId": "",
+    "categoryId": "DIC_kwDOSYXV8c4C8tqu",
     "mapping": "pathname",
-    "theme": "light"
+    "theme": "preferred_color_scheme",
+    "inputPosition": "bottom"
   }
 }
