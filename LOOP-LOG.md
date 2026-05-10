@@ -39,7 +39,14 @@ The owner can delete this file once the loop has wrapped up.
 - (No browser in this environment — full runtime behaviour to be confirmed by
   the PR code review + a post-deploy `curl` of antaresyuan.site.)
 
+**Review:** independent sub-agent code review → verdict "OK to merge". Notes
+addressed pre-merge: disabled Timeline/Specs tabs `tabindex="-1"` (one tab stop);
+sort-button `aria-label="Sort by …"`; clarified the title tiebreak isn't reversed
+by sort dir; the `.board[hidden]` cascade fix above.
+
 **Known follow-up (a11y, task 6):** table rows use `role="button"` on `<tr>`,
 which is a semantics gray area inside a `<table>`; revisit in the a11y pass.
 
-**Status:** branch pushed → PR #79 opened → fixing review findings → merge → verify.
+**Status: ✅ DONE.** PR #79 squash-merged → `1aec4f4` on main → CF redeployed →
+verified live (`data-view="table"` tab + `#view-table` panel present; CTA copy
+not regressed; #75 rebuild Action found no diff). Commented on #78.
