@@ -37,8 +37,13 @@
   --color-blue:          #2347D9;  /* cobalt — links, primary CTAs */
   --color-blue-soft:     #DDE4FF;  /* tint for blue surfaces */
   --color-blue-deep:     #1832A6;  /* hover / pressed */
-  --color-success:       #2F9E55;  /* shipped status */
-  --color-warn:          #D97706;  /* now status */
+  /* Used as small text on a tinted-white background (e.g. card-impact
+     green pill: rgba(47,158,85,0.10) wash on white card). The brighter
+     #2F9E55 / #D97706 tones were ~3.0:1 — failed AA 4.5:1 for normal
+     text. Darkened to land at AA on the tinted bg while keeping
+     enough chroma to read as "green good" / "orange in-progress". */
+  --color-success:       #1F7A3F;  /* shipped status */
+  --color-warn:          #A55300;  /* now status */
 
   /* ── Aliases (legacy/short) ────────────────────────────────────────── */
   --color-accent: var(--color-blue);
