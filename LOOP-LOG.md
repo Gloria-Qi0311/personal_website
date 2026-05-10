@@ -122,3 +122,13 @@ verified live (`data-view="specs"` tab + `#view-specs` panel present; Table view
   `#view-timeline`) survives the build; rebuild idempotent.
 
 **Status:** branch pushed → PR opened → awaiting sub-agent review → merge → verify.
+
+**Review:** independent sub-agent code review → verdict "OK to merge" (no
+critical/should-fix). One nit — a stale block comment in render.js
+("kanban ⇄ table" / "Disabled tabs Timeline/Specs stay inert") — fixed
+pre-merge (commit 9eecc9f).
+
+**Status: ✅ DONE.** PR #81 squash-merged → `7533353` on main → CF redeployed →
+verified live (`data-view="timeline"` tab + `#view-timeline` panel present;
+Spec/Table/kanban unaffected; #75 rebuild Action found no diff). Commented on
+#78. **Board view modes complete: Board · Table · Timeline · Specs.**
