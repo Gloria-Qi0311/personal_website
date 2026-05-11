@@ -158,9 +158,9 @@
         </div>
       </div>
       <div class="board-toolbar-right">
-        <span class="board-stat"><strong id="board-total-count">11</strong> cards</span>
+        <span class="board-stat"><strong id="board-total-count">8</strong> cards</span>
         <span class="board-stat sep">·</span>
-        <span class="board-stat" id="board-shipped-count">3 shipped</span>
+        <span class="board-stat" id="board-shipped-count">4 shipped</span>
         <span class="board-stat sep">·</span>
         <select class="audience-lens" id="audience-lens" aria-label="Audience preset — reorder cards for a particular reader">
           <option value="everyone" selected>For everyone</option>
@@ -172,179 +172,145 @@
     </div>
 
     <!-- filter chips (click to filter by tag) -->
-    <div class="board-filters" id="board-filters" role="group" aria-label="Filter by tag"><button class="filter-chip is-active" type="button" data-filter="all" aria-pressed="true">All</button><button class="filter-chip" type="button" data-filter="side project" aria-pressed="false">SIDE PROJECT</button><button class="filter-chip" type="button" data-filter="ai pm" aria-pressed="false">AI PM</button><button class="filter-chip" type="button" data-filter="0→1" aria-pressed="false">0→1</button><button class="filter-chip" type="button" data-filter="website" aria-pressed="false">Website</button><button class="filter-chip" type="button" data-filter="productivity" aria-pressed="false">Productivity</button><button class="filter-chip" type="button" data-filter="ai builder" aria-pressed="false">AI Builder</button></div>
+    <div class="board-filters" id="board-filters" role="group" aria-label="Filter by tag"><button class="filter-chip is-active" type="button" data-filter="all" aria-pressed="true">All</button><button class="filter-chip" type="button" data-filter="side project" aria-pressed="false">SIDE PROJECT</button><button class="filter-chip" type="button" data-filter="full-stack" aria-pressed="false">Full-stack</button><button class="filter-chip" type="button" data-filter="react" aria-pressed="false">React</button><button class="filter-chip" type="button" data-filter="node.js" aria-pressed="false">Node.js</button><button class="filter-chip" type="button" data-filter="supabase" aria-pressed="false">Supabase</button><button class="filter-chip" type="button" data-filter="frontend" aria-pressed="false">Frontend</button></div>
 
     <!-- columns -->
     <div class="board" id="board" role="tabpanel" aria-labelledby="tab-board">
       <article class="column col-shipped" id="col-shipped" aria-labelledby="col-shipped-title">
         <header class="col-head">
           <h3 class="col-title" id="col-shipped-title"><span class="col-dot"></span>Shipped</h3>
-          <span class="col-count" data-count="shipped">3</span>
+          <span class="col-count" data-count="shipped">4</span>
         </header>
         <div class="col-cards" data-cards="shipped">
-            <button type="button" class="card" data-id="shipped-1" data-card-id="SHIP-01" data-tags="side project|ai pm|0→1|explainable ai|website" aria-label="Open details for Worth Fly">
+            <button type="button" class="card" data-id="shipped-1" data-card-id="SHIP-01" data-tags="side project|full-stack|react|node.js|supabase" aria-label="Open details for fitty">
               <div class="card-meta-top">
                 <span class="card-id">SHIP-01</span>
                 <span class="card-handle" aria-hidden="true">⋮⋮</span>
               </div>
-              <div class="card-title">Worth Fly</div>
-              <div class="card-summary">WorthFly currently focuses on search, decision support, alert drafts, and external purchase handoff. Final fare, inventory, and ticketing still belong to the real booking channel.</div>
-              <div class="card-tags"><span class="tag">SIDE PROJECT</span><span class="tag tag-blue">AI PM</span><span class="tag">0→1</span><span class="tag tag-blue">Explainable AI</span><span class="tag">Website</span></div>
+              <div class="card-title">fitty</div>
+              <div class="card-summary">A calorie tracking app with Mochi, an animated companion that reacts to your daily nutrition progress. Built full-stack from scratch.</div>
+              <div class="card-tags"><span class="tag">SIDE PROJECT</span><span class="tag tag-blue">Full-stack</span><span class="tag">React</span><span class="tag tag-blue">Node.js</span><span class="tag">Supabase</span></div>
               <div class="card-footer">
                 <span class="card-footer-left">
-                  <span>2026-04-10</span>
+                  <span>2026-04-22</span>
                   <span class="card-comments">0</span>
                 </span>
-                
+                <span class="card-impact">live at fitty-nu.vercel.app</span>
               </div>
-              <div class="card-links"><a href="https://worthfly.vercel.app" target="_blank" rel="noopener">Demo ↗</a><a href="https://github.com/AntaresYuan/Worthfly" target="_blank" rel="noopener">GitHub ↗</a></div>
+              <div class="card-links"><a href="https://fitty-nu.vercel.app" target="_blank" rel="noopener">Demo ↗</a><a href="https://github.com/Gloria-Qi0311/calarie_app" target="_blank" rel="noopener">GitHub ↗</a></div>
             </button>
-            <button type="button" class="card" data-id="shipped-2" data-card-id="SHIP-02" data-tags="side project|tool-use|ai pm|ai native|productivity" aria-label="Open details for Claude Credit Watchdog">
+            <button type="button" class="card" data-id="shipped-2" data-card-id="SHIP-02" data-tags="side project|full-stack|react|fastapi|openai|supabase" aria-label="Open details for HuskyMatch">
               <div class="card-meta-top">
                 <span class="card-id">SHIP-02</span>
                 <span class="card-handle" aria-hidden="true">⋮⋮</span>
               </div>
-              <div class="card-title">Claude Credit Watchdog</div>
-              <div class="card-summary">A lightweight menu bar watchdog that monitors your Claude Code sessions, alerts you the moment credits renew, and automatically resumes your work.</div>
-              <div class="card-tags"><span class="tag">SIDE PROJECT</span><span class="tag tag-blue">tool-use</span><span class="tag">AI PM</span><span class="tag tag-blue">AI Native</span><span class="tag">Productivity</span></div>
+              <div class="card-title">HuskyMatch</div>
+              <div class="card-summary">A full-stack student networking platform for UW — profile-based matching powered by OpenAI embeddings, with messaging and social feed.</div>
+              <div class="card-tags"><span class="tag">SIDE PROJECT</span><span class="tag tag-blue">Full-stack</span><span class="tag">React</span><span class="tag tag-blue">FastAPI</span><span class="tag">OpenAI</span><span class="tag tag-blue">Supabase</span></div>
               <div class="card-footer">
                 <span class="card-footer-left">
-                  <span>2026-04-15</span>
+                  <span>2026-04-23</span>
                   <span class="card-comments">0</span>
                 </span>
-                <span class="card-impact">saved me 10 hrs+ of sleep</span>
+                
               </div>
-              <div class="card-links"><a href="https://claude-credit-watchdog.vercel.app" target="_blank" rel="noopener">Download ↗</a><a href="https://github.com/AntaresYuan/Claude-Credit-Watchdog" target="_blank" rel="noopener">GitHub ↗</a></div>
+              <div class="card-links"><a href="https://github.com/Gloria-Qi0311/HuskyMatch" target="_blank" rel="noopener">GitHub ↗</a></div>
             </button>
-            <button type="button" class="card" data-id="shipped-3" data-card-id="SHIP-03" data-tags="research project|hci|iui 2025" aria-label="Open details for SusBench">
+            <button type="button" class="card" data-id="shipped-3" data-card-id="SHIP-03" data-tags="side project|ui/ux design|figma|frontend|search" aria-label="Open details for LexVault">
               <div class="card-meta-top">
                 <span class="card-id">SHIP-03</span>
                 <span class="card-handle" aria-hidden="true">⋮⋮</span>
               </div>
-              <div class="card-title">SusBench</div>
-              <div class="card-summary">Online benchmark for evaluating the susceptibility of CUAs to UI dark patterns.</div>
-              <div class="card-tags"><span class="tag">RESEARCH PROJECT</span><span class="tag tag-blue">HCI</span><span class="tag">IUI 2025</span></div>
+              <div class="card-title">LexVault</div>
+              <div class="card-summary">A legal document search tool — designed end-to-end in Figma and implemented as a working frontend.</div>
+              <div class="card-tags"><span class="tag">SIDE PROJECT</span><span class="tag tag-blue">UI/UX Design</span><span class="tag">Figma</span><span class="tag tag-blue">Frontend</span><span class="tag">Search</span></div>
               <div class="card-footer">
                 <span class="card-footer-left">
-                  <span>2026-02-23</span>
+                  <span>2026-04-24</span>
                   <span class="card-comments">0</span>
                 </span>
-                <span class="card-impact">cited by 2 papers</span>
+                
               </div>
-              <div class="card-links"><a href="https://arxiv.org/pdf/2510.11035" target="_blank" rel="noopener">Paper ↗</a><a href="https://arxiv.org/abs/2510.11035" target="_blank" rel="noopener">DOI ↗</a><a href="https://github.com/SusBench-creator/SusBench" target="_blank" rel="noopener">GitHub ↗</a></div>
+              <div class="card-links"><a href="https://github.com/Gloria-Qi0311/Lexvault" target="_blank" rel="noopener">GitHub ↗</a></div>
+            </button>
+            <button type="button" class="card" data-id="shipped-4" data-card-id="SHIP-04" data-tags="course project|python|information retrieval|bm25|info376" aria-label="Open details for Savorly">
+              <div class="card-meta-top">
+                <span class="card-id">SHIP-04</span>
+                <span class="card-handle" aria-hidden="true">⋮⋮</span>
+              </div>
+              <div class="card-title">Savorly</div>
+              <div class="card-summary">A recipe search engine built with BM25 and PyTerrier — preprocesses, indexes, and ranks recipe data for keyword queries.</div>
+              <div class="card-tags"><span class="tag">COURSE PROJECT</span><span class="tag tag-blue">Python</span><span class="tag">Information Retrieval</span><span class="tag tag-blue">BM25</span><span class="tag">INFO376</span></div>
+              <div class="card-footer">
+                <span class="card-footer-left">
+                  <span>2025-11-30</span>
+                  <span class="card-comments">0</span>
+                </span>
+                
+              </div>
+              <div class="card-links"><a href="https://github.com/Gloria-Qi0311/info376-Savorly" target="_blank" rel="noopener">GitHub ↗</a></div>
             </button></div>
       </article>
 
       <article class="column col-now" id="now" aria-labelledby="col-now-title">
         <header class="col-head">
           <h3 class="col-title" id="col-now-title"><span class="col-dot"></span>Now</h3>
-          <span class="col-count" data-count="now">3</span>
+          <span class="col-count" data-count="now">2</span>
         </header>
         <div class="col-cards" data-cards="now">
-            <button type="button" class="card" data-id="now-1" data-card-id="NOW-01" data-tags="lark ai challenge for college students|ai agent pm|delivery layer developer|collaboration|lark" aria-label="Open details for Lark Loom">
+            <button type="button" class="card" data-id="now-1" data-card-id="NOW-01" data-tags="competition|ai agent|typescript|node.js|lark" aria-label="Open details for Lark Loom">
               <div class="card-meta-top">
                 <span class="card-id">NOW-01</span>
                 <span class="card-handle" aria-hidden="true">⋮⋮</span>
               </div>
               <div class="card-title">Lark Loom</div>
-              <div class="card-summary">The collaborative AI Agent rooted  in the Lark ecosystem.</div>
-              <div class="card-tags"><span class="tag">Lark AI Challenge for College Students</span><span class="tag tag-blue">AI Agent PM</span><span class="tag">Delivery Layer Developer</span><span class="tag tag-blue">Collaboration</span><span class="tag">Lark</span></div>
+              <div class="card-summary">An AI agent that lives in Feishu group chats, turning fragmented IM conversations into structured docs, task tables, and presentations.</div>
+              <div class="card-tags"><span class="tag">COMPETITION</span><span class="tag tag-blue">AI Agent</span><span class="tag">TypeScript</span><span class="tag tag-blue">Node.js</span><span class="tag">Lark</span></div>
               <div class="card-footer">
                 <span class="card-footer-left">
-                  <span>2026-05-09</span>
+                  <span>2026-05-10</span>
                   <span class="card-comments">0</span>
                 </span>
-                
+                <span class="card-impact">ByteDance Lark AI Campus Challenge — finalist</span>
               </div>
-              <div class="card-links"><a href="https://github.com/EdwinjJ1/lark-loom" target="_blank" rel="noopener">GitHub(in Chinese) ↗</a><a href="https://bytedance.aiforce.cloud/app/app_4jv6kvy942afr" target="_blank" rel="noopener">Lark AI Challenge(in Chinese) ↗</a></div>
+              <div class="card-links"><a href="https://github.com/EdwinjJ1/lark-loom" target="_blank" rel="noopener">GitHub ↗</a></div>
             </button>
-            <button type="button" class="card" data-id="now-2" data-card-id="NOW-02" data-tags="side project|ai builder|xgboost|productivity|website" aria-label="Open details for Gmail Plus Plus">
+            <button type="button" class="card" data-id="now-2" data-card-id="NOW-02" data-tags="side project|frontend|travel|search" aria-label="Open details for DiscountedAirfare">
               <div class="card-meta-top">
                 <span class="card-id">NOW-02</span>
                 <span class="card-handle" aria-hidden="true">⋮⋮</span>
               </div>
-              <div class="card-title">Gmail Plus Plus</div>
-              <div class="card-summary">Gmail++ is a AI-powered email ranking platform that gives you a read-only reply queue on top of Gmail, with visible reasoning and reversible account-scoped preferences.</div>
-              <div class="card-tags"><span class="tag">SIDE PROJECT</span><span class="tag tag-blue">AI Builder</span><span class="tag">XGBoost</span><span class="tag tag-blue">Productivity</span><span class="tag">Website</span></div>
+              <div class="card-title">DiscountedAirfare</div>
+              <div class="card-summary">A platform for discovering discounted airfare — making fare search less overwhelming and more decision-friendly.</div>
+              <div class="card-tags"><span class="tag">SIDE PROJECT</span><span class="tag tag-blue">Frontend</span><span class="tag">Travel</span><span class="tag tag-blue">Search</span></div>
               <div class="card-footer">
                 <span class="card-footer-left">
-                  <span>2026-04-25</span>
+                  <span>2026-04-12</span>
                   <span class="card-comments">0</span>
                 </span>
                 
               </div>
-              <div class="card-links"><a href="https://gmailplusplus.site" target="_blank" rel="noopener">Try it ↗</a><a href="https://github.com/AntaresYuan/Gmailplusplus" target="_blank" rel="noopener">GitHub ↗</a></div>
-            </button>
-            <button type="button" class="card" data-id="now-3" data-card-id="NOW-03" data-tags="side project|job application|chrome extension" aria-label="Open details for ApplyMint">
-              <div class="card-meta-top">
-                <span class="card-id">NOW-03</span>
-                <span class="card-handle" aria-hidden="true">⋮⋮</span>
-              </div>
-              <div class="card-title">ApplyMint</div>
-              <div class="card-summary">ApplyMint is a AI-powered chrome extension that compiles the resume into JSON, import it once for visual editing, and automatically fill it in one click on the job application form</div>
-              <div class="card-tags"><span class="tag">SIDE PROJECT</span><span class="tag tag-blue">Job Application</span><span class="tag">Chrome Extension</span></div>
-              <div class="card-footer">
-                <span class="card-footer-left">
-                  <span>2026-05-09</span>
-                  <span class="card-comments">0</span>
-                </span>
-                
-              </div>
-              
+              <div class="card-links"><a href="https://github.com/Gloria-Qi0311/DiscountedAirfare" target="_blank" rel="noopener">GitHub ↗</a></div>
             </button></div>
       </article>
 
       <article class="column col-next" id="col-next" aria-labelledby="col-next-title">
         <header class="col-head">
           <h3 class="col-title" id="col-next-title"><span class="col-dot"></span>Next</h3>
-          <span class="col-count" data-count="next">3</span>
+          <span class="col-count" data-count="next">1</span>
         </header>
         <div class="col-cards" data-cards="next">
-            <button type="button" class="card" data-id="next-1" data-card-id="NEXT-01" data-tags="career pivot|ai builder|0→1" aria-label="Open details for From PM to Builder">
+            <button type="button" class="card" data-id="next-1" data-card-id="NEXT-01" data-tags="tbd" aria-label="Open details for Coming soon">
               <div class="card-meta-top">
                 <span class="card-id">NEXT-01</span>
                 <span class="card-handle" aria-hidden="true">⋮⋮</span>
               </div>
-              <div class="card-title">From PM to Builder</div>
-              <div class="card-summary">Stop briefing engineers — become one. Use solo builder loops to solve real business problems end-to-end, not just spec them.</div>
-              <div class="card-tags"><span class="tag">Career Pivot</span><span class="tag tag-blue">AI Builder</span><span class="tag">0→1</span></div>
+              <div class="card-title">Coming soon</div>
+              <div class="card-summary">To be filled — what&#39;s next on the roadmap.</div>
+              <div class="card-tags"><span class="tag">TBD</span></div>
               <div class="card-footer">
                 <span class="card-footer-left">
-                  <span>2026-05-09</span>
-                  <span class="card-comments">0</span>
-                </span>
-                
-              </div>
-              
-            </button>
-            <button type="button" class="card" data-id="next-2" data-card-id="NEXT-02" data-tags="ai aesthetic|distillation|skills|craft" aria-label="Open details for Make AI worth looking at">
-              <div class="card-meta-top">
-                <span class="card-id">NEXT-02</span>
-                <span class="card-handle" aria-hidden="true">⋮⋮</span>
-              </div>
-              <div class="card-title">Make AI worth looking at</div>
-              <div class="card-summary">Most AI products inherit the model&#39;s flat default aesthetic. Explore distillation + skill composition to ship AI that&#39;s well-crafted, not just functional.</div>
-              <div class="card-tags"><span class="tag">AI Aesthetic</span><span class="tag tag-blue">Distillation</span><span class="tag">Skills</span><span class="tag tag-blue">Craft</span></div>
-              <div class="card-footer">
-                <span class="card-footer-left">
-                  <span>2026-05-09</span>
-                  <span class="card-comments">0</span>
-                </span>
-                
-              </div>
-              
-            </button>
-            <button type="button" class="card" data-id="next-3" data-card-id="NEXT-03" data-tags="product ops|data analysis|full-stack pm" aria-label="Open details for Close the product loop">
-              <div class="card-meta-top">
-                <span class="card-id">NEXT-03</span>
-                <span class="card-handle" aria-hidden="true">⋮⋮</span>
-              </div>
-              <div class="card-title">Close the product loop</div>
-              <div class="card-summary">Build operations + data analytics fluency so I own the full product lifecycle — not just the design-and-ship slice.</div>
-              <div class="card-tags"><span class="tag">Product Ops</span><span class="tag tag-blue">Data Analysis</span><span class="tag">Full-stack PM</span></div>
-              <div class="card-footer">
-                <span class="card-footer-left">
-                  <span>2026-05-09</span>
+                  <span>2026-05-10</span>
                   <span class="card-comments">0</span>
                 </span>
                 
@@ -356,37 +322,20 @@
       <article class="column col-later" id="col-later" aria-labelledby="col-later-title">
         <header class="col-head">
           <h3 class="col-title" id="col-later-title"><span class="col-dot"></span>Later</h3>
-          <span class="col-count" data-count="later">2</span>
+          <span class="col-count" data-count="later">1</span>
         </header>
         <div class="col-cards" data-cards="later">
-            <button type="button" class="card" data-id="later-1" data-card-id="LATER-01" data-tags="mission|mass-impact ai|real-world ai" aria-label="Open details for AI for people, not just AI people">
+            <button type="button" class="card" data-id="later-1" data-card-id="LATER-01" data-tags="tbd" aria-label="Open details for Coming soon">
               <div class="card-meta-top">
                 <span class="card-id">LATER-01</span>
                 <span class="card-handle" aria-hidden="true">⋮⋮</span>
               </div>
-              <div class="card-title">AI for people, not just AI people</div>
-              <div class="card-summary">The 1-3 year version of me: shipped AI products that ordinary people — not the early-adopter or AI-insider crowd — use daily to make their lives meaningfully better.</div>
-              <div class="card-tags"><span class="tag">Mission</span><span class="tag tag-blue">Mass-impact AI</span><span class="tag">Real-world AI</span></div>
+              <div class="card-title">Coming soon</div>
+              <div class="card-summary">To be filled — longer term direction.</div>
+              <div class="card-tags"><span class="tag">TBD</span></div>
               <div class="card-footer">
                 <span class="card-footer-left">
-                  <span>2026-05-09</span>
-                  <span class="card-comments">0</span>
-                </span>
-                
-              </div>
-              
-            </button>
-            <button type="button" class="card" data-id="later-2" data-card-id="LATER-02" data-tags="human-centered design|agent-friendly|hci × ai|pi-shaped" aria-label="Open details for Human-centered, agent-aware">
-              <div class="card-meta-top">
-                <span class="card-id">LATER-02</span>
-                <span class="card-handle" aria-hidden="true">⋮⋮</span>
-              </div>
-              <div class="card-title">Human-centered, agent-aware</div>
-              <div class="card-summary">Human-centered design stays the foundation. But in the agent era, AI is also a user — and most products still ignore that. The 1-3 year version of me: deep enough AI fluency to design for both humans and the agents acting on their behalf, so the AI actually helps.</div>
-              <div class="card-tags"><span class="tag">Human-centered Design</span><span class="tag tag-blue">Agent-friendly</span><span class="tag">HCI × AI</span><span class="tag tag-blue">Pi-shaped</span></div>
-              <div class="card-footer">
-                <span class="card-footer-left">
-                  <span>2026-05-09</span>
+                  <span>2026-05-10</span>
                   <span class="card-comments">0</span>
                 </span>
                 

@@ -17,57 +17,42 @@
   </url>
   <url>
     <loc>https://antaresyuan.site/#card/SHIP-01</loc>
-    <lastmod>2026-04-10</lastmod>
+    <lastmod>2026-04-22</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://antaresyuan.site/#card/SHIP-02</loc>
-    <lastmod>2026-04-15</lastmod>
+    <lastmod>2026-04-23</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://antaresyuan.site/#card/SHIP-03</loc>
-    <lastmod>2026-02-23</lastmod>
+    <lastmod>2026-04-24</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://antaresyuan.site/#card/SHIP-04</loc>
+    <lastmod>2025-11-30</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://antaresyuan.site/#card/NOW-01</loc>
-    <lastmod>2026-05-09</lastmod>
+    <lastmod>2026-05-10</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://antaresyuan.site/#card/NOW-02</loc>
-    <lastmod>2026-04-25</lastmod>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://antaresyuan.site/#card/NOW-03</loc>
-    <lastmod>2026-05-09</lastmod>
+    <lastmod>2026-04-12</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://antaresyuan.site/#card/NEXT-01</loc>
-    <lastmod>2026-05-09</lastmod>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://antaresyuan.site/#card/NEXT-02</loc>
-    <lastmod>2026-05-09</lastmod>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://antaresyuan.site/#card/NEXT-03</loc>
-    <lastmod>2026-05-09</lastmod>
+    <lastmod>2026-05-10</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://antaresyuan.site/#card/LATER-01</loc>
-    <lastmod>2026-05-09</lastmod>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://antaresyuan.site/#card/LATER-02</loc>
-    <lastmod>2026-05-09</lastmod>
+    <lastmod>2026-05-10</lastmod>
     <priority>0.6</priority>
   </url>
 </urlset>

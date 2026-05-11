@@ -11,96 +11,147 @@ Tags: Pi-Shaped AI PM, AI Agent Native, 0→1, HCI Researcher, HCDE @ UDub
 
 # Shipped
 
-## SHIP-01 · SHIPPED · Worth Fly
-WorthFly currently focuses on search, decision support, alert drafts, and external purchase handoff. Final fare, inventory, and ticketing still belong to the real booking channel.
-Tags: SIDE PROJECT, AI PM, 0→1, Explainable AI, Website
-Updated: 2026-04-10
+## SHIP-01 · SHIPPED · fitty
+A calorie tracking app with Mochi, an animated companion that reacts to your daily nutrition progress. Built full-stack from scratch.
+Impact: live at fitty-nu.vercel.app
+Tags: SIDE PROJECT, Full-stack, React, Node.js, Supabase
+Updated: 2026-04-22
 Links:
-  - Demo: https://worthfly.vercel.app
-  - GitHub: https://github.com/AntaresYuan/Worthfly
+  - Demo: https://fitty-nu.vercel.app
+  - GitHub: https://github.com/Gloria-Qi0311/calarie_app
 
 ## Context
 
-Replace this with the longer story. Two or three short paragraphs is plenty.
+fitty is a calorie tracking app built around Mochi, an animated companion that reacts to your daily nutrition progress. The goal was to make habit tracking feel less clinical and more personal.
 
 ## What I owned
 
-- Decision X
-- Decision Y
-- Trade-off Z
--  I am very good.
+- Designed and built the full frontend in React + Vite + TypeScript
+- Wired up Node.js backend and Supabase for food logging and user data
+- Built the Mochi animation system that responds to daily progress state
+- Shipped to Vercel (frontend) + Railway (backend)
 
 ## Outcome
 
-What happened. What you'd do differently.
+Live and accessible. The Mochi feedback loop made calorie logging feel less like a chore.
 
-## SHIP-02 · SHIPPED · Claude Credit Watchdog
-A lightweight menu bar watchdog that monitors your Claude Code sessions, alerts you the moment credits renew, and automatically resumes your work.
-Impact: saved me 10 hrs+ of sleep
-Tags: SIDE PROJECT, tool-use, AI PM, AI Native, Productivity
-Updated: 2026-04-15
+## SHIP-02 · SHIPPED · HuskyMatch
+A full-stack student networking platform for UW — profile-based matching powered by OpenAI embeddings, with messaging and social feed.
+Tags: SIDE PROJECT, Full-stack, React, FastAPI, OpenAI, Supabase
+Updated: 2026-04-23
 Links:
-  - Download: https://claude-credit-watchdog.vercel.app
-  - GitHub: https://github.com/AntaresYuan/Claude-Credit-Watchdog
+  - GitHub: https://github.com/Gloria-Qi0311/HuskyMatch
 
-## SHIP-03 · SHIPPED · SusBench
-Online benchmark for evaluating the susceptibility of CUAs to UI dark patterns.
-Impact: cited by 2 papers
-Tags: RESEARCH PROJECT, HCI, IUI 2025
-Updated: 2026-02-23
+## Context
+
+HuskyMatch (HuskyConnect) is a student networking platform for UW students to find classmates, collaborators, and community connections through profile-based matching.
+
+## What I owned
+
+- Built the React 19 + Vite frontend with profile creation and editing flows
+- Integrated OpenAI embeddings for interest-based recommendation engine
+- Set up FastAPI backend with SQLAlchemy and Supabase Postgres
+- Implemented direct messaging and social feed features
+
+## Outcome
+
+Full-stack platform with AI-powered matching across student profiles.
+
+## SHIP-03 · SHIPPED · LexVault
+A legal document search tool — designed end-to-end in Figma and implemented as a working frontend.
+Tags: SIDE PROJECT, UI/UX Design, Figma, Frontend, Search
+Updated: 2026-04-24
 Links:
-  - Paper: https://arxiv.org/pdf/2510.11035
-  - DOI: https://arxiv.org/abs/2510.11035
-  - GitHub: https://github.com/SusBench-creator/SusBench
+  - GitHub: https://github.com/Gloria-Qi0311/Lexvault
+
+## Context
+
+LexVault is a legal document search tool designed to help users navigate complex legal documents efficiently. Started from a Figma design and implemented as a working frontend.
+
+## What I owned
+
+- Designed the full product in Figma (search UX, document viewer, result ranking)
+- Implemented the frontend from the design spec
+
+## Outcome
+
+End-to-end ownership from design to implementation.
+
+## SHIP-04 · SHIPPED · Savorly
+A recipe search engine built with BM25 and PyTerrier — preprocesses, indexes, and ranks recipe data for keyword queries.
+Tags: COURSE PROJECT, Python, Information Retrieval, BM25, INFO376
+Updated: 2025-11-30
+Links:
+  - GitHub: https://github.com/Gloria-Qi0311/info376-Savorly
+
+## Context
+
+Savorly is a recipe search engine built with BM25 and PyTerrier for an information retrieval course (INFO376). The system preprocesses raw recipe data, builds an inverted index, and supports keyword search.
+
+## What I owned
+
+- Built the full preprocessing pipeline (lowercasing, stopword removal, stemming)
+- Implemented BM25 retrieval with PyTerrier
+- Designed the index structure for recipe fields (name, ingredients, steps)
+
+## Outcome
+
+Functional search engine returning ranked BM25 results for recipe queries.
 # Now
 
 ## NOW-01 · NOW · Lark Loom
-The collaborative AI Agent rooted  in the Lark ecosystem.
-Tags: Lark AI Challenge for College Students, AI Agent PM, Delivery Layer Developer, Collaboration, Lark
-Updated: 2026-05-09
+An AI agent that lives in Feishu group chats, turning fragmented IM conversations into structured docs, task tables, and presentations.
+Impact: ByteDance Lark AI Campus Challenge — finalist
+Tags: COMPETITION, AI Agent, TypeScript, Node.js, Lark
+Updated: 2026-05-10
 Links:
-  - GitHub(in Chinese): https://github.com/EdwinjJ1/lark-loom
-  - Lark AI Challenge(in Chinese): https://bytedance.aiforce.cloud/app/app_4jv6kvy942afr
+  - GitHub: https://github.com/EdwinjJ1/lark-loom
 
-## NOW-02 · NOW · Gmail Plus Plus
-Gmail++ is a AI-powered email ranking platform that gives you a read-only reply queue on top of Gmail, with visible reasoning and reversible account-scoped preferences.
-Tags: SIDE PROJECT, AI Builder, XGBoost, Productivity, Website
-Updated: 2026-04-25
+## Context
+
+Lark Loom is a group-chat AI agent built for the ByteDance Lark AI Campus Challenge. It lives inside Feishu (Lark) group chats and helps project teams structure the chaos of IM conversations into actionable outputs.
+
+## What I owned
+
+- Designed and implemented the delivery layer (TypeScript + Node.js)
+- Built the Skill pipeline: GapDetector → SkillRouter → CardBuilder
+- Implemented MessageBuffer sliding window for batching fragmented messages
+- Set up CI workflow and enforced Result<T> error boundary across all modules
+
+## Outcome
+
+In competition — finals on May 14, 2026. Covers recall, summary, and archive skill chains end-to-end.
+
+## NOW-02 · NOW · DiscountedAirfare
+A platform for discovering discounted airfare — making fare search less overwhelming and more decision-friendly.
+Tags: SIDE PROJECT, Frontend, Travel, Search
+Updated: 2026-04-12
 Links:
-  - Try it: https://gmailplusplus.site
-  - GitHub: https://github.com/AntaresYuan/Gmailplusplus
+  - GitHub: https://github.com/Gloria-Qi0311/DiscountedAirfare
 
-## NOW-03 · NOW · ApplyMint
-ApplyMint is a AI-powered chrome extension that compiles the resume into JSON, import it once for visual editing, and automatically fill it in one click on the job application form
-Tags: SIDE PROJECT, Job Application, Chrome Extension
-Updated: 2026-05-09
+## Context
+
+A discounted airfare discovery platform — helping users find deals without getting lost in fare complexity.
+
+## What I owned
+
+- Frontend design and implementation
+
+## Outcome
+
+In progress.
 # Next
 
-## NEXT-01 · NEXT · From PM to Builder
-Stop briefing engineers — become one. Use solo builder loops to solve real business problems end-to-end, not just spec them.
-Tags: Career Pivot, AI Builder, 0→1
-Updated: 2026-05-09
-
-## NEXT-02 · NEXT · Make AI worth looking at
-Most AI products inherit the model's flat default aesthetic. Explore distillation + skill composition to ship AI that's well-crafted, not just functional.
-Tags: AI Aesthetic, Distillation, Skills, Craft
-Updated: 2026-05-09
-
-## NEXT-03 · NEXT · Close the product loop
-Build operations + data analytics fluency so I own the full product lifecycle — not just the design-and-ship slice.
-Tags: Product Ops, Data Analysis, Full-stack PM
-Updated: 2026-05-09
+## NEXT-01 · NEXT · Coming soon
+To be filled — what's next on the roadmap.
+Tags: TBD
+Updated: 2026-05-10
 # Later
 
-## LATER-01 · LATER · AI for people, not just AI people
-The 1-3 year version of me: shipped AI products that ordinary people — not the early-adopter or AI-insider crowd — use daily to make their lives meaningfully better.
-Tags: Mission, Mass-impact AI, Real-world AI
-Updated: 2026-05-09
-
-## LATER-02 · LATER · Human-centered, agent-aware
-Human-centered design stays the foundation. But in the agent era, AI is also a user — and most products still ignore that. The 1-3 year version of me: deep enough AI fluency to design for both humans and the agents acting on their behalf, so the AI actually helps.
-Tags: Human-centered Design, Agent-friendly, HCI × AI, Pi-shaped
-Updated: 2026-05-09
+## LATER-01 · LATER · Coming soon
+To be filled — longer term direction.
+Tags: TBD
+Updated: 2026-05-10
 
 # Lens — how I think
 
@@ -122,7 +173,7 @@ Currently open to: founder conversations in AI infra & agents, AI PM roles at to
 - github: @AntaresYuan (https://github.com/AntaresYuan)
 
 ---
-Generated 2026-05-10 from content/*.json. Last site update: 2026-05-09
+Generated 2026-05-11 from content/*.json. Last site update: 2026-05-09
 
 
 ---
