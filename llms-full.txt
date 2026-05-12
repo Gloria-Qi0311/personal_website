@@ -1,13 +1,13 @@
-# Antares Yuan — AI PM
+# Gloria Qi — Aspiring AI PM
 
-A star to ship by.
+Fake it until you make it.
 
-I build AI products by treating myself like one — versioned, measured, always shipping.
+Junior at UW Informatics, building toward AI product management one project at a time. I think in user problems, not features — and I learn fastest by shipping.
 
-Name: Antares Yuan
-Role: AI Product Manager
-Location: Seattle | Beijing · currently remote working at YiTang
-Tags: Pi-Shaped AI PM, AI Agent Native, 0→1, HCI Researcher, HCDE @ UDub
+Name: Gloria Qi
+Role: Aspiring AI PM
+Location: Seattle · UW Informatics
+Tags: Informatics @ UW, Aspiring AI PM, Builder, Seattle, Open to Internship
 
 # Shipped
 
@@ -166,14 +166,14 @@ Updated: 2026-05-10
 
 # Contact
 
-Currently open to: founder conversations in AI infra & agents, AI PM roles at top product orgs, and contractor work on 0→1 features. Tell me what you're building.
+Junior at UW Informatics, open to AI PM internships for summer / fall 2026. Also down to collaborate on side projects. Tell me what you're building.
 
-- email: chenjy4@uw.edu (mailto:chenjy4@uw.edu)
-- linkedin: Chenjie (Antares) Yuan (#)
-- github: @AntaresYuan (https://github.com/AntaresYuan)
+- email: qpt0311@uw.edu (mailto:qpt0311@uw.edu)
+- linkedin: Gloria Qi (https://www.linkedin.com/in/peitong-qi-4478ba293)
+- github: @Gloria-Qi0311 (https://github.com/Gloria-Qi0311)
 
 ---
-Generated 2026-05-11 from content/*.json. Last site update: 2026-05-09
+Generated 2026-05-12 from content/*.json. Last site update: 2026-05-11
 
 
 ---
