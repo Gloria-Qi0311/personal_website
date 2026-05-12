@@ -52,11 +52,11 @@
       "id": "shipped-2"
     },
     {
-      "details": "## Context\n\nLexVault is a legal document search tool designed to help users navigate complex legal documents efficiently. Started from a Figma design and implemented as a working frontend.\n\n## What I owned\n\n- Designed the full product in Figma (search UX, document viewer, result ranking)\n- Implemented the frontend from the design spec\n\n## Outcome\n\nEnd-to-end ownership from design to implementation.",
+      "details": "## Context\n\nLexVault is a legal document search tool designed to help users navigate complex legal documents efficiently. Started from a Figma design and currently implementing as a working frontend.\n\n## What I owned\n\n- Designed the full product in Figma (search UX, document viewer, result ranking)\n- Implementing the frontend from the design spec\n\n## Outcome\n\nIn progress.",
       "impact": "",
-      "summary": "A legal document search tool — designed end-to-end in Figma and implemented as a working frontend.",
+      "summary": "A legal document search tool — designed end-to-end in Figma, currently being implemented.",
       "order": 3,
-      "status": "shipped",
+      "status": "now",
       "title": "LexVault",
       "tags": [
         "SIDE PROJECT",
@@ -121,11 +121,11 @@
       "id": "now-1"
     },
     {
-      "details": "## Context\n\nA discounted airfare discovery platform — helping users find deals without getting lost in fare complexity.\n\n## What I owned\n\n- Frontend design and implementation\n\n## Outcome\n\nIn progress.",
+      "details": "## Context\n\nA discounted airfare discovery platform — helping users find flight deals without getting lost in fare complexity.\n\n## What I owned\n\n- Full product design and frontend implementation\n\n## Outcome\n\nShipped.",
       "impact": "",
       "summary": "A platform for discovering discounted airfare — making fare search less overwhelming and more decision-friendly.",
-      "order": 2,
-      "status": "now",
+      "order": 5,
+      "status": "shipped",
       "title": "DiscountedAirfare",
       "tags": [
         "SIDE PROJECT",
@@ -141,6 +141,28 @@
       ],
       "updated": "2026-04-12",
       "id": "now-2"
+    },
+    {
+      "details": "## Context\n\nBOSS Auto Apply is a Chrome extension that automates bulk job applications on BOSS直聘. Built out of a real frustration: job hunting at scale is repetitive and tedious.\n\n## What I owned\n\n- Built the full Chrome extension (manifest.json, content.js, popup UI)\n- Implemented configurable parameters: delivery interval, max count, keyword blocking, auto-pagination\n- Added safeguards to avoid rate-limiting (randomized intervals, skip-already-contacted logic)\n\n## Outcome\n\nIn progress — actively developing.",
+      "impact": "",
+      "summary": "A Chrome extension that automates bulk job applications on BOSS直聘 — configurable intervals, keyword filters, and auto-pagination.",
+      "order": 3,
+      "status": "now",
+      "title": "BOSS Auto Apply",
+      "tags": [
+        "SIDE PROJECT",
+        "Chrome Extension",
+        "Automation",
+        "Job Hunt"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/Gloria-Qi0311/boss-auto-apply"
+        }
+      ],
+      "updated": "2026-05-12",
+      "id": "now-3"
     },
     {
       "details": "",
