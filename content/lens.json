@@ -7,23 +7,23 @@
   "items": [
     {
       "num": "/ 01",
-      "main": "Evals before features.",
-      "aside": "If you can't measure it, you're shipping vibes."
+      "main": "Build it to understand it.",
+      "aside": "Reading about something is not the same as shipping it and watching it break."
     },
     {
       "num": "/ 02",
-      "main": "The model is one input.",
-      "aside": "Latency, UX, and trust often matter more than benchmark deltas."
+      "main": "Start with the problem, not the feature.",
+      "aside": "Features are guesses. Problems are real."
     },
     {
       "num": "/ 03",
-      "main": "Demos lie. Production tells the truth.",
-      "aside": "Watch the long tail."
+      "main": "The boundary matters as much as the capability.",
+      "aside": "Knowing what AI can't do is as useful as knowing what it can."
     },
     {
       "num": "/ 04",
-      "main": "A great PM removes ambiguity. Models add it back.",
-      "aside": "The job is balance."
+      "main": "AI is a multiplier, not a replacement.",
+      "aside": "The human judgment part is still the hard part."
     }
   ]
 }
