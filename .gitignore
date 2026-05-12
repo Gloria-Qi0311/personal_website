@@ -13,3 +13,7 @@ dist/
 .wrangler/
 .dev.vars
 wrangler.local.toml
+
+.dev.vars*
+!.dev.vars.example
+!.env.example
