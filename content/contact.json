@@ -7,7 +7,7 @@
   "intro": "Junior at UW Informatics, open to AI PM internships for summer / fall 2026. Also down to collaborate on side projects. <em>Tell me what you're building.</em>",
   "items": [
     { "key": "email",    "label": "qpt0311@uw.edu", "href": "mailto:qpt0311@uw.edu" },
-    { "key": "linkedin", "label": "Gloria Qi",      "href": "#" },
+    { "key": "linkedin", "label": "Gloria Qi",      "href": "https://www.linkedin.com/in/peitong-qi-4478ba293" },
     { "key": "github",   "label": "@Gloria-Qi0311", "href": "https://github.com/Gloria-Qi0311" }
   ]
 }
