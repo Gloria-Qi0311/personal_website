@@ -1,29 +1,29 @@
 {
   "meta": {
-    "title": "Antares Yuan — AI PM",
+    "title": "Gloria Qi — Aspiring AI PM",
     "lang": "en",
     "locale": "en_US",
-    "siteName": "Antares Yuan",
-    "url": "https://antaresyuan.site",
-    "author": "Chenjie (Antares) Yuan",
+    "siteName": "Gloria Qi",
+    "url": "https://gloria-qi.vercel.app",
+    "author": "Gloria Qi",
     "ogImage": "media/avatar-calm.png",
     "ogImageWidth": "512",
     "ogImageHeight": "512",
-    "description": "AI Product Manager. A living roadmap of what I've shipped, what I'm building, and where I'm going."
+    "description": "Informatics junior at UW, building toward AI PM. Projects, thinking, and what's next."
   },
   "footer": {
-    "copyright": "© 2026 Antares Yuan",
-    "tagline": "This site is a roadmap of how Antares is growing as an AI Builder, not only a resume.",
-    "lastUpdated": "2026-05-09"
+    "copyright": "© 2026 Gloria Qi",
+    "tagline": "This site is a roadmap of how I'm growing — not just a resume.",
+    "lastUpdated": "2026-05-11"
   },
   "analytics": {
     "cfAnalyticsToken": ""
   },
   "giscus": {
-    "repo": "AntaresYuan/personal_website",
-    "repoId": "R_kgDOSYXV8Q",
+    "repo": "Gloria-Qi0311/personal_website",
+    "repoId": "",
     "category": "General",
-    "categoryId": "DIC_kwDOSYXV8c4C8tqu",
+    "categoryId": "",
     "mapping": "pathname",
     "theme": "preferred_color_scheme",
     "inputPosition": "bottom"

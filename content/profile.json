@@ -1,41 +1,41 @@
 {
-  "name": "Antares",
-  "nameAccent": "Yuan",
-  "role": "AI Product Manager",
-  "location": "Seattle | Beijing · currently remote working at YiTang",
-  "status": "Building in public",
-  "slogan": "A star to ship by.",
-  "manifesto": "I build AI products by treating myself like one — versioned, measured, always shipping.",
-  "tags": ["Pi-Shaped AI PM", "AI Agent Native", "0→1", "HCI Researcher", "HCDE @ UDub"],
+  "name": "Gloria",
+  "nameAccent": "Qi",
+  "role": "Aspiring AI PM",
+  "location": "Seattle · UW Informatics",
+  "status": "Open to internship",
+  "slogan": "Fake it until you make it.",
+  "manifesto": "Junior at UW Informatics, building toward AI product management one project at a time. I think in user problems, not features — and I learn fastest by shipping.",
+  "tags": ["Informatics @ UW", "Aspiring AI PM", "Builder", "Seattle", "Open to Internship"],
   "avatar": {
     "calm":    "media/avatar-calm.png",
     "talking": "media/avatar-talking.png",
-    "alt":     "Antares — illustrated portrait"
+    "alt":     "Gloria Qi"
   },
   "ctas": [
-        {
+    {
+      "audience": "for recruiters",
+      "label": "what I've shipped",
+      "anchor": "#shipped",
+      "note": "projects + outcomes"
+    },
+    {
+      "audience": "for collaborators",
+      "label": "let's build",
+      "anchor": "#contact",
+      "note": "open to side projects"
+    },
+    {
+      "audience": "for everyone",
+      "label": "how I think",
+      "anchor": "#lens",
+      "note": "my principles"
+    },
+    {
       "audience": "for agents",
       "label": "use the CLI",
       "anchor": "#terminal",
       "note": "/llms.txt also available"
-    },
-    {
-      "audience": "for HR",
-      "label": "30-second snapshot",
-      "anchor": "#shipped",
-      "note": "see what I've shipped + impact"
-    },
-    {
-      "audience": "for founders",
-      "label": "what I'm building next",
-      "anchor": "#now",
-      "note": "current focus + bets"
-    },
-    {
-      "audience": "for collaborators",
-      "label": "let's talk",
-      "anchor": "#contact",
-      "note": "open to founder convos & contracts"
     }
   ]
 }
