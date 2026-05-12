@@ -1,15 +1,15 @@
-# Antares Yuan — AI PM
+# Gloria Qi — Aspiring AI PM
 
-> AI Product Manager. A living roadmap of what I've shipped, what I'm building, and where I'm going.
+> Informatics junior at UW, building toward AI PM. Projects, thinking, and what's next.
 
-A star to ship by.
+Fake it until you make it.
 
 ## Identity
-- Name: Antares Yuan
-- Role: AI Product Manager
-- Location: Seattle | Beijing · currently remote working at YiTang
-- Status: Building in public
-- Tags: Pi-Shaped AI PM, AI Agent Native, 0→1, HCI Researcher, HCDE @ UDub
+- Name: Gloria Qi
+- Role: Aspiring AI PM
+- Location: Seattle · UW Informatics
+- Status: Open to internship
+- Tags: Informatics @ UW, Aspiring AI PM, Builder, Seattle, Open to Internship
 
 ## Sections
 - [Roadmap board](/#shipped): four-column kanban — shipped, now, next, later
