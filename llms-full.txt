@@ -155,14 +155,14 @@ Updated: 2026-05-10
 
 # Lens — how I think
 
-- / 01 Evals before features.
-  If you can't measure it, you're shipping vibes.
-- / 02 The model is one input.
-  Latency, UX, and trust often matter more than benchmark deltas.
-- / 03 Demos lie. Production tells the truth.
-  Watch the long tail.
-- / 04 A great PM removes ambiguity. Models add it back.
-  The job is balance.
+- / 01 Build it to understand it.
+  Reading about something is not the same as shipping it and watching it break.
+- / 02 Start with the problem, not the feature.
+  Features are guesses. Problems are real.
+- / 03 The boundary matters as much as the capability.
+  Knowing what AI can't do is as useful as knowing what it can.
+- / 04 AI is a multiplier, not a replacement.
+  The human judgment part is still the hard part.
 
 # Contact
 
