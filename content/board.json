@@ -1,239 +1,174 @@
 {
   "cards": [
     {
-      "details": "## Context\n\nReplace this with the longer story. Two or three short paragraphs is plenty.\n\n## What I owned\n\n- Decision X\n- Decision Y\n- Trade-off Z\n-  I am very good.\n\n## Outcome\n\nWhat happened. What you'd do differently.",
-      "impact": "",
-      "summary": "WorthFly currently focuses on search, decision support, alert drafts, and external purchase handoff. Final fare, inventory, and ticketing still belong to the real booking channel.",
+      "details": "## Context\n\nfitty is a calorie tracking app built around Mochi, an animated companion that reacts to your daily nutrition progress. The goal was to make habit tracking feel less clinical and more personal.\n\n## What I owned\n\n- Designed and built the full frontend in React + Vite + TypeScript\n- Wired up Node.js backend and Supabase for food logging and user data\n- Built the Mochi animation system that responds to daily progress state\n- Shipped to Vercel (frontend) + Railway (backend)\n\n## Outcome\n\nLive and accessible. The Mochi feedback loop made calorie logging feel less like a chore.",
+      "impact": "live at fitty-nu.vercel.app",
+      "summary": "A calorie tracking app with Mochi, an animated companion that reacts to your daily nutrition progress. Built full-stack from scratch.",
       "order": 1,
       "status": "shipped",
-      "title": "Worth Fly",
+      "title": "fitty",
       "tags": [
         "SIDE PROJECT",
-        "AI PM",
-        "0→1",
-        "Explainable AI",
-        "Website"
+        "Full-stack",
+        "React",
+        "Node.js",
+        "Supabase"
       ],
       "links": [
         {
           "label": "Demo",
-          "href": "https://worthfly.vercel.app"
+          "href": "https://fitty-nu.vercel.app"
         },
         {
           "label": "GitHub",
-          "href": "https://github.com/AntaresYuan/Worthfly"
+          "href": "https://github.com/Gloria-Qi0311/calarie_app"
         }
       ],
-      "updated": "2026-04-10",
+      "updated": "2026-04-22",
       "id": "shipped-1"
     },
     {
-      "details": "",
-      "impact": "saved me 10 hrs+ of sleep",
-      "summary": "A lightweight menu bar watchdog that monitors your Claude Code sessions, alerts you the moment credits renew, and automatically resumes your work.",
+      "details": "## Context\n\nHuskyMatch (HuskyConnect) is a student networking platform for UW students to find classmates, collaborators, and community connections through profile-based matching.\n\n## What I owned\n\n- Built the React 19 + Vite frontend with profile creation and editing flows\n- Integrated OpenAI embeddings for interest-based recommendation engine\n- Set up FastAPI backend with SQLAlchemy and Supabase Postgres\n- Implemented direct messaging and social feed features\n\n## Outcome\n\nFull-stack platform with AI-powered matching across student profiles.",
+      "impact": "",
+      "summary": "A full-stack student networking platform for UW — profile-based matching powered by OpenAI embeddings, with messaging and social feed.",
       "order": 2,
       "status": "shipped",
-      "title": "Claude Credit Watchdog",
+      "title": "HuskyMatch",
       "tags": [
         "SIDE PROJECT",
-        "tool-use",
-        "AI PM",
-        "AI Native",
-        "Productivity"
+        "Full-stack",
+        "React",
+        "FastAPI",
+        "OpenAI",
+        "Supabase"
       ],
       "links": [
         {
-          "label": "Download",
-          "href": "https://claude-credit-watchdog.vercel.app"
-        },
-        {
           "label": "GitHub",
-          "href": "https://github.com/AntaresYuan/Claude-Credit-Watchdog"
+          "href": "https://github.com/Gloria-Qi0311/HuskyMatch"
         }
       ],
-      "updated": "2026-04-15",
+      "updated": "2026-04-23",
       "id": "shipped-2"
     },
     {
-      "details": "",
-      "impact": "cited by 2 papers",
-      "summary": "Online benchmark for evaluating the susceptibility of CUAs to UI dark patterns.",
+      "details": "## Context\n\nLexVault is a legal document search tool designed to help users navigate complex legal documents efficiently. Started from a Figma design and implemented as a working frontend.\n\n## What I owned\n\n- Designed the full product in Figma (search UX, document viewer, result ranking)\n- Implemented the frontend from the design spec\n\n## Outcome\n\nEnd-to-end ownership from design to implementation.",
+      "impact": "",
+      "summary": "A legal document search tool — designed end-to-end in Figma and implemented as a working frontend.",
       "order": 3,
       "status": "shipped",
-      "title": "SusBench",
+      "title": "LexVault",
       "tags": [
-        "RESEARCH PROJECT",
-        "HCI",
-        "IUI 2025"
+        "SIDE PROJECT",
+        "UI/UX Design",
+        "Figma",
+        "Frontend",
+        "Search"
       ],
       "links": [
         {
-          "label": "Paper",
-          "href": "https://arxiv.org/pdf/2510.11035"
-        },
-        {
-          "label": "DOI",
-          "href": "https://arxiv.org/abs/2510.11035"
-        },
-        {
           "label": "GitHub",
-          "href": "https://github.com/SusBench-creator/SusBench"
+          "href": "https://github.com/Gloria-Qi0311/Lexvault"
         }
       ],
-      "updated": "2026-02-23",
+      "updated": "2026-04-24",
       "id": "shipped-3"
     },
     {
-      "details": "",
+      "details": "## Context\n\nSavorly is a recipe search engine built with BM25 and PyTerrier for an information retrieval course (INFO376). The system preprocesses raw recipe data, builds an inverted index, and supports keyword search.\n\n## What I owned\n\n- Built the full preprocessing pipeline (lowercasing, stopword removal, stemming)\n- Implemented BM25 retrieval with PyTerrier\n- Designed the index structure for recipe fields (name, ingredients, steps)\n\n## Outcome\n\nFunctional search engine returning ranked BM25 results for recipe queries.",
       "impact": "",
-      "summary": "The collaborative AI Agent rooted  in the Lark ecosystem.",
+      "summary": "A recipe search engine built with BM25 and PyTerrier — preprocesses, indexes, and ranks recipe data for keyword queries.",
+      "order": 4,
+      "status": "shipped",
+      "title": "Savorly",
+      "tags": [
+        "COURSE PROJECT",
+        "Python",
+        "Information Retrieval",
+        "BM25",
+        "INFO376"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/Gloria-Qi0311/info376-Savorly"
+        }
+      ],
+      "updated": "2025-11-30",
+      "id": "shipped-4"
+    },
+    {
+      "details": "## Context\n\nLark Loom is a group-chat AI agent built for the ByteDance Lark AI Campus Challenge. It lives inside Feishu (Lark) group chats and helps project teams structure the chaos of IM conversations into actionable outputs.\n\n## What I owned\n\n- Designed and implemented the delivery layer (TypeScript + Node.js)\n- Built the Skill pipeline: GapDetector → SkillRouter → CardBuilder\n- Implemented MessageBuffer sliding window for batching fragmented messages\n- Set up CI workflow and enforced Result<T> error boundary across all modules\n\n## Outcome\n\nIn competition — finals on May 14, 2026. Covers recall, summary, and archive skill chains end-to-end.",
+      "impact": "ByteDance Lark AI Campus Challenge — finalist",
+      "summary": "An AI agent that lives in Feishu group chats, turning fragmented IM conversations into structured docs, task tables, and presentations.",
       "order": 1,
       "status": "now",
       "title": "Lark Loom",
       "tags": [
-        "Lark AI Challenge for College Students",
-        "AI Agent PM",
-        "Delivery Layer Developer",
-        "Collaboration",
+        "COMPETITION",
+        "AI Agent",
+        "TypeScript",
+        "Node.js",
         "Lark"
       ],
       "links": [
         {
-          "label": "GitHub(in Chinese)",
+          "label": "GitHub",
           "href": "https://github.com/EdwinjJ1/lark-loom"
-        },
-        {
-          "label": "Lark AI Challenge(in Chinese)",
-          "href": "https://bytedance.aiforce.cloud/app/app_4jv6kvy942afr"
         }
       ],
-      "updated": "2026-05-09",
+      "updated": "2026-05-10",
       "id": "now-1"
     },
     {
-      "details": "",
+      "details": "## Context\n\nA discounted airfare discovery platform — helping users find deals without getting lost in fare complexity.\n\n## What I owned\n\n- Frontend design and implementation\n\n## Outcome\n\nIn progress.",
       "impact": "",
-      "summary": "Gmail++ is a AI-powered email ranking platform that gives you a read-only reply queue on top of Gmail, with visible reasoning and reversible account-scoped preferences.",
+      "summary": "A platform for discovering discounted airfare — making fare search less overwhelming and more decision-friendly.",
       "order": 2,
       "status": "now",
-      "title": "Gmail Plus Plus",
+      "title": "DiscountedAirfare",
       "tags": [
         "SIDE PROJECT",
-        "AI Builder",
-        "XGBoost",
-        "Productivity",
-        "Website"
+        "Frontend",
+        "Travel",
+        "Search"
       ],
       "links": [
         {
-          "label": "Try it",
-          "href": "https://gmailplusplus.site"
-        },
-        {
           "label": "GitHub",
-          "href": "https://github.com/AntaresYuan/Gmailplusplus"
+          "href": "https://github.com/Gloria-Qi0311/DiscountedAirfare"
         }
       ],
-      "updated": "2026-04-25",
+      "updated": "2026-04-12",
       "id": "now-2"
     },
     {
       "details": "",
       "impact": "",
-      "summary": "ApplyMint is a AI-powered chrome extension that compiles the resume into JSON, import it once for visual editing, and automatically fill it in one click on the job application form",
-      "order": 3,
-      "status": "now",
-      "title": "ApplyMint",
-      "tags": [
-        "SIDE PROJECT",
-        "Job Application",
-        "Chrome Extension"
-      ],
-      "links": [],
-      "updated": "2026-05-09",
-      "id": "now-3"
-    },
-    {
-      "details": "",
-      "impact": "",
-      "summary": "Stop briefing engineers — become one. Use solo builder loops to solve real business problems end-to-end, not just spec them.",
+      "summary": "To be filled — what's next on the roadmap.",
       "order": 1,
       "status": "next",
-      "title": "From PM to Builder",
+      "title": "Coming soon",
       "tags": [
-        "Career Pivot",
-        "AI Builder",
-        "0→1"
+        "TBD"
       ],
       "links": [],
-      "updated": "2026-05-09",
+      "updated": "2026-05-10",
       "id": "next-1"
     },
     {
       "details": "",
       "impact": "",
-      "summary": "Most AI products inherit the model's flat default aesthetic. Explore distillation + skill composition to ship AI that's well-crafted, not just functional.",
-      "order": 2,
-      "status": "next",
-      "title": "Make AI worth looking at",
-      "tags": [
-        "AI Aesthetic",
-        "Distillation",
-        "Skills",
-        "Craft"
-      ],
-      "links": [],
-      "updated": "2026-05-09",
-      "id": "next-2"
-    },
-    {
-      "details": "",
-      "impact": "",
-      "summary": "Build operations + data analytics fluency so I own the full product lifecycle — not just the design-and-ship slice.",
-      "order": 3,
-      "status": "next",
-      "title": "Close the product loop",
-      "tags": [
-        "Product Ops",
-        "Data Analysis",
-        "Full-stack PM"
-      ],
-      "links": [],
-      "updated": "2026-05-09",
-      "id": "next-3"
-    },
-    {
-      "details": "",
-      "impact": "",
-      "summary": "The 1-3 year version of me: shipped AI products that ordinary people — not the early-adopter or AI-insider crowd — use daily to make their lives meaningfully better.",
+      "summary": "To be filled — longer term direction.",
       "order": 1,
       "status": "later",
-      "title": "AI for people, not just AI people",
+      "title": "Coming soon",
       "tags": [
-        "Mission",
-        "Mass-impact AI",
-        "Real-world AI"
+        "TBD"
       ],
       "links": [],
-      "updated": "2026-05-09",
+      "updated": "2026-05-10",
       "id": "later-1"
-    },
-    {
-      "details": "",
-      "impact": "",
-      "summary": "Human-centered design stays the foundation. But in the agent era, AI is also a user — and most products still ignore that. The 1-3 year version of me: deep enough AI fluency to design for both humans and the agents acting on their behalf, so the AI actually helps.",
-      "order": 2,
-      "status": "later",
-      "title": "Human-centered, agent-aware",
-      "tags": [
-        "Human-centered Design",
-        "Agent-friendly",
-        "HCI × AI",
-        "Pi-shaped"
-      ],
-      "links": [],
-      "updated": "2026-05-09",
-      "id": "later-2"
     }
   ]
 }
