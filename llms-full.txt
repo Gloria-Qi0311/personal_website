@@ -57,27 +57,7 @@ HuskyMatch (HuskyConnect) is a student networking platform for UW students to fi
 
 Full-stack platform with AI-powered matching across student profiles.
 
-## SHIP-03 · SHIPPED · LexVault
-A legal document search tool — designed end-to-end in Figma and implemented as a working frontend.
-Tags: SIDE PROJECT, UI/UX Design, Figma, Frontend, Search
-Updated: 2026-04-24
-Links:
-  - GitHub: https://github.com/Gloria-Qi0311/Lexvault
-
-## Context
-
-LexVault is a legal document search tool designed to help users navigate complex legal documents efficiently. Started from a Figma design and implemented as a working frontend.
-
-## What I owned
-
-- Designed the full product in Figma (search UX, document viewer, result ranking)
-- Implemented the frontend from the design spec
-
-## Outcome
-
-End-to-end ownership from design to implementation.
-
-## SHIP-04 · SHIPPED · Savorly
+## SHIP-03 · SHIPPED · Savorly
 A recipe search engine built with BM25 and PyTerrier — preprocesses, indexes, and ranks recipe data for keyword queries.
 Tags: COURSE PROJECT, Python, Information Retrieval, BM25, INFO376
 Updated: 2025-11-30
@@ -97,6 +77,25 @@ Savorly is a recipe search engine built with BM25 and PyTerrier for an informati
 ## Outcome
 
 Functional search engine returning ranked BM25 results for recipe queries.
+
+## SHIP-04 · SHIPPED · DiscountedAirfare
+A platform for discovering discounted airfare — making fare search less overwhelming and more decision-friendly.
+Tags: SIDE PROJECT, Frontend, Travel, Search
+Updated: 2026-04-12
+Links:
+  - GitHub: https://github.com/Gloria-Qi0311/DiscountedAirfare
+
+## Context
+
+A discounted airfare discovery platform — helping users find flight deals without getting lost in fare complexity.
+
+## What I owned
+
+- Full product design and frontend implementation
+
+## Outcome
+
+Shipped.
 # Now
 
 ## NOW-01 · NOW · Lark Loom
@@ -122,20 +121,42 @@ Lark Loom is a group-chat AI agent built for the ByteDance Lark AI Campus Challe
 
 In competition — finals on May 14, 2026. Covers recall, summary, and archive skill chains end-to-end.
 
-## NOW-02 · NOW · DiscountedAirfare
-A platform for discovering discounted airfare — making fare search less overwhelming and more decision-friendly.
-Tags: SIDE PROJECT, Frontend, Travel, Search
-Updated: 2026-04-12
+## NOW-02 · NOW · BOSS Auto Apply
+A Chrome extension that automates bulk job applications on BOSS直聘 — configurable intervals, keyword filters, and auto-pagination.
+Tags: SIDE PROJECT, Chrome Extension, Automation, Job Hunt
+Updated: 2026-05-12
 Links:
-  - GitHub: https://github.com/Gloria-Qi0311/DiscountedAirfare
+  - GitHub: https://github.com/Gloria-Qi0311/boss-auto-apply
 
 ## Context
 
-A discounted airfare discovery platform — helping users find deals without getting lost in fare complexity.
+BOSS Auto Apply is a Chrome extension that automates bulk job applications on BOSS直聘. Built out of a real frustration: job hunting at scale is repetitive and tedious.
 
 ## What I owned
 
-- Frontend design and implementation
+- Built the full Chrome extension (manifest.json, content.js, popup UI)
+- Implemented configurable parameters: delivery interval, max count, keyword blocking, auto-pagination
+- Added safeguards to avoid rate-limiting (randomized intervals, skip-already-contacted logic)
+
+## Outcome
+
+In progress — actively developing.
+
+## NOW-03 · NOW · LexVault
+A legal document search tool — designed end-to-end in Figma, currently being implemented.
+Tags: SIDE PROJECT, UI/UX Design, Figma, Frontend, Search
+Updated: 2026-04-24
+Links:
+  - GitHub: https://github.com/Gloria-Qi0311/Lexvault
+
+## Context
+
+LexVault is a legal document search tool designed to help users navigate complex legal documents efficiently. Started from a Figma design and currently implementing as a working frontend.
+
+## What I owned
+
+- Designed the full product in Figma (search UX, document viewer, result ranking)
+- Implementing the frontend from the design spec
 
 ## Outcome
 
