@@ -7,8 +7,8 @@
   "items": [
     {
       "num": "/ 01",
-      "main": "Build it to understand it.",
-      "aside": "Reading about something is not the same as shipping it and watching it break."
+      "main": "Make the work inspectable.",
+      "aside": "AI products earn trust when plans, memory, artifacts, and decisions can be reviewed instead of guessed."
     },
     {
       "num": "/ 02",
@@ -22,8 +22,8 @@
     },
     {
       "num": "/ 04",
-      "main": "AI is a multiplier, not a replacement.",
-      "aside": "The human judgment part is still the hard part."
+      "main": "Use benchmarks as product instruments.",
+      "aside": "A good evaluation does not just score a system; it reveals which behavior is worth designing around."
     }
   ]
 }

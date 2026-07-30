@@ -180,6 +180,13 @@
           `<span class="tag${i % 2 ? ' tag-blue' : ''}">${escape(t)}</span>`
         ).join('');
 
+        const heroMedia = (c.media ?? []).find((m) => m.src);
+        const mediaHtml = heroMedia
+          ? `<figure class="card-media">
+              <img src="${escape(heroMedia.src)}" alt="${escape(heroMedia.alt ?? '')}" loading="lazy">
+            </figure>`
+          : '';
+
         const links = (c.links ?? []).filter(l => l.href && l.href !== '#').map((l) =>
           `<a href="${escape(l.href)}" target="_blank" rel="noopener">${escape(l.label)} ↗</a>`
         ).join('');
@@ -197,6 +204,7 @@
               <span class="card-handle" aria-hidden="true">⋮⋮</span>
             </div>
             <div class="card-title">${escape(c.title)}</div>
+            ${mediaHtml}
             ${c.summary ? `<div class="card-summary">${safeRich(c.summary)}</div>` : ''}
             ${tags ? `<div class="card-tags">${tags}</div>` : ''}
             <div class="card-footer">
@@ -778,6 +786,16 @@
       .join('');
 
     const detailsHtml = mini(c.details);
+    const modalMedia = (c.media ?? []).filter((m) => m.src);
+    const mediaHtml = modalMedia.length
+      ? `<div class="modal-media" aria-label="Project evidence">
+          ${modalMedia.map((m) => `
+            <figure class="modal-media-item">
+              <img src="${escape(m.src)}" alt="${escape(m.alt ?? '')}" loading="lazy">
+              ${m.caption ? `<figcaption>${escape(m.caption)}</figcaption>` : ''}
+            </figure>`).join('')}
+        </div>`
+      : '';
     const statusText  = statusLabel[c.status] ?? c.status;
 
     panelBody.innerHTML = `
@@ -787,6 +805,7 @@
       </div>
       <h2 class="modal-title" id="modal-title">${escape(c.title ?? '')}</h2>
       <p class="modal-summary" id="modal-summary">${escape(c.summary ?? '')}</p>
+      ${mediaHtml}
       <div class="modal-tags" id="modal-tags">${tagsHtml}</div>
       <div class="modal-details" id="modal-details">${detailsHtml}</div>
       <div class="modal-foot">

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "Gloria Qi — Aspiring AI PM",
+    "title": "Gloria Qi — AI Product Builder",
     "lang": "en",
     "locale": "en_US",
     "siteName": "Gloria Qi",
@@ -9,12 +9,12 @@
     "ogImage": "media/avatar-calm.png",
     "ogImageWidth": "512",
     "ogImageHeight": "512",
-    "description": "Informatics junior at UW, building toward AI PM. Projects, thinking, and what's next."
+    "description": "UW Informatics junior building AI agent workflows, memory benchmarks, and human-AI collaboration tools."
   },
   "footer": {
     "copyright": "© 2026 Gloria Qi",
-    "tagline": "This site is a roadmap of how I'm growing — not just a resume.",
-    "lastUpdated": "2026-05-11"
+    "tagline": "This site is a working portfolio: human-readable, agent-readable, and built from the same source of truth.",
+    "lastUpdated": "2026-07-30"
   },
   "analytics": {
     "cfAnalyticsToken": ""

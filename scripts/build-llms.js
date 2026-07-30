@@ -82,6 +82,10 @@ const fmtCard = (c) => {
     lines.push('Links:');
     c.links.filter(l => l.href && l.href !== '#').forEach((l) => lines.push(`  - ${l.label}: ${l.href}`));
   }
+  if ((c.media ?? []).length) {
+    lines.push('Media:');
+    c.media.filter(m => m.src).forEach((m) => lines.push(`  - ${m.caption || m.alt || 'Image'}: /${m.src}`));
+  }
   if (c.details) {
     lines.push('');
     lines.push(c.details.trim());

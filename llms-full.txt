@@ -1,20 +1,139 @@
-# Gloria Qi — Aspiring AI PM
+# Gloria Qi — AI Product Builder
 
-Fake it until you make it.
+Building agent workflows, memory systems, and tools that make AI work visible.
 
-Junior at UW Informatics, building toward AI product management one project at a time. I think in user problems, not features — and I learn fastest by shipping.
+Junior at UW Informatics, working toward AI product management through shipped products, research benchmarks, and collaboration tools. I think in user problems, system boundaries, and the evidence needed to trust a product.
 
 Name: Gloria Qi
-Role: Aspiring AI PM
+Role: AI Product Builder
 Location: Seattle · UW Informatics
-Tags: Informatics @ UW, Aspiring AI PM, Builder, Seattle, Open to Internship
+Tags: Informatics @ UW, AI Product, Agent Workflows, Memory Systems, Seattle
 
 # Shipped
 
-## SHIP-01 · SHIPPED · fitty
-A calorie tracking app with Mochi, an animated companion that reacts to your daily nutrition progress. Built full-stack from scratch.
+## SHIP-01 · SHIPPED · Roundtable
+A visible AI dev squad workbench: plan a task, run agents in parallel, review outputs, preserve files, diffs, previews, and decisions.
+Impact: flagship agent workflow product
+Tags: FLAGSHIP, AI Agent, Product Systems, Next.js, TypeScript
+Updated: 2026-07-13
+Links:
+  - GitHub: https://github.com/EdwinjJ1/roundtable
+Media:
+  - Live workbench: /media/projects/roundtable-workbench.png
+  - Plans, files, diffs, previews: /media/projects/roundtable-artifacts.png
+
+## Problem
+
+Most multi-agent coding tools hide the actual work. A prompt goes in, a long answer comes out, and the user cannot easily see who planned, who implemented, what changed, or why a review passed.
+
+## My Role
+
+- Shaped the product concept around a visible AI dev squad and persistent workbench
+- Built across the Next.js app, server action layer, CLI workflows, and local/Postgres storage paths
+- Designed the review/fix loop so failed work is bounded instead of becoming an infinite agent loop
+- Added developer checks around type safety, tests, safety scanning, and deterministic local demos
+
+## Product Decisions
+
+- Made the run itself the product: plans, handoffs, files, diffs, previews, and decisions stay attached to the mission
+- Used a dependency-aware task graph so independent work can run in parallel while blocked tasks wait for prerequisites
+- Kept a zero-key local-dispatch adapter so the product can be demoed and tested without external model credentials
+
+## System Design
+
+Next.js 15 + React + TypeScript, tRPC/REST/CLI over one shared action layer, local JSON or normalized Postgres storage, NextAuth for auth, and pluggable agent adapters for local CLIs, E2B, MiniMax, or deterministic CI.
+
+## Outcome
+
+A working agent workbench with planner, implementers, reviewer, architect, fixer roles, visible artifacts, bounded fixer rounds, and safety checks before agent output lands.
+
+## Reflection
+
+The strongest product insight here is that agent autonomy needs product surfaces for trust: users need to inspect the plan, the artifact, and the review state, not just receive a polished final answer.
+
+## SHIP-02 · SHIPPED · Agent Memory Benchmark
+A benchmark for shared-memory LLM systems, testing whether multiple agents can preserve, update, and retrieve memories without silent loss.
+Impact: multi-agent memory benchmark
+Tags: RESEARCH, AI Memory, Evaluation, Python, LLM Systems
+Updated: 2026-07-08
+Links:
+  - GitHub: https://github.com/Gloria-Qi0311/agent-memory-benchmark
+Media:
+  - T4 split-intake results: /media/projects/agent-memory-t4-results.png
+
+## Problem
+
+Modern memory benchmarks mostly assume one agent owns its own memory. Real AI work is moving toward shared memory across Claude, ChatGPT, Codex, custom agents, MCP tools, and product-specific runtimes. That creates a different question: when multiple agents write to and read from the same memory layer, do memory systems still preserve the details that matter?
+
+## My Role
+
+- Designed the v1 benchmark suite for non-trivial multi-agent shared-memory behavior
+- Built Python runners, case generators, system adapters, and programmatic judges
+- Compared baselines against mem0 and documented decisions, limitations, and findings
+- Produced reproducible cases, result analysis scripts, and charts for benchmark writeups
+
+## Product Decisions
+
+- Moved beyond atomic one-fact memories because they do not discriminate modern systems
+- Focused v1 on split intake, compound updates, surgical edits, and cross-memory updates
+- Used programmatic scoring where possible to reduce LLM-as-judge ambiguity
+
+## System Design
+
+Python benchmark harness with DeepSeek agent/judge clients, memory system adapters, generated JSON cases, analysis scripts, and committed docs for task specs, findings, and design decisions.
+
+## Outcome
+
+T4 split-intake results showed extraction-free systems around 95% per-detail recall while mem0 trailed substantially. T2 preview work surfaced silent collateral damage during compound updates.
+
+## Reflection
+
+The project taught me that evaluation design is product design. The benchmark only became useful once the tasks resembled realistic memory events instead of clean textbook facts.
+
+## SHIP-03 · SHIPPED · Personal Website
+A PM-style portfolio dashboard with JSON content, pre-rendered HTML, llms.txt surfaces, CMS editing, and a terminal resume.
+Impact: this portfolio is the demo
+Tags: PORTFOLIO, Agent-Friendly, Vanilla JS, Cloudflare, CMS
+Updated: 2026-07-30
+Links:
+  - Live: https://antaresyuan.site
+  - GitHub: https://github.com/AntaresYuan/personal_website
+Media:
+  - Same content, human and agent readable: /media/avatar-calm.png
+
+## Problem
+
+A normal portfolio is optimized for humans, while the people and agents reading it increasingly need structured, stable, machine-readable context. I wanted the site to be more than a resume: it should be a living product surface for what I have shipped, what I am building, and how I think.
+
+## My Role
+
+- Designed and built the static portfolio system end to end
+- Created JSON content sources for profile, project board, principles, and contact data
+- Built pre-rendered HTML plus runtime hydration so the same content works with or without JavaScript
+- Added Decap CMS editing, Cloudflare deployment support, llms.txt surfaces, and a terminal-shaped resume CLI
+
+## Product Decisions
+
+- Treated the portfolio as a dashboard instead of a landing page
+- Kept stable card IDs so agents and people can cite projects across conversations
+- Made the site readable through HTML, JSON, llms.txt, llms-full.txt, and `npx antares-cv`
+
+## System Design
+
+Vanilla HTML/CSS/JS, build scripts that generate static artifacts from `content/*.json`, Decap CMS for browser edits, Cloudflare Pages/Worker support, and a single-file Node CLI that reads the same public content.
+
+## Outcome
+
+A content-managed, agent-friendly portfolio where the website, terminal resume, and machine-readable files all share one source of truth.
+
+## Reflection
+
+This project is a small statement of taste: if agents are going to read our work, the source material should be deliberate, structured, and still pleasant for humans.
+
+## SHIP-04 · SHIPPED · fitty
+A calorie tracking app with Mochi, an animated companion that reacts to daily nutrition progress. Built full-stack from scratch.
 Impact: live at fitty-nu.vercel.app
-Tags: SIDE PROJECT, Full-stack, React, Node.js, Supabase
+Tags: EARLIER, Full-stack, React, Node.js, Supabase
 Updated: 2026-04-22
 Links:
   - Demo: https://fitty-nu.vercel.app
@@ -35,9 +154,9 @@ fitty is a calorie tracking app built around Mochi, an animated companion that r
 
 Live and accessible. The Mochi feedback loop made calorie logging feel less like a chore.
 
-## SHIP-02 · SHIPPED · HuskyMatch
-A full-stack student networking platform for UW — profile-based matching powered by OpenAI embeddings, with messaging and social feed.
-Tags: SIDE PROJECT, Full-stack, React, FastAPI, OpenAI, Supabase
+## SHIP-05 · SHIPPED · HuskyMatch
+A full-stack student networking platform for UW: profile-based matching powered by OpenAI embeddings, with messaging and social feed.
+Tags: EARLIER, Full-stack, React, FastAPI, OpenAI
 Updated: 2026-04-23
 Links:
   - GitHub: https://github.com/Gloria-Qi0311/HuskyMatch
@@ -57,73 +176,111 @@ HuskyMatch (HuskyConnect) is a student networking platform for UW students to fi
 
 Full-stack platform with AI-powered matching across student profiles.
 
-## SHIP-03 · SHIPPED · Savorly
-A recipe search engine built with BM25 and PyTerrier — preprocesses, indexes, and ranks recipe data for keyword queries.
-Tags: COURSE PROJECT, Python, Information Retrieval, BM25, INFO376
+## SHIP-06 · SHIPPED · Savorly
+A recipe search engine built with BM25 and PyTerrier, preprocessing and ranking recipe data for keyword queries.
+Tags: EARLIER, Python, Information Retrieval, BM25, Course Project
 Updated: 2025-11-30
 Links:
   - GitHub: https://github.com/Gloria-Qi0311/info376-Savorly
 
 ## Context
 
-Savorly is a recipe search engine built with BM25 and PyTerrier for an information retrieval course (INFO376). The system preprocesses raw recipe data, builds an inverted index, and supports keyword search.
+Savorly is a recipe search engine built with BM25 and PyTerrier for an information retrieval course. The system preprocesses raw recipe data, builds an inverted index, and supports keyword search.
 
 ## What I owned
 
-- Built the full preprocessing pipeline (lowercasing, stopword removal, stemming)
+- Built the full preprocessing pipeline: lowercasing, stopword removal, and stemming
 - Implemented BM25 retrieval with PyTerrier
-- Designed the index structure for recipe fields (name, ingredients, steps)
+- Designed the index structure for recipe fields: name, ingredients, and steps
 
 ## Outcome
 
 Functional search engine returning ranked BM25 results for recipe queries.
 
-## SHIP-04 · SHIPPED · DiscountedAirfare
-A platform for discovering discounted airfare — making fare search less overwhelming and more decision-friendly.
-Tags: SIDE PROJECT, Frontend, Travel, Search
+## SHIP-07 · SHIPPED · DiscountedAirfare
+A discounted airfare discovery platform that makes fare search less overwhelming and more decision-friendly.
+Tags: EARLIER, Frontend, Travel, Search
 Updated: 2026-04-12
 Links:
   - GitHub: https://github.com/Gloria-Qi0311/DiscountedAirfare
 
 ## Context
 
-A discounted airfare discovery platform — helping users find flight deals without getting lost in fare complexity.
+DiscountedAirfare is a discounted airfare discovery platform built to help users find flight deals without getting lost in fare complexity.
 
 ## What I owned
 
-- Full product design and frontend implementation
+- Designed the product flow for browsing and comparing fare opportunities
+- Built the frontend implementation
+- Focused the experience on making travel search more decision-friendly
 
 ## Outcome
 
-Shipped.
+Shipped as an earlier project.
 # Now
 
 ## NOW-01 · NOW · Lark Loom
-An AI agent that lives in Feishu group chats, turning fragmented IM conversations into structured docs, task tables, and presentations.
-Impact: ByteDance Lark AI Campus Challenge — finalist
-Tags: COMPETITION, AI Agent, TypeScript, Node.js, Lark
-Updated: 2026-05-10
+A Feishu group-chat AI agent that turns fragmented project conversations into docs, task tables, updates, and presentation drafts.
+Impact: ByteDance Lark AI Campus Challenge
+Tags: COMPETITION, AI Agent, Collaboration, TypeScript, Lark
+Updated: 2026-07-06
 Links:
   - GitHub: https://github.com/EdwinjJ1/lark-loom
+Media:
+  - Feishu group-chat collaboration agent: /media/projects/lark-loom-logo.png
 
-## Context
+## Problem
 
-Lark Loom is a group-chat AI agent built for the ByteDance Lark AI Campus Challenge. It lives inside Feishu (Lark) group chats and helps project teams structure the chaos of IM conversations into actionable outputs.
+Student project teams often make decisions inside messy group chats. Requirements, deadlines, ownership, and meeting prep get scattered across messages, documents, tables, and slides.
 
-## What I owned
+## My Role
 
-- Designed and implemented the delivery layer (TypeScript + Node.js)
-- Built the Skill pipeline: GapDetector → SkillRouter → CardBuilder
-- Implemented MessageBuffer sliding window for batching fragmented messages
-- Set up CI workflow and enforced Result<T> error boundary across all modules
+- Designed the product direction for a Feishu/Lark group-chat collaboration agent
+- Built the TypeScript monorepo structure across contracts, bot runtime, and skills
+- Implemented the Skill Router direction for recall, summary, archive, requirement docs, task assignment, progress updates, and rehearsal flows
+- Documented product boundaries, Feishu permissions, API constraints, and compliance limits
+
+## Product Decisions
+
+- Let the agent live in the group chat instead of requiring users to switch tools
+- Avoided private 1:1 monitoring and kept the product centered on project group spaces
+- Turned fragmented IM context into structured docs, task tables, and presentation drafts
+
+## System Design
+
+pnpm monorepo with `contracts`, `bot`, and `skills` packages. The architecture includes message/card contracts, bot runtime interfaces, Bitable clients, LLM/retriever abstractions, and skill implementations for collaboration workflows.
 
 ## Outcome
 
-In competition — finals on May 14, 2026. Covers recall, summary, and archive skill chains end-to-end.
+Built as a ByteDance Lark AI Campus Challenge project for the AI product innovation track, with product docs, engineering docs, and a working skill-oriented bot foundation.
 
-## NOW-02 · NOW · BOSS Auto Apply
-A Chrome extension that automates bulk job applications on BOSS直聘 — configurable intervals, keyword filters, and auto-pagination.
-Tags: SIDE PROJECT, Chrome Extension, Automation, Job Hunt
+## Reflection
+
+Lark Loom made the product boundary very concrete: the impressive part is not that an agent can summarize chat, but whether it can do that inside the permission, UI, and workflow limits of a real collaboration platform.
+
+## NOW-02 · NOW · LexVault
+A legal document search tool designed end to end in Figma, currently being implemented as a working frontend.
+Tags: EARLIER, UI/UX Design, Figma, Frontend, Search
+Updated: 2026-04-24
+Links:
+  - GitHub: https://github.com/Gloria-Qi0311/Lexvault
+
+## Context
+
+LexVault is a legal document search tool designed to help users navigate complex legal documents efficiently. Started from a Figma design and currently being implemented as a working frontend.
+
+## What I owned
+
+- Designed the full product in Figma: search UX, document viewer, and result ranking
+- Implementing the frontend from the design spec
+
+## Outcome
+
+In progress.
+
+## NOW-03 · NOW · BOSS Auto Apply
+A Chrome extension for bulk job applications on BOSS直聘, with configurable intervals, keyword filters, and auto-pagination.
+Tags: EARLIER, Chrome Extension, Automation, Job Hunt
 Updated: 2026-05-12
 Links:
   - GitHub: https://github.com/Gloria-Qi0311/boss-auto-apply
@@ -134,67 +291,63 @@ BOSS Auto Apply is a Chrome extension that automates bulk job applications on BO
 
 ## What I owned
 
-- Built the full Chrome extension (manifest.json, content.js, popup UI)
-- Implemented configurable parameters: delivery interval, max count, keyword blocking, auto-pagination
-- Added safeguards to avoid rate-limiting (randomized intervals, skip-already-contacted logic)
-
-## Outcome
-
-In progress — actively developing.
-
-## NOW-03 · NOW · LexVault
-A legal document search tool — designed end-to-end in Figma, currently being implemented.
-Tags: SIDE PROJECT, UI/UX Design, Figma, Frontend, Search
-Updated: 2026-04-24
-Links:
-  - GitHub: https://github.com/Gloria-Qi0311/Lexvault
-
-## Context
-
-LexVault is a legal document search tool designed to help users navigate complex legal documents efficiently. Started from a Figma design and currently implementing as a working frontend.
-
-## What I owned
-
-- Designed the full product in Figma (search UX, document viewer, result ranking)
-- Implementing the frontend from the design spec
+- Built the full Chrome extension: manifest, content script, and popup UI
+- Implemented configurable delivery interval, max count, keyword blocking, and auto-pagination
+- Added safeguards against rate limiting through randomized intervals and skip-already-contacted logic
 
 ## Outcome
 
 In progress.
 # Next
 
-## NEXT-01 · NEXT · Coming soon
-To be filled — what's next on the roadmap.
-Tags: TBD
-Updated: 2026-05-10
+## NEXT-01 · NEXT · Portfolio Evidence Pass
+Add visual evidence for the flagship work: screenshots, diagrams, demo clips, and deeper case-study pages.
+Tags: NEXT, Case Study, Visual Proof
+Updated: 2026-07-30
+
+## Direction
+
+The next version of this portfolio should add richer project evidence: screenshots, architecture diagrams, selected commits, demo clips, and short case-study pages for the flagship projects.
+
+## Why
+
+The current board explains the projects clearly. The next lift is proof: make it easier for a recruiter or collaborator to inspect how the products feel and how the systems are shaped.
 # Later
 
-## LATER-01 · LATER · Coming soon
-To be filled — longer term direction.
-Tags: TBD
-Updated: 2026-05-10
+## LATER-01 · LATER · Reader-Specific Paths
+A more guided version of the portfolio with reader-specific paths for recruiters, collaborators, and AI agents.
+Tags: LATER, Portfolio System, Information Architecture
+Updated: 2026-07-30
+
+## Direction
+
+Longer term, turn the project board into a stronger narrative system: one path for recruiters, one path for product collaborators, and one path for agents reading the site through structured data.
+
+## Why
+
+The strongest version of this portfolio should not just list projects. It should help different readers assemble the right evidence quickly.
 
 # Lens — how I think
 
-- / 01 Build it to understand it.
-  Reading about something is not the same as shipping it and watching it break.
+- / 01 Make the work inspectable.
+  AI products earn trust when plans, memory, artifacts, and decisions can be reviewed instead of guessed.
 - / 02 Start with the problem, not the feature.
   Features are guesses. Problems are real.
 - / 03 The boundary matters as much as the capability.
   Knowing what AI can't do is as useful as knowing what it can.
-- / 04 AI is a multiplier, not a replacement.
-  The human judgment part is still the hard part.
+- / 04 Use benchmarks as product instruments.
+  A good evaluation does not just score a system; it reveals which behavior is worth designing around.
 
 # Contact
 
-Junior at UW Informatics, open to AI PM internships for summer / fall 2026. Also down to collaborate on side projects. Tell me what you're building.
+Junior at UW Informatics, open to AI PM / product-engineering internships and collaborations around agents, memory, and human-AI workflows. Tell me what you're building.
 
 - email: qpt0311@uw.edu (mailto:qpt0311@uw.edu)
 - linkedin: Gloria Qi (https://www.linkedin.com/in/peitong-qi-4478ba293)
 - github: @Gloria-Qi0311 (https://github.com/Gloria-Qi0311)
 
 ---
-Generated 2026-05-12 from content/*.json. Last site update: 2026-05-11
+Generated 2026-07-30 from content/*.json. Last site update: 2026-07-30
 
 
 ---

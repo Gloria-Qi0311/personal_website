@@ -1,15 +1,15 @@
-# Gloria Qi — Aspiring AI PM
+# Gloria Qi — AI Product Builder
 
-> Informatics junior at UW, building toward AI PM. Projects, thinking, and what's next.
+> UW Informatics junior building AI agent workflows, memory benchmarks, and human-AI collaboration tools.
 
-Fake it until you make it.
+Building agent workflows, memory systems, and tools that make AI work visible.
 
 ## Identity
 - Name: Gloria Qi
-- Role: Aspiring AI PM
+- Role: AI Product Builder
 - Location: Seattle · UW Informatics
 - Status: Open to internship
-- Tags: Informatics @ UW, Aspiring AI PM, Builder, Seattle, Open to Internship
+- Tags: Informatics @ UW, AI Product, Agent Workflows, Memory Systems, Seattle
 
 ## Sections
 - [Roadmap board](/#shipped): four-column kanban — shipped, now, next, later

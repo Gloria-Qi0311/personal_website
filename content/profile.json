@@ -1,12 +1,12 @@
 {
   "name": "Gloria",
   "nameAccent": "Qi",
-  "role": "Aspiring AI PM",
+  "role": "AI Product Builder",
   "location": "Seattle · UW Informatics",
   "status": "Open to internship",
-  "slogan": "Fake it until you make it.",
-  "manifesto": "Junior at UW Informatics, building toward AI product management one project at a time. I think in user problems, not features — and I learn fastest by shipping.",
-  "tags": ["Informatics @ UW", "Aspiring AI PM", "Builder", "Seattle", "Open to Internship"],
+  "slogan": "Building agent workflows, memory systems, and tools that make AI work visible.",
+  "manifesto": "Junior at UW Informatics, working toward AI product management through shipped products, research benchmarks, and collaboration tools. I think in user problems, system boundaries, and the evidence needed to trust a product.",
+  "tags": ["Informatics @ UW", "AI Product", "Agent Workflows", "Memory Systems", "Seattle"],
   "avatar": {
     "calm":    "media/avatar-calm.png",
     "talking": "media/avatar-talking.png",
@@ -15,9 +15,9 @@
   "ctas": [
     {
       "audience": "for recruiters",
-      "label": "what I've shipped",
+      "label": "flagship work",
       "anchor": "#shipped",
-      "note": "projects + outcomes"
+      "note": "agent products + systems"
     },
     {
       "audience": "for collaborators",
@@ -27,7 +27,7 @@
     },
     {
       "audience": "for everyone",
-      "label": "how I think",
+      "label": "how I decide",
       "anchor": "#lens",
       "note": "my principles"
     },

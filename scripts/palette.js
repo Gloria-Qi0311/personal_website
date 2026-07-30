@@ -80,17 +80,17 @@
   // (smooth-scrolls), or `href` (opens externally). cardIds assume the
   // default board order: shipped 1/2/3 → SHIP-01/02/03; now 1/2/3 → NOW-01…
   const FAQ = [
-    { q: 'are you looking for a job / open to roles?', a: 'Yes — open to AI PM roles at top labs & big-tech, founder conversations, and independent collaborations.', anchor: '#contact' },
-    { q: "what's your strongest shipped project?", a: 'SusBench — an IUI 2025 benchmark for how susceptible computer-use agents are to UI dark patterns; cited by 2 papers.', cardId: 'SHIP-03' },
-    { q: 'what are you building right now?', a: 'Lark Loom (a collaborative AI agent in the Lark ecosystem), Gmail++ (AI email ranking), and ApplyMint (one-click job-application autofill).', anchor: '#now' },
+    { q: 'are you looking for a job / open to roles?', a: 'Yes — open to AI PM / product-engineering internships and collaborations around agents, memory, and human-AI workflows.', anchor: '#contact' },
+    { q: "what's your strongest shipped project?", a: 'Roundtable — a visible AI dev squad workbench with planning, parallel implementation, review gates, artifacts, and safety checks.', cardId: 'SHIP-01' },
+    { q: 'what are you building right now?', a: 'Lark Loom is the active collaboration-agent case: a Feishu group-chat assistant that turns project discussion into structured outputs.', anchor: '#now' },
     { q: 'how do I get in touch / contact you?', a: "Email and socials are in the Contact section — that's the fastest way.", anchor: '#contact' },
     { q: 'where did you study / education?', a: 'Human-Centered Design & Engineering (HCDE) at the University of Washington.', anchor: '#main-content' },
     { q: 'is this site agent-friendly? can an AI read it?', a: 'Yes — /llms.txt and /llms-full.txt, an embedded CLI on the page, and `npx antares-cv`. See the agent surfaces section.', anchor: '#agents' },
     { q: "what's the site built with / tech stack?", a: 'Vanilla HTML/CSS/JS, Decap CMS, a pre-rendering SSG, deployed on Cloudflare Pages. Source is on GitHub.', href: 'https://github.com/AntaresYuan/personal_website' },
-    { q: 'what does "a star to ship by" mean?', a: 'A north star you steer by — pick a direction worth committing to, then ship toward it.', anchor: '#main-content' },
-    { q: "what's a Pi-shaped AI PM?", a: 'Product + HCI-research depth, plus enough builder fluency to ship 0→1 — not just spec it.', anchor: '#lens' },
-    { q: "what's Worth Fly?", a: 'WorthFly — flight search, decision support and alert drafts; the final fare, inventory and ticketing stay with the real booking channel.', cardId: 'SHIP-01' },
-    { q: "what's Gmail++ / Gmail Plus Plus?", a: 'An AI email-ranking layer over Gmail: a read-only reply queue with visible reasoning and reversible, account-scoped preferences.', cardId: 'NOW-02' },
+    { q: 'what is the portfolio theme?', a: 'AI product builder focused on agent workflows, shared memory, evaluation, and human-AI collaboration tools.', anchor: '#main-content' },
+    { q: "what's the memory benchmark?", a: 'Agent Memory Benchmark tests whether shared-memory systems preserve and update details across multiple agents.', cardId: 'SHIP-02' },
+    { q: "what's Lark Loom?", a: 'Lark Loom is a Feishu group-chat AI agent for turning messy project conversations into docs, task tables, updates, and presentation drafts.', cardId: 'NOW-01' },
+    { q: "what's Roundtable?", a: 'Roundtable makes multi-agent software work inspectable: plans, handoffs, artifacts, reviews, and fixer rounds stay visible.', cardId: 'SHIP-01' },
     { q: 'is the source code available?', a: 'Yes — github.com/AntaresYuan/personal_website (and there is a /admin/ CMS for editing content).', href: 'https://github.com/AntaresYuan/personal_website' },
     { q: 'how do I edit the content?', a: 'Through Decap CMS at /admin/ (GitHub OAuth — owner only). A GitHub Action then rebuilds the static artifacts.', href: '/admin/' },
   ];
