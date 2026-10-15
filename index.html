@@ -12,7 +12,8 @@
 <meta name="author" content="Gloria Qi">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://gloria-qi.glqi63583.workers.dev">
-<meta name="theme-color" content="#ECE2CB">
+<meta name="theme-color" content="#ECE2CB" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1C1711" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="media/avatar-calm.png">
 <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable summary">
@@ -59,115 +60,132 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+DW+Pica:ital@0;1&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+DW+Pica:ital@0;1&display=swap"></noscript>
 <link rel="stylesheet" href="styles/cabinet.css">
+<script>try{var t=localStorage.getItem('cabinet-theme');if(t)document.documentElement.dataset.theme=t;if(localStorage.getItem('cabinet-sepia')==='off')document.documentElement.dataset.sepia='off';}catch(e){}</script>
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
-<div class="cabinet">
-  <header class="masthead">
-    <p class="masthead-label">A Cabinet of Curiosities, being the</p>
-    <nav class="masthead-nav" aria-label="Site">
-      <ul><li><a href="./" aria-current="page">Index</a></li><li><a href="projects/">Specimens</a></li><li><span class="is-forthcoming" title="Forthcoming">Skills</span></li><li><span class="is-forthcoming" title="Forthcoming">Gallery</span></li><li><span class="is-forthcoming" title="Forthcoming">Journal</span></li></ul>
-    </nav>
+<nav class="rail" aria-label="Site">
+    <ul><li><a class="rail-item" href="./" title="Home" aria-label="Home" aria-current="page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></a></li><li><a class="rail-item" href="projects/" title="Projects" aria-label="Projects"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h6l2 2h10v11H3z"/></svg></a></li><li><span class="rail-item is-forthcoming" title="Skills — forthcoming" aria-label="Skills (forthcoming)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg></span></li><li><span class="rail-item is-forthcoming" title="Gallery — forthcoming" aria-label="Gallery (forthcoming)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg></span></li><li><span class="rail-item is-forthcoming" title="Journal — forthcoming" aria-label="Journal (forthcoming)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg></span></li></ul>
+  </nav>
+<div class="shell">
+  <header class="topbar">
+    <a class="topbar-label" href="./">A Cabinet of Curiosities</a>
+    <div class="topbar-controls">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <span class="is-active" aria-current="true">EN</span>
+        <span class="is-forthcoming" title="Chinese version forthcoming" lang="zh">中</span>
+      </div>
+      <button type="button" class="round-btn" id="theme-toggle" aria-label="Toggle candlelight (dark) mode" title="Candlelight"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></button>
+      <button type="button" class="round-btn" id="sepia-toggle" aria-label="Toggle sepia plates" aria-pressed="true" title="Sepia plates"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg></button>
+    </div>
   </header>
   <main id="main-content">
-    <header class="intro">
-      <figure class="portrait">
-        <div class="portrait-oval"><img src="media/avatar-calm.png" alt="Gloria Qi" width="300" height="380" fetchpriority="high"></div>
-        <figcaption>Fig. 1. The collector, at work in Seattle.</figcaption>
-      </figure>
-      <div class="intro-text">
-        <h1>Gloria Qi</h1>
-        
-        <p class="intro-subtitle">Collection of Things Built &amp; Questions Asked</p>
-        <p class="resume-links"><span class="is-forthcoming" title="Forthcoming">Résumé</span><span class="is-forthcoming" title="Forthcoming">简历</span></p>
-        <ul class="roles"><li>AI Product Builder</li><li>Informatics @ UW</li><li>Open to internship</li></ul>
+    <section class="hero" aria-label="Introduction">
+      <div class="hero-col hero-id">
+        <h1><span class="name-light">Gloria</span> <span class="name-strong">Qi</span></h1>
+        <div class="hero-row">
+          
+          <span class="chip chip-strong is-forthcoming" title="Forthcoming">Résumé <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v13M6 12l6 6 6-6"/></svg></span><span class="chip chip-strong is-forthcoming" title="Forthcoming">简历 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v13M6 12l6 6 6-6"/></svg></span>
+        </div>
+        <ul class="roles"><li class="chip">AI Product Builder</li><li class="chip">Informatics @ UW</li><li class="chip">Open to internship</li></ul>
       </div>
-    </header>
 
-    <div class="divider" aria-hidden="true"><svg class="sprig" width="120" height="40" viewBox="0 0 120 40" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M5 20 Q60 4 115 20"/><path d="M20 17 q6 -12 14 -8 q-4 9 -14 8z"/><path d="M24 20 q6 12 14 8 q-4 -9 -14 -8z"/><path d="M35 16 q6 -12 14 -8 q-4 9 -14 8z"/><path d="M39 20 q6 12 14 8 q-4 -9 -14 -8z"/><path d="M50 15 q6 -12 14 -8 q-4 9 -14 8z"/><path d="M54 20 q6 12 14 8 q-4 -9 -14 -8z"/><path d="M65 17 q6 -12 14 -8 q-4 9 -14 8z"/><path d="M69 20 q6 12 14 8 q-4 -9 -14 -8z"/><path d="M80 16 q6 -12 14 -8 q-4 9 -14 8z"/><path d="M84 20 q6 12 14 8 q-4 -9 -14 -8z"/><path d="M95 15 q6 -12 14 -8 q-4 9 -14 8z"/><path d="M99 20 q6 12 14 8 q-4 -9 -14 -8z"/></svg></div>
+      <section class="hero-col hero-usage" aria-labelledby="usage-title">
+        <h2 class="col-title" id="usage-title">Personal token consumption ›</h2>
+        <dl class="usage-stats"><div><dt>Total tokens</dt><dd>—</dd></div><div><dt>Top agent</dt><dd>—</dd></div></dl>
+        <div class="usage-chart is-empty"><span>specimens of usage to be collected</span></div>
+      </section>
 
-    <section class="usage" aria-labelledby="usage-title">
-      <h2 id="usage-title">Personal token consumption</h2>
-      <dl class="usage-stats"><div><dt>Total tokens</dt><dd>—</dd></div><div><dt>Top agent</dt><dd>—</dd></div></dl>
-    </section>
-
-    <section class="message" aria-labelledby="message-title">
-      <h2 id="message-title">A message from Gloria</h2>
-      <p>I&#39;m a junior at UW Informatics working toward AI product management. I like problems where the model is the easy part and the hard part is trust: who did what, what changed, and why the result should be believed. Everything in this cabinet started as a question like that, and I keep the specimens here so they can be looked at, compared, and argued with.</p>
+      <section class="hero-col hero-message" aria-labelledby="message-title">
+        <h2 class="col-title" id="message-title">A message from Gloria</h2>
+        <p>I&#39;m a junior at UW Informatics working toward AI product management. I like problems where the model is the easy part and the hard part is trust: who did what, what changed, and why the result should be believed. Everything in this cabinet started as a question like that.</p>
+      </section>
     </section>
 
     <section class="projects" id="projects" aria-labelledby="projects-title">
-      <h2 id="projects-title">Projects</h2>
-      <p class="update"><span class="update-label">Now</span> Building Lark Loom for the ByteDance Lark AI Campus Challenge, AI product innovation track.</p>
-      <ol class="specimens">
+      <div class="projects-head">
+        <h2 id="projects-title">Projects</h2>
+        <div class="pager">
+          <span class="pager-count" id="pager-count" aria-live="polite">1–2 of 5</span>
+          <button type="button" class="round-btn" id="pager-prev" aria-label="Previous projects" disabled><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button type="button" class="round-btn" id="pager-next" aria-label="Next projects"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+        </div>
+      </div>
+      <p class="update"><strong>Update</strong> Building Lark Loom for the ByteDance Lark AI Campus Challenge, AI product innovation track.</p>
+      <ol class="carousel" id="carousel">
         <li class="specimen">
           <a href="projects/#shipped-roundtable">
-            <div class="specimen-plate"><img src="media/projects/roundtable-workbench.png" alt="Roundtable workbench with a live AI dev squad around one table." loading="lazy"></div>
-            <div class="specimen-label">
+            <div class="specimen-plate">
               <span class="pin" aria-hidden="true"></span>
-              <p class="specimen-no">No. 001 · Flagship</p>
-              <h3>Roundtable</h3>
-              <p class="specimen-latin">Agentia visibilis</p>
+              <p class="plate-no">No. 001 · <i>Agentia visibilis</i></p>
+              <div class="flow" aria-hidden="true"><div class="flow-step"><span class="flow-label">Problem</span><p>Multi-agent coding tools hide who planned, who built, what changed, and why a review passed.</p></div><span class="flow-arrow">→</span><div class="flow-step"><span class="flow-label">My work</span><p>Product concept, dependency-aware task graph, bounded review/fix loop, Next.js app and CLI.</p></div><span class="flow-arrow">→</span><div class="flow-step"><span class="flow-label">Outcome</span><p>A working workbench with planner, implementer, reviewer, architect and fixer roles.</p></div></div>
             </div>
-            <p class="specimen-tags">AI Agent · Product Systems · Next.js · TypeScript</p>
-            <p class="specimen-summary">A visible AI dev squad workbench: plan a task, run agents in parallel, review outputs, preserve files, diffs, previews, and decisions.</p>
-            <dl class="specimen-fields"><div><dt>Problem</dt><dd>Multi-agent coding tools hide who planned, who built, what changed, and why a review passed.</dd></div><div><dt>My work</dt><dd>Product concept, dependency-aware task graph, bounded review/fix loop, Next.js app and CLI.</dd></div><div><dt>Outcome</dt><dd>A working workbench with planner, implementer, reviewer, architect and fixer roles.</dd></div></dl>
+            <div class="specimen-body">
+              <p class="specimen-tags">Flagship · AI Agent · Product Systems · Next.js · TypeScript</p>
+              <h3>Roundtable</h3>
+              <p class="specimen-summary">A visible AI dev squad workbench: plan a task, run agents in parallel, review outputs, preserve files, diffs, previews, and decisions.</p>
+              <dl class="sr-only"><div><dt>Problem</dt><dd>Multi-agent coding tools hide who planned, who built, what changed, and why a review passed.</dd></div><div><dt>My work</dt><dd>Product concept, dependency-aware task graph, bounded review/fix loop, Next.js app and CLI.</dd></div><div><dt>Outcome</dt><dd>A working workbench with planner, implementer, reviewer, architect and fixer roles.</dd></div></dl>
+            </div>
           </a>
         </li>
         <li class="specimen">
           <a href="projects/#shipped-memory-benchmark">
-            <div class="specimen-plate"><img src="media/projects/agent-memory-t4-results.png" alt="T4 split-intake benchmark chart comparing memory systems by per-detail recall." loading="lazy"></div>
-            <div class="specimen-label">
+            <div class="specimen-plate">
               <span class="pin" aria-hidden="true"></span>
-              <p class="specimen-no">No. 002 · Research</p>
-              <h3>Agent Memory Benchmark</h3>
-              <p class="specimen-latin">Memoria communis</p>
+              <p class="plate-no">No. 002 · <i>Memoria communis</i></p>
+              <div class="flow" aria-hidden="true"><div class="flow-step"><span class="flow-label">Problem</span><p>Memory benchmarks assume one agent owns its memory; real work shares memory across many agents.</p></div><span class="flow-arrow">→</span><div class="flow-step"><span class="flow-label">My work</span><p>v1 task suite, Python runners, system adapters, programmatic judges.</p></div><span class="flow-arrow">→</span><div class="flow-step"><span class="flow-label">Result</span><p>~95% per-detail recall for extraction-free systems on T4 split intake; mem0 trailed substantially.</p></div></div>
             </div>
-            <p class="specimen-tags">AI Memory · Evaluation · Python · LLM Systems</p>
-            <p class="specimen-summary">A benchmark for shared-memory LLM systems, testing whether multiple agents can preserve, update, and retrieve memories without silent loss.</p>
-            <dl class="specimen-fields"><div><dt>Problem</dt><dd>Memory benchmarks assume one agent owns its memory; real work shares memory across many agents.</dd></div><div><dt>My work</dt><dd>v1 task suite, Python runners, system adapters, programmatic judges.</dd></div><div><dt>Result</dt><dd>~95% per-detail recall for extraction-free systems on T4 split intake; mem0 trailed substantially.</dd></div></dl>
+            <div class="specimen-body">
+              <p class="specimen-tags">Research · AI Memory · Evaluation · Python · LLM Systems</p>
+              <h3>Agent Memory Benchmark</h3>
+              <p class="specimen-summary">A benchmark for shared-memory LLM systems, testing whether multiple agents can preserve, update, and retrieve memories without silent loss.</p>
+              <dl class="sr-only"><div><dt>Problem</dt><dd>Memory benchmarks assume one agent owns its memory; real work shares memory across many agents.</dd></div><div><dt>My work</dt><dd>v1 task suite, Python runners, system adapters, programmatic judges.</dd></div><div><dt>Result</dt><dd>~95% per-detail recall for extraction-free systems on T4 split intake; mem0 trailed substantially.</dd></div></dl>
+            </div>
           </a>
         </li>
         <li class="specimen">
           <a href="projects/#now-lark-loom">
-            <div class="specimen-plate is-drawing"><img src="media/projects/lark-loom-logo.png" alt="Lark Loom project logo." loading="lazy"></div>
-            <div class="specimen-label">
+            <div class="specimen-plate">
               <span class="pin" aria-hidden="true"></span>
-              <p class="specimen-no">No. 003 · Competition</p>
-              <h3>Lark Loom</h3>
-              <p class="specimen-latin">Textrix colloquii</p>
+              <p class="plate-no">No. 003 · <i>Textrix colloquii</i></p>
+              <div class="flow" aria-hidden="true"><div class="flow-step"><span class="flow-label">Problem</span><p>Student teams make decisions inside messy group chats, and the context gets lost.</p></div><span class="flow-arrow">→</span><div class="flow-step"><span class="flow-label">My work</span><p>Product direction, skill router, TypeScript monorepo across contracts, bot and skills.</p></div><span class="flow-arrow">→</span><div class="flow-step"><span class="flow-label">Track</span><p>ByteDance Lark AI Campus Challenge, AI product innovation.</p></div></div>
             </div>
-            <p class="specimen-tags">AI Agent · Collaboration · TypeScript · Lark</p>
-            <p class="specimen-summary">A Feishu group-chat AI agent that turns fragmented project conversations into docs, task tables, updates, and presentation drafts.</p>
-            <dl class="specimen-fields"><div><dt>Problem</dt><dd>Student teams make decisions inside messy group chats, and the context gets lost.</dd></div><div><dt>My work</dt><dd>Product direction, skill router, TypeScript monorepo across contracts, bot and skills.</dd></div><div><dt>Track</dt><dd>ByteDance Lark AI Campus Challenge, AI product innovation.</dd></div></dl>
+            <div class="specimen-body">
+              <p class="specimen-tags">Competition · AI Agent · Collaboration · TypeScript · Lark</p>
+              <h3>Lark Loom</h3>
+              <p class="specimen-summary">A Feishu group-chat AI agent that turns fragmented project conversations into docs, task tables, updates, and presentation drafts.</p>
+              <dl class="sr-only"><div><dt>Problem</dt><dd>Student teams make decisions inside messy group chats, and the context gets lost.</dd></div><div><dt>My work</dt><dd>Product direction, skill router, TypeScript monorepo across contracts, bot and skills.</dd></div><div><dt>Track</dt><dd>ByteDance Lark AI Campus Challenge, AI product innovation.</dd></div></dl>
+            </div>
           </a>
         </li>
         <li class="specimen">
           <a href="projects/#shipped-personal-website">
-            <div class="specimen-plate is-drawing"><img src="media/avatar-calm.png" alt="Gloria Qi portfolio avatar used as the site&#39;s visual identity." loading="lazy"></div>
-            <div class="specimen-label">
+            <div class="specimen-plate">
               <span class="pin" aria-hidden="true"></span>
-              <p class="specimen-no">No. 004 · Portfolio</p>
-              <h3>Personal Website</h3>
-              <p class="specimen-latin">Speculum sui</p>
+              <p class="plate-no">No. 004 · <i>Speculum sui</i></p>
+              <div class="flow" aria-hidden="true"><div class="flow-step"><span class="flow-label">Problem</span><p>Portfolios are written only for humans, while agents increasingly read them too.</p></div><span class="flow-arrow">→</span><div class="flow-step"><span class="flow-label">My work</span><p>Content model, pre-rendered HTML, Decap CMS editing, Cloudflare deploy.</p></div><span class="flow-arrow">→</span><div class="flow-step"><span class="flow-label">Outcome</span><p>One source of truth, readable as HTML, JSON, llms.txt and a terminal CV.</p></div></div>
             </div>
-            <p class="specimen-tags">Agent-Friendly · Vanilla JS · Cloudflare · CMS</p>
-            <p class="specimen-summary">A PM-style portfolio dashboard with JSON content, pre-rendered HTML, llms.txt surfaces, CMS editing, and a terminal resume.</p>
-            <dl class="specimen-fields"><div><dt>Problem</dt><dd>Portfolios are written only for humans, while agents increasingly read them too.</dd></div><div><dt>My work</dt><dd>Content model, pre-rendered HTML, Decap CMS editing, Cloudflare deploy.</dd></div><div><dt>Outcome</dt><dd>One source of truth, readable as HTML, JSON, llms.txt and a terminal CV.</dd></div></dl>
+            <div class="specimen-body">
+              <p class="specimen-tags">Portfolio · Agent-Friendly · Vanilla JS · Cloudflare · CMS</p>
+              <h3>Personal Website</h3>
+              <p class="specimen-summary">A PM-style portfolio dashboard with JSON content, pre-rendered HTML, llms.txt surfaces, CMS editing, and a terminal resume.</p>
+              <dl class="sr-only"><div><dt>Problem</dt><dd>Portfolios are written only for humans, while agents increasingly read them too.</dd></div><div><dt>My work</dt><dd>Content model, pre-rendered HTML, Decap CMS editing, Cloudflare deploy.</dd></div><div><dt>Outcome</dt><dd>One source of truth, readable as HTML, JSON, llms.txt and a terminal CV.</dd></div></dl>
+            </div>
           </a>
         </li>
         <li class="specimen">
           <a href="projects/#shipped-fitty">
-            
-            <div class="specimen-label">
+            <div class="specimen-plate">
               <span class="pin" aria-hidden="true"></span>
-              <p class="specimen-no">No. 005 · Earlier</p>
-              <h3>fitty</h3>
-              <p class="specimen-latin">Mochi nutrix</p>
+              <p class="plate-no">No. 005 · <i>Mochi nutrix</i></p>
+              <div class="flow" aria-hidden="true"><div class="flow-step"><span class="flow-label">Idea</span><p>Make calorie tracking feel personal instead of clinical.</p></div><span class="flow-arrow">→</span><div class="flow-step"><span class="flow-label">My work</span><p>React + Vite frontend, Node + Supabase backend, the Mochi animation system.</p></div><span class="flow-arrow">→</span><div class="flow-step"><span class="flow-label">Outcome</span><p>Live at fitty-nu.vercel.app.</p></div></div>
             </div>
-            <p class="specimen-tags">Full-stack · React · Node.js · Supabase</p>
-            <p class="specimen-summary">A calorie tracking app with Mochi, an animated companion that reacts to daily nutrition progress. Built full-stack from scratch.</p>
-            <dl class="specimen-fields"><div><dt>Idea</dt><dd>Make calorie tracking feel personal instead of clinical.</dd></div><div><dt>My work</dt><dd>React + Vite frontend, Node + Supabase backend, the Mochi animation system.</dd></div><div><dt>Outcome</dt><dd>Live at fitty-nu.vercel.app.</dd></div></dl>
+            <div class="specimen-body">
+              <p class="specimen-tags">Earlier · Full-stack · React · Node.js · Supabase</p>
+              <h3>fitty</h3>
+              <p class="specimen-summary">A calorie tracking app with Mochi, an animated companion that reacts to daily nutrition progress. Built full-stack from scratch.</p>
+              <dl class="sr-only"><div><dt>Idea</dt><dd>Make calorie tracking feel personal instead of clinical.</dd></div><div><dt>My work</dt><dd>React + Vite frontend, Node + Supabase backend, the Mochi animation system.</dd></div><div><dt>Outcome</dt><dd>Live at fitty-nu.vercel.app.</dd></div></dl>
+            </div>
           </a>
         </li>
       </ol>
@@ -179,6 +197,10 @@
     <p class="footer-links"><a href="mailto:qpt0311@uw.edu">qpt0311@uw.edu</a><span aria-hidden="true"> · </span><a href="https://www.linkedin.com/in/peitong-qi-4478ba293" target="_blank" rel="noopener">Linkedin</a><span aria-hidden="true"> · </span><a href="https://github.com/Gloria-Qi0311" target="_blank" rel="noopener">Github</a><span aria-hidden="true"> · </span><a href="/admin/">Edit</a><span aria-hidden="true"> · </span><a href="/llms.txt">llms.txt</a><span aria-hidden="true"> · </span><a href="https://github.com/Gloria-Qi0311/personal_website" target="_blank" rel="noopener">Source</a></p>
   </footer>
 </div>
-<img class="farewell" src="media/avatar-talking.png" alt="" width="140" height="140" loading="lazy">
+<button type="button" class="chat-pill" id="chat-pill" title="Coming soon">
+    <img src="media/avatar-calm.png" alt="" width="32" height="32">
+    <span>Ask Gloria anything</span>
+  </button>
+<script src="scripts/home.js" defer></script>
 </body>
 </html>

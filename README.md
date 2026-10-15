@@ -19,6 +19,7 @@ SOURCE (edit these — directly or via /admin/)
 │   └── contact.json        ← email + socials + "open to" line
 ├── styles/cabinet.css      ← "cabinet of curiosities" theme
 ├── scripts/
+│   ├── home.js             ← runtime: carousel pager, dark/sepia toggles, Ask pill
 │   ├── build-html.js       ← build:   renders index.html + projects/index.html
 │   ├── build-llms.js       ← build:   regen /llms.txt + /llms-full.txt
 │   ├── build.js            ← build:   runs both
