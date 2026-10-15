@@ -59,10 +59,8 @@ ${profile.slogan ?? ''}
 - Tags: ${(profile.tags ?? []).join(', ')}
 
 ## Sections
-- [Roadmap board](/#shipped): four-column kanban — shipped, now, next, later
-- [Agent terminal](/#terminal): interactive CLI — same data as the board
-- [Lens](/#lens): how I think
-- [Contact](/#contact): how to reach me
+- [Home](/): intro, a message, and featured projects
+- [Projects](/projects/): every project with its full write-up
 - [Full content](/llms-full.txt): every card + lens entry + contact, plain text
 
 ## Edit

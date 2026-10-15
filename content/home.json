@@ -1,0 +1,43 @@
+{
+  "label": "A Cabinet of Curiosities, being the",
+  "subtitle": "Collection of Things Built & Questions Asked",
+  "nav": [
+    { "label": "Index", "href": "/" },
+    { "label": "Specimens", "href": "/projects/" },
+    { "label": "Skills", "href": "" },
+    { "label": "Gallery", "href": "" },
+    { "label": "Journal", "href": "" }
+  ],
+  "nameZh": "",
+  "portraitCaption": "Fig. 1. The collector, at work in Seattle.",
+  "resume": [
+    { "label": "Résumé", "href": "" },
+    { "label": "简历", "href": "" }
+  ],
+  "roles": ["AI Product Builder", "Informatics @ UW", "Open to internship"],
+  "usage": {
+    "title": "Personal token consumption",
+    "href": "",
+    "stats": [
+      { "label": "Total tokens", "value": "—" },
+      { "label": "Top agent", "value": "—" }
+    ]
+  },
+  "message": {
+    "title": "A message from Gloria",
+    "body": "I'm a junior at UW Informatics working toward AI product management. I like problems where the model is the easy part and the hard part is trust: who did what, what changed, and why the result should be believed. Everything in this cabinet started as a question like that, and I keep the specimens here so they can be looked at, compared, and argued with."
+  },
+  "projects": {
+    "title": "Projects",
+    "updateLabel": "Now",
+    "update": "Building Lark Loom for the ByteDance Lark AI Campus Challenge, AI product innovation track.",
+    "featured": [
+      "shipped-roundtable",
+      "shipped-memory-benchmark",
+      "now-lark-loom",
+      "shipped-personal-website",
+      "shipped-fitty"
+    ]
+  },
+  "farewell": "media/avatar-talking.png"
+}

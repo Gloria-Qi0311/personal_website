@@ -90,6 +90,60 @@ collections:
               - { label: "Anchor (#shipped, #now, #contact, …)", name: "anchor", widget: "string" }
               - { label: "Helper note", name: "note",   widget: "string", required: false }
 
+  # ── Home page ──────────────────────────────────────────────────────
+  - name: "home"
+    label: "Home page"
+    files:
+      - file: "content/home.json"
+        label: "Home"
+        name: "home"
+        format: "json"
+        fields:
+          - { label: "Masthead label", name: "label", widget: "string" }
+          - { label: "Subtitle", name: "subtitle", widget: "string" }
+          - label: "Nav"
+            name: "nav"
+            widget: "list"
+            fields:
+              - { label: "Label", name: "label", widget: "string" }
+              - { label: "Link (empty = forthcoming)", name: "href", widget: "string", required: false }
+          - { label: "Chinese name", name: "nameZh", widget: "string", required: false }
+          - { label: "Portrait caption", name: "portraitCaption", widget: "string" }
+          - label: "Résumé links"
+            name: "resume"
+            widget: "list"
+            fields:
+              - { label: "Label", name: "label", widget: "string" }
+              - { label: "Link (empty = forthcoming)", name: "href", widget: "string", required: false }
+          - { label: "Roles", name: "roles", widget: "list", field: { label: "Role", name: "role", widget: "string" } }
+          - label: "Token usage"
+            name: "usage"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Link", name: "href", widget: "string", required: false }
+              - label: "Stats"
+                name: "stats"
+                widget: "list"
+                fields:
+                  - { label: "Label", name: "label", widget: "string" }
+                  - { label: "Value", name: "value", widget: "string" }
+          - label: "Message"
+            name: "message"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Body", name: "body", widget: "text" }
+          - label: "Projects"
+            name: "projects"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Update label", name: "updateLabel", widget: "string", required: false }
+              - { label: "Update note", name: "update", widget: "text", required: false }
+              - { label: "Featured card IDs (in order)", name: "featured", widget: "list", field: { label: "Card ID", name: "id", widget: "string" } }
+          - { label: "Farewell image", name: "farewell", widget: "image", required: false }
+
   # ── Board: project cards ───────────────────────────────────────────
   - name: "board"
     label: "Board (Shipped/Now/Next/Later)"
@@ -126,6 +180,14 @@ collections:
                   - { label: "URL",   name: "href",  widget: "string" }
               - { label: "Updated (YYYY-MM-DD)", name: "updated", widget: "string" }
               - { label: "Order within column", name: "order", widget: "number", default: 1 }
+              - { label: "Specimen name (Latin-ish, shown under the title)", name: "specimen", widget: "string", required: false }
+              - label: "Home card fields"
+                name: "fields"
+                widget: "list"
+                required: false
+                fields:
+                  - { label: "Label", name: "label", widget: "string" }
+                  - { label: "Value", name: "value", widget: "text" }
 
   # ── Lens: principles ───────────────────────────────────────────────
   - name: "lens"

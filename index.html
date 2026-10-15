@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <!--
   GENERATED — do not edit by hand.
-  Source of truth: content/*.json (and the structural template in this file).
-  Regenerate: `node scripts/build.js`
+  Source of truth: content/*.json. Regenerate: `node scripts/build.js`
 -->
-<html data-prerendered="true" lang="en">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,17 +12,12 @@
 <meta name="author" content="Gloria Qi">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://gloria-qi.glqi63583.workers.dev">
-
-<!-- ── Theme + favicon ───────────────────────────────────────────── -->
-<meta name="theme-color" content="#FAF7F0" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1A1A1F" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ECE2CB">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="media/avatar-calm.png">
-<!-- llmstxt.org — agent-readable summary + full content dump -->
-<link rel="alternate" type="text/plain" href="/llms.txt"      title="LLM-readable summary">
+<link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable summary">
 <link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLM-readable full content">
 
-<!-- ── Open Graph / Twitter ──────────────────────────────────────── -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://gloria-qi.glqi63583.workers.dev">
 <meta property="og:site_name" content="Gloria Qi">
@@ -39,12 +33,10 @@
 <meta name="twitter:description" content="UW Informatics junior building AI agent workflows, memory benchmarks, and human-AI collaboration tools.">
 <meta name="twitter:image" content="https://gloria-qi.glqi63583.workers.dev/media/avatar-calm.png">
 
-<!-- ── JSON-LD Person schema (rebuilt from content/profile.json) ─── -->
-<script type="application/ld+json" id="ld-person">{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "Gloria Qi",
-  "alternateName": "Gloria Qi",
   "url": "https://gloria-qi.glqi63583.workers.dev",
   "jobTitle": "AI Product Builder",
   "description": "Building agent workflows, memory systems, and tools that make AI work visible.",
@@ -62,636 +54,131 @@
   ]
 }</script>
 
-<!-- ── Fonts (truly non-blocking) ────────────────────────────────────
-     The print/onload trick: media="print" makes the browser fetch the
-     stylesheet but NOT block render (since it's not for screen). Once
-     loaded, the onload handler swaps media to "all" so the fonts apply.
-     Falls back to a regular <noscript> link if JS is off.
-     Saves the full ~2.1s of render-blocking time on mobile. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap"
-      media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap"></noscript>
-
-<!-- Avatar is the LCP candidate — preload so it starts downloading
-     immediately, in parallel with stylesheet + JS, instead of waiting
-     until CSS resolves the .avatar-img background-image rule. -->
-<link rel="preload" as="image" href="media/avatar-calm.png" fetchpriority="high">
-
-<link rel="stylesheet" href="styles/main.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+DW+Pica:ital@0;1&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+DW+Pica:ital@0;1&display=swap"></noscript>
+<link rel="stylesheet" href="styles/cabinet.css">
 </head>
 <body>
-
 <a class="skip-link" href="#main-content">Skip to content</a>
-
-<main class="page" id="main-content">
-
-  <!-- ── TOP NAV ─────────────────────────────────────────────────── -->
-  <nav class="topnav rise">
-    <div class="brand"><span class="dot"></span><span id="brand-name">Gloria Qi</span></div>
-    <div class="meta" id="last-updated">updated 2026-07-30</div>
-  </nav>
-
-  <!-- ── HERO ────────────────────────────────────────────────────── -->
-  <header class="hero rise rise-1">
-    <div class="hero-left">
-      <!-- Avatar sits inline on the left of the name/slogan block.
-           Calm by default; swaps to talking on hover/focus/tap. -->
-      <button type="button" class="hero-avatar" id="hero-avatar"
-              aria-label="Avatar — tap or hover to see me say hi">
-        <img class="avatar-img avatar-calm"    id="avatar-calm"    alt="Gloria Qi" src="media/avatar-calm.png">
-        <img class="avatar-img avatar-talking" id="avatar-talking" alt="" aria-hidden="true" src="media/avatar-talking.png">
-      </button>
-      <div class="hero-text">
-        <h1 class="hero-name" id="hero-name">Gloria <em>Qi</em></h1>
-        <p class="hero-slogan" id="hero-slogan">Building agent workflows, memory systems, and tools that make AI work visible.</p>
-        <div class="hero-meta" id="hero-meta"><span>AI Product Builder</span><span class="sep">·</span><span>Seattle · UW Informatics</span><span class="sep">·</span><span class="now-pill"><span class="pulse"></span>Open to internship</span><span class="pill">Informatics @ UW</span><span class="pill">AI Product</span><span class="pill">Agent Workflows</span><span class="pill">Memory Systems</span><span class="pill">Seattle</span></div>
-      </div>
-    </div>
-    <div class="hero-ctas" id="hero-ctas">
-        <a class="cta" href="#shipped">
-          <div>
-            <div class="cta-label">for recruiters</div>
-            <div class="cta-text">flagship work</div>
-          </div>
-          <span class="cta-arrow">→</span>
-        </a>
-        <a class="cta" href="#contact">
-          <div>
-            <div class="cta-label">for collaborators</div>
-            <div class="cta-text">let&#39;s build</div>
-          </div>
-          <span class="cta-arrow">→</span>
-        </a>
-        <a class="cta" href="#lens">
-          <div>
-            <div class="cta-label">for everyone</div>
-            <div class="cta-text">how I decide</div>
-          </div>
-          <span class="cta-arrow">→</span>
-        </a>
-        <a class="cta" href="#terminal">
-          <div>
-            <div class="cta-label">for agents</div>
-            <div class="cta-text">use the CLI</div>
-          </div>
-          <span class="cta-arrow">→</span>
-        </a></div>
+<div class="cabinet">
+  <header class="masthead">
+    <p class="masthead-label">A Cabinet of Curiosities, being the</p>
+    <nav class="masthead-nav" aria-label="Site">
+      <ul><li><a href="./" aria-current="page">Index</a></li><li><a href="projects/">Specimens</a></li><li><span class="is-forthcoming" title="Forthcoming">Skills</span></li><li><span class="is-forthcoming" title="Forthcoming">Gallery</span></li><li><span class="is-forthcoming" title="Forthcoming">Journal</span></li></ul>
+    </nav>
   </header>
-
-  <!-- ── BOARD ───────────────────────────────────────────────────── -->
-  <section class="board-section rise rise-2" aria-label="Project board" id="shipped">
-
-    <!-- toolbar: board name + view tabs + count -->
-    <div class="board-toolbar">
-      <div class="board-toolbar-left">
-        <h2 class="board-name">
-          <span class="board-icon" aria-hidden="true">⊞</span>
-          <span id="board-name-text">Roadmap</span>
-        </h2>
-        <div class="board-views" role="tablist" aria-label="Board view">
-          <button class="view-tab is-active" type="button" role="tab" id="tab-board" aria-controls="board" aria-selected="true" data-view="board">Board</button>
-          <button class="view-tab" type="button" role="tab" id="tab-table" aria-controls="view-table" aria-selected="false" data-view="table">Table</button>
-          <button class="view-tab" type="button" role="tab" id="tab-timeline" aria-controls="view-timeline" aria-selected="false" data-view="timeline">Timeline</button>
-          <button class="view-tab" type="button" role="tab" id="tab-specs" aria-controls="view-specs" aria-selected="false" data-view="specs">Specs</button>
-        </div>
+  <main id="main-content">
+    <header class="intro">
+      <figure class="portrait">
+        <div class="portrait-oval"><img src="media/avatar-calm.png" alt="Gloria Qi" width="300" height="380" fetchpriority="high"></div>
+        <figcaption>Fig. 1. The collector, at work in Seattle.</figcaption>
+      </figure>
+      <div class="intro-text">
+        <h1>Gloria Qi</h1>
+        
+        <p class="intro-subtitle">Collection of Things Built &amp; Questions Asked</p>
+        <p class="resume-links"><span class="is-forthcoming" title="Forthcoming">Résumé</span><span class="is-forthcoming" title="Forthcoming">简历</span></p>
+        <ul class="roles"><li>AI Product Builder</li><li>Informatics @ UW</li><li>Open to internship</li></ul>
       </div>
-      <div class="board-toolbar-right">
-        <span class="board-stat"><strong id="board-total-count">12</strong> cards</span>
-        <span class="board-stat sep">·</span>
-        <span class="board-stat" id="board-shipped-count">7 shipped</span>
-        <span class="board-stat sep">·</span>
-        <select class="audience-lens" id="audience-lens" aria-label="Audience preset — reorder cards for a particular reader">
-          <option value="everyone" selected>For everyone</option>
-          <option value="hr">For HR</option>
-          <option value="founders">For founders</option>
-          <option value="collaborators">For collaborators</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- filter chips (click to filter by tag) -->
-    <div class="board-filters" id="board-filters" role="group" aria-label="Filter by tag"><button class="filter-chip is-active" type="button" data-filter="all" aria-pressed="true">All</button><button class="filter-chip" type="button" data-filter="earlier" aria-pressed="false">EARLIER</button><button class="filter-chip" type="button" data-filter="ai agent" aria-pressed="false">AI Agent</button><button class="filter-chip" type="button" data-filter="typescript" aria-pressed="false">TypeScript</button><button class="filter-chip" type="button" data-filter="python" aria-pressed="false">Python</button><button class="filter-chip" type="button" data-filter="full-stack" aria-pressed="false">Full-stack</button><button class="filter-chip" type="button" data-filter="react" aria-pressed="false">React</button></div>
-
-    <!-- columns -->
-    <div class="board" id="board" role="tabpanel" aria-labelledby="tab-board">
-      <article class="column col-shipped" id="col-shipped" aria-labelledby="col-shipped-title">
-        <header class="col-head">
-          <h3 class="col-title" id="col-shipped-title"><span class="col-dot"></span>Shipped</h3>
-          <span class="col-count" data-count="shipped">7</span>
-        </header>
-        <div class="col-cards" data-cards="shipped">
-            <button type="button" class="card" data-id="shipped-roundtable" data-card-id="SHIP-01" data-tags="flagship|ai agent|product systems|next.js|typescript" aria-label="Open details for Roundtable">
-              <div class="card-meta-top">
-                <span class="card-id">SHIP-01</span>
-                <span class="card-handle" aria-hidden="true">⋮⋮</span>
-              </div>
-              <div class="card-title">Roundtable</div>
-              <figure class="card-media">
-                <img src="media/projects/roundtable-workbench.png" alt="Roundtable workbench with a live AI dev squad around one table." loading="lazy">
-              </figure>
-              <div class="card-summary">A visible AI dev squad workbench: plan a task, run agents in parallel, review outputs, preserve files, diffs, previews, and decisions.</div>
-              <div class="card-tags"><span class="tag">FLAGSHIP</span><span class="tag tag-blue">AI Agent</span><span class="tag">Product Systems</span><span class="tag tag-blue">Next.js</span><span class="tag">TypeScript</span></div>
-              <div class="card-footer">
-                <span class="card-footer-left">
-                  <span>2026-07-13</span>
-                  <span class="card-comments">0</span>
-                </span>
-                <span class="card-impact">flagship agent workflow product</span>
-              </div>
-              <div class="card-links"><a href="https://github.com/EdwinjJ1/roundtable" target="_blank" rel="noopener">GitHub ↗</a></div>
-            </button>
-            <button type="button" class="card" data-id="shipped-memory-benchmark" data-card-id="SHIP-02" data-tags="research|ai memory|evaluation|python|llm systems" aria-label="Open details for Agent Memory Benchmark">
-              <div class="card-meta-top">
-                <span class="card-id">SHIP-02</span>
-                <span class="card-handle" aria-hidden="true">⋮⋮</span>
-              </div>
-              <div class="card-title">Agent Memory Benchmark</div>
-              <figure class="card-media">
-                <img src="media/projects/agent-memory-t4-results.png" alt="T4 split-intake benchmark chart comparing memory systems by per-detail recall." loading="lazy">
-              </figure>
-              <div class="card-summary">A benchmark for shared-memory LLM systems, testing whether multiple agents can preserve, update, and retrieve memories without silent loss.</div>
-              <div class="card-tags"><span class="tag">RESEARCH</span><span class="tag tag-blue">AI Memory</span><span class="tag">Evaluation</span><span class="tag tag-blue">Python</span><span class="tag">LLM Systems</span></div>
-              <div class="card-footer">
-                <span class="card-footer-left">
-                  <span>2026-07-08</span>
-                  <span class="card-comments">0</span>
-                </span>
-                <span class="card-impact">multi-agent memory benchmark</span>
-              </div>
-              <div class="card-links"><a href="https://github.com/Gloria-Qi0311/agent-memory-benchmark" target="_blank" rel="noopener">GitHub ↗</a></div>
-            </button>
-            <button type="button" class="card" data-id="shipped-personal-website" data-card-id="SHIP-03" data-tags="portfolio|agent-friendly|vanilla js|cloudflare|cms" aria-label="Open details for Personal Website">
-              <div class="card-meta-top">
-                <span class="card-id">SHIP-03</span>
-                <span class="card-handle" aria-hidden="true">⋮⋮</span>
-              </div>
-              <div class="card-title">Personal Website</div>
-              <figure class="card-media">
-                <img src="media/avatar-calm.png" alt="Gloria Qi portfolio avatar used as the site&#39;s visual identity." loading="lazy">
-              </figure>
-              <div class="card-summary">A PM-style portfolio dashboard with JSON content, pre-rendered HTML, llms.txt surfaces, CMS editing, and a terminal resume.</div>
-              <div class="card-tags"><span class="tag">PORTFOLIO</span><span class="tag tag-blue">Agent-Friendly</span><span class="tag">Vanilla JS</span><span class="tag tag-blue">Cloudflare</span><span class="tag">CMS</span></div>
-              <div class="card-footer">
-                <span class="card-footer-left">
-                  <span>2026-07-30</span>
-                  <span class="card-comments">0</span>
-                </span>
-                <span class="card-impact">this portfolio is the demo</span>
-              </div>
-              <div class="card-links"><a href="https://gloria-qi.glqi63583.workers.dev" target="_blank" rel="noopener">Live ↗</a><a href="https://github.com/AntaresYuan/personal_website" target="_blank" rel="noopener">GitHub ↗</a></div>
-            </button>
-            <button type="button" class="card" data-id="shipped-fitty" data-card-id="SHIP-04" data-tags="earlier|full-stack|react|node.js|supabase" aria-label="Open details for fitty">
-              <div class="card-meta-top">
-                <span class="card-id">SHIP-04</span>
-                <span class="card-handle" aria-hidden="true">⋮⋮</span>
-              </div>
-              <div class="card-title">fitty</div>
-              
-              <div class="card-summary">A calorie tracking app with Mochi, an animated companion that reacts to daily nutrition progress. Built full-stack from scratch.</div>
-              <div class="card-tags"><span class="tag">EARLIER</span><span class="tag tag-blue">Full-stack</span><span class="tag">React</span><span class="tag tag-blue">Node.js</span><span class="tag">Supabase</span></div>
-              <div class="card-footer">
-                <span class="card-footer-left">
-                  <span>2026-04-22</span>
-                  <span class="card-comments">0</span>
-                </span>
-                <span class="card-impact">live at fitty-nu.vercel.app</span>
-              </div>
-              <div class="card-links"><a href="https://fitty-nu.vercel.app" target="_blank" rel="noopener">Demo ↗</a><a href="https://github.com/Gloria-Qi0311/calarie_app" target="_blank" rel="noopener">GitHub ↗</a></div>
-            </button>
-            <button type="button" class="card" data-id="shipped-huskymatch" data-card-id="SHIP-05" data-tags="earlier|full-stack|react|fastapi|openai" aria-label="Open details for HuskyMatch">
-              <div class="card-meta-top">
-                <span class="card-id">SHIP-05</span>
-                <span class="card-handle" aria-hidden="true">⋮⋮</span>
-              </div>
-              <div class="card-title">HuskyMatch</div>
-              
-              <div class="card-summary">A full-stack student networking platform for UW: profile-based matching powered by OpenAI embeddings, with messaging and social feed.</div>
-              <div class="card-tags"><span class="tag">EARLIER</span><span class="tag tag-blue">Full-stack</span><span class="tag">React</span><span class="tag tag-blue">FastAPI</span><span class="tag">OpenAI</span></div>
-              <div class="card-footer">
-                <span class="card-footer-left">
-                  <span>2026-04-23</span>
-                  <span class="card-comments">0</span>
-                </span>
-                
-              </div>
-              <div class="card-links"><a href="https://github.com/Gloria-Qi0311/HuskyMatch" target="_blank" rel="noopener">GitHub ↗</a></div>
-            </button>
-            <button type="button" class="card" data-id="shipped-savorly" data-card-id="SHIP-06" data-tags="earlier|python|information retrieval|bm25|course project" aria-label="Open details for Savorly">
-              <div class="card-meta-top">
-                <span class="card-id">SHIP-06</span>
-                <span class="card-handle" aria-hidden="true">⋮⋮</span>
-              </div>
-              <div class="card-title">Savorly</div>
-              
-              <div class="card-summary">A recipe search engine built with BM25 and PyTerrier, preprocessing and ranking recipe data for keyword queries.</div>
-              <div class="card-tags"><span class="tag">EARLIER</span><span class="tag tag-blue">Python</span><span class="tag">Information Retrieval</span><span class="tag tag-blue">BM25</span><span class="tag">Course Project</span></div>
-              <div class="card-footer">
-                <span class="card-footer-left">
-                  <span>2025-11-30</span>
-                  <span class="card-comments">0</span>
-                </span>
-                
-              </div>
-              <div class="card-links"><a href="https://github.com/Gloria-Qi0311/info376-Savorly" target="_blank" rel="noopener">GitHub ↗</a></div>
-            </button>
-            <button type="button" class="card" data-id="shipped-discounted-airfare" data-card-id="SHIP-07" data-tags="earlier|frontend|travel|search" aria-label="Open details for DiscountedAirfare">
-              <div class="card-meta-top">
-                <span class="card-id">SHIP-07</span>
-                <span class="card-handle" aria-hidden="true">⋮⋮</span>
-              </div>
-              <div class="card-title">DiscountedAirfare</div>
-              
-              <div class="card-summary">A discounted airfare discovery platform that makes fare search less overwhelming and more decision-friendly.</div>
-              <div class="card-tags"><span class="tag">EARLIER</span><span class="tag tag-blue">Frontend</span><span class="tag">Travel</span><span class="tag tag-blue">Search</span></div>
-              <div class="card-footer">
-                <span class="card-footer-left">
-                  <span>2026-04-12</span>
-                  <span class="card-comments">0</span>
-                </span>
-                
-              </div>
-              <div class="card-links"><a href="https://github.com/Gloria-Qi0311/DiscountedAirfare" target="_blank" rel="noopener">GitHub ↗</a></div>
-            </button></div>
-      </article>
-
-      <article class="column col-now" id="now" aria-labelledby="col-now-title">
-        <header class="col-head">
-          <h3 class="col-title" id="col-now-title"><span class="col-dot"></span>Now</h3>
-          <span class="col-count" data-count="now">3</span>
-        </header>
-        <div class="col-cards" data-cards="now">
-            <button type="button" class="card" data-id="now-lark-loom" data-card-id="NOW-01" data-tags="competition|ai agent|collaboration|typescript|lark" aria-label="Open details for Lark Loom">
-              <div class="card-meta-top">
-                <span class="card-id">NOW-01</span>
-                <span class="card-handle" aria-hidden="true">⋮⋮</span>
-              </div>
-              <div class="card-title">Lark Loom</div>
-              <figure class="card-media">
-                <img src="media/projects/lark-loom-logo.png" alt="Lark Loom project logo." loading="lazy">
-              </figure>
-              <div class="card-summary">A Feishu group-chat AI agent that turns fragmented project conversations into docs, task tables, updates, and presentation drafts.</div>
-              <div class="card-tags"><span class="tag">COMPETITION</span><span class="tag tag-blue">AI Agent</span><span class="tag">Collaboration</span><span class="tag tag-blue">TypeScript</span><span class="tag">Lark</span></div>
-              <div class="card-footer">
-                <span class="card-footer-left">
-                  <span>2026-07-06</span>
-                  <span class="card-comments">0</span>
-                </span>
-                <span class="card-impact">ByteDance Lark AI Campus Challenge</span>
-              </div>
-              <div class="card-links"><a href="https://github.com/EdwinjJ1/lark-loom" target="_blank" rel="noopener">GitHub ↗</a></div>
-            </button>
-            <button type="button" class="card" data-id="now-lexvault" data-card-id="NOW-02" data-tags="earlier|ui/ux design|figma|frontend|search" aria-label="Open details for LexVault">
-              <div class="card-meta-top">
-                <span class="card-id">NOW-02</span>
-                <span class="card-handle" aria-hidden="true">⋮⋮</span>
-              </div>
-              <div class="card-title">LexVault</div>
-              
-              <div class="card-summary">A legal document search tool designed end to end in Figma, currently being implemented as a working frontend.</div>
-              <div class="card-tags"><span class="tag">EARLIER</span><span class="tag tag-blue">UI/UX Design</span><span class="tag">Figma</span><span class="tag tag-blue">Frontend</span><span class="tag">Search</span></div>
-              <div class="card-footer">
-                <span class="card-footer-left">
-                  <span>2026-04-24</span>
-                  <span class="card-comments">0</span>
-                </span>
-                
-              </div>
-              <div class="card-links"><a href="https://github.com/Gloria-Qi0311/Lexvault" target="_blank" rel="noopener">GitHub ↗</a></div>
-            </button>
-            <button type="button" class="card" data-id="now-boss-auto-apply" data-card-id="NOW-03" data-tags="earlier|chrome extension|automation|job hunt" aria-label="Open details for BOSS Auto Apply">
-              <div class="card-meta-top">
-                <span class="card-id">NOW-03</span>
-                <span class="card-handle" aria-hidden="true">⋮⋮</span>
-              </div>
-              <div class="card-title">BOSS Auto Apply</div>
-              
-              <div class="card-summary">A Chrome extension for bulk job applications on BOSS直聘, with configurable intervals, keyword filters, and auto-pagination.</div>
-              <div class="card-tags"><span class="tag">EARLIER</span><span class="tag tag-blue">Chrome Extension</span><span class="tag">Automation</span><span class="tag tag-blue">Job Hunt</span></div>
-              <div class="card-footer">
-                <span class="card-footer-left">
-                  <span>2026-05-12</span>
-                  <span class="card-comments">0</span>
-                </span>
-                
-              </div>
-              <div class="card-links"><a href="https://github.com/Gloria-Qi0311/boss-auto-apply" target="_blank" rel="noopener">GitHub ↗</a></div>
-            </button></div>
-      </article>
-
-      <article class="column col-next" id="col-next" aria-labelledby="col-next-title">
-        <header class="col-head">
-          <h3 class="col-title" id="col-next-title"><span class="col-dot"></span>Next</h3>
-          <span class="col-count" data-count="next">1</span>
-        </header>
-        <div class="col-cards" data-cards="next">
-            <button type="button" class="card" data-id="next-evidence-pass" data-card-id="NEXT-01" data-tags="next|case study|visual proof" aria-label="Open details for Portfolio Evidence Pass">
-              <div class="card-meta-top">
-                <span class="card-id">NEXT-01</span>
-                <span class="card-handle" aria-hidden="true">⋮⋮</span>
-              </div>
-              <div class="card-title">Portfolio Evidence Pass</div>
-              
-              <div class="card-summary">Add visual evidence for the flagship work: screenshots, diagrams, demo clips, and deeper case-study pages.</div>
-              <div class="card-tags"><span class="tag">NEXT</span><span class="tag tag-blue">Case Study</span><span class="tag">Visual Proof</span></div>
-              <div class="card-footer">
-                <span class="card-footer-left">
-                  <span>2026-07-30</span>
-                  <span class="card-comments">0</span>
-                </span>
-                
-              </div>
-              
-            </button></div>
-      </article>
-
-      <article class="column col-later" id="col-later" aria-labelledby="col-later-title">
-        <header class="col-head">
-          <h3 class="col-title" id="col-later-title"><span class="col-dot"></span>Later</h3>
-          <span class="col-count" data-count="later">1</span>
-        </header>
-        <div class="col-cards" data-cards="later">
-            <button type="button" class="card" data-id="later-reader-paths" data-card-id="LATER-01" data-tags="later|portfolio system|information architecture" aria-label="Open details for Reader-Specific Paths">
-              <div class="card-meta-top">
-                <span class="card-id">LATER-01</span>
-                <span class="card-handle" aria-hidden="true">⋮⋮</span>
-              </div>
-              <div class="card-title">Reader-Specific Paths</div>
-              
-              <div class="card-summary">A more guided version of the portfolio with reader-specific paths for recruiters, collaborators, and AI agents.</div>
-              <div class="card-tags"><span class="tag">LATER</span><span class="tag tag-blue">Portfolio System</span><span class="tag">Information Architecture</span></div>
-              <div class="card-footer">
-                <span class="card-footer-left">
-                  <span>2026-07-30</span>
-                  <span class="card-comments">0</span>
-                </span>
-                
-              </div>
-              
-            </button></div>
-      </article>
-    </div>
-
-    <!-- Table view of the same cards — JS-rendered (scripts/render.js) on the
-         first switch to it. The kanban above stays the SSG-prerendered
-         default, so agents and no-JS visitors see that. -->
-    <div class="board-table-view" id="view-table" role="tabpanel" aria-labelledby="tab-table" hidden></div>
-
-    <!-- Spec view — the same cards as a long-form document (every card with its
-         `details` expanded). JS-rendered (scripts/render.js) on first switch. -->
-    <div class="board-spec-view" id="view-specs" role="tabpanel" aria-labelledby="tab-specs" hidden></div>
-
-    <!-- Timeline view — a horizontal "ship log" / mini-Gantt: every Shipped
-         card as a bar (started → updated) on a real month/year axis, overlapping
-         bars packed into lanes. JS-rendered (scripts/render.js) on first switch. -->
-    <div class="board-timeline-view" id="view-timeline" role="tabpanel" aria-labelledby="tab-timeline" hidden></div>
-
-  </section>
-
-  <!-- ── AGENT TERMINAL ──────────────────────────────────────────────
-       Embedded interactive CLI. Same data as the board (content/*.json),
-       different surface — for keyboard users and AI agents.
-  ──────────────────────────────────────────────────────────────────── -->
-  <section class="section terminal-section rise rise-3" id="terminal" aria-label="Agent terminal">
-    <header class="sec-head">
-      <span class="sec-cmd">$ ./agent</span>
-      <span class="sec-title">terminal</span>
-      <span class="sec-meta" id="terminal-meta">type <kbd>help</kbd> · ↑↓ history</span>
     </header>
 
-    <div class="terminal" id="terminal-root">
-      <div class="terminal-chrome">
-        <span class="terminal-dot d-r"></span>
-        <span class="terminal-dot d-y"></span>
-        <span class="terminal-dot d-g"></span>
-        <span class="terminal-path" id="terminal-path">antares@local: ~</span>
-        <span class="terminal-spacer"></span>
-        <button type="button" class="terminal-action" id="terminal-clear" title="clear (⌃L)">clear</button>
-      </div>
-      <div class="terminal-body" id="terminal-body" tabindex="-1">
-        <!-- history rendered here -->
-        <div class="terminal-line term-prompt-line">
-          <span class="term-prompt">$</span>
-          <input
-            type="text"
-            class="terminal-input"
-            id="terminal-input"
-            autocomplete="off"
-            autocapitalize="off"
-            spellcheck="false"
-            aria-label="Terminal command"
-          />
-        </div>
-      </div>
-    </div>
-  </section>
+    <div class="divider" aria-hidden="true"><svg class="sprig" width="120" height="40" viewBox="0 0 120 40" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M5 20 Q60 4 115 20"/><path d="M20 17 q6 -12 14 -8 q-4 9 -14 8z"/><path d="M24 20 q6 12 14 8 q-4 -9 -14 -8z"/><path d="M35 16 q6 -12 14 -8 q-4 9 -14 8z"/><path d="M39 20 q6 12 14 8 q-4 -9 -14 -8z"/><path d="M50 15 q6 -12 14 -8 q-4 9 -14 8z"/><path d="M54 20 q6 12 14 8 q-4 -9 -14 -8z"/><path d="M65 17 q6 -12 14 -8 q-4 9 -14 8z"/><path d="M69 20 q6 12 14 8 q-4 -9 -14 -8z"/><path d="M80 16 q6 -12 14 -8 q-4 9 -14 8z"/><path d="M84 20 q6 12 14 8 q-4 -9 -14 -8z"/><path d="M95 15 q6 -12 14 -8 q-4 9 -14 8z"/><path d="M99 20 q6 12 14 8 q-4 -9 -14 -8z"/></svg></div>
 
-  <!-- ── LENS: how I think ───────────────────────────────────────── -->
-  <section class="section rise rise-3" id="lens">
-    <header class="sec-head">
-      <span class="sec-cmd" id="lens-cmd">$ grep -i</span>
-      <span class="sec-title" id="lens-title">how_i_think.md</span>
-      <span class="sec-meta" id="lens-meta">principles · updated occasionally</span>
-    </header>
-    <div class="lens" id="lens-list">
-        <div class="lens-card">
-          <div class="lens-num">/ 01</div>
-          <div class="lens-text">Make the work inspectable.<em>AI products earn trust when plans, memory, artifacts, and decisions can be reviewed instead of guessed.</em></div>
-        </div>
-        <div class="lens-card">
-          <div class="lens-num">/ 02</div>
-          <div class="lens-text">Start with the problem, not the feature.<em>Features are guesses. Problems are real.</em></div>
-        </div>
-        <div class="lens-card">
-          <div class="lens-num">/ 03</div>
-          <div class="lens-text">The boundary matters as much as the capability.<em>Knowing what AI can&#39;t do is as useful as knowing what it can.</em></div>
-        </div>
-        <div class="lens-card">
-          <div class="lens-num">/ 04</div>
-          <div class="lens-text">Use benchmarks as product instruments.<em>A good evaluation does not just score a system; it reveals which behavior is worth designing around.</em></div>
-        </div></div>
-  </section>
+    <section class="usage" aria-labelledby="usage-title">
+      <h2 id="usage-title">Personal token consumption</h2>
+      <dl class="usage-stats"><div><dt>Total tokens</dt><dd>—</dd></div><div><dt>Top agent</dt><dd>—</dd></div></dl>
+    </section>
 
-  <!-- ── CONTACT ─────────────────────────────────────────────────── -->
-  <section class="section rise rise-4" id="contact">
-    <header class="sec-head">
-      <span class="sec-cmd" id="contact-cmd">$ ./reach-out</span>
-      <span class="sec-title" id="contact-title">open to:</span>
-    </header>
-    <div class="contact">
-      <p class="contact-intro" id="contact-intro">Junior at UW Informatics, open to AI PM / product-engineering internships and collaborations around agents, memory, and human-AI workflows. <em>Tell me what you&#39;re building.</em></p>
-      <div class="contact-list" id="contact-list"><a href="mailto:qpt0311@uw.edu"><span class="key">email</span><span>qpt0311@uw.edu</span></a><a href="https://www.linkedin.com/in/peitong-qi-4478ba293" target="_blank" rel="noopener"><span class="key">linkedin</span><span>Gloria Qi</span></a><a href="https://github.com/Gloria-Qi0311" target="_blank" rel="noopener"><span class="key">github</span><span>@Gloria-Qi0311</span></a></div>
-    </div>
-  </section>
+    <section class="message" aria-labelledby="message-title">
+      <h2 id="message-title">A message from Gloria</h2>
+      <p>I&#39;m a junior at UW Informatics working toward AI product management. I like problems where the model is the easy part and the hard part is trust: who did what, what changed, and why the result should be believed. Everything in this cabinet started as a question like that, and I keep the specimens here so they can be looked at, compared, and argued with.</p>
+    </section>
 
-  <!-- ── AGENT-FRIENDLY SURFACES ─────────────────────────────────────
-       Documents how AI agents and other machine readers can consume the
-       site. Aimed at engineering peers / curious humans — agents
-       themselves go straight to the endpoints.
-  ──────────────────────────────────────────────────────────────────── -->
-  <section class="section agents-section rise" id="agents" aria-label="For AI agents">
-    <header class="sec-head">
-      <span class="sec-cmd">$ /agents</span>
-      <span class="sec-title">how this site works for AI</span>
-      <span class="sec-meta">three entry points</span>
-    </header>
-
-    <p class="agents-intro">
-      This site is designed to be read by both humans and AI agents. The dashboard, terminal, and detail panels are for you. For an agent, prefer:
-    </p>
-
-    <div class="agents-endpoints">
-      <a href="/llms.txt" class="agents-card">
-        <div class="agents-card-head">
-          <span class="agents-method">GET</span>
-          <span class="agents-path">/llms.txt</span>
-        </div>
-        <p>Short summary in plain text per the <a href="https://llmstxt.org" target="_blank" rel="noopener">llmstxt.org</a> spec. Best entry point — gist in &lt;1KB.</p>
-      </a>
-
-      <a href="/llms-full.txt" class="agents-card">
-        <div class="agents-card-head">
-          <span class="agents-method">GET</span>
-          <span class="agents-path">/llms-full.txt</span>
-        </div>
-        <p>Full content dump — every project card, lens entry, contact info — all plain text. Use when you need depth.</p>
-      </a>
-
-      <a href="/content/board.json" class="agents-card">
-        <div class="agents-card-head">
-          <span class="agents-method">GET</span>
-          <span class="agents-path">/content/*.json</span>
-        </div>
-        <p>Raw structured data: <code>profile.json</code>, <code>board.json</code>, <code>lens.json</code>, <code>contact.json</code>. Use for typed access to specific fields.</p>
-      </a>
-    </div>
-
-    <ul class="agents-extras">
-      <li><strong>Stable IDs.</strong> Cards have permanent display IDs (<code>SHIP-01</code>, <code>NOW-01</code>, …) — citable across conversations and durable across content edits.</li>
-      <li><strong>Pre-rendered HTML.</strong> The home page ships with content baked into the initial HTML — readable without executing JavaScript.</li>
-      <li><strong>Open content.</strong> All data lives at <a href="https://github.com/Gloria-Qi0311/personal_website/tree/main/content" target="_blank" rel="noopener">/content</a> on GitHub. Free to scrape, fork, or quote.</li>
-    </ul>
-  </section>
-
-  <!-- ── COMMENTS (Giscus) ───────────────────────────────────────────
-       Setup (one-time, owner only):
-       1. Enable GitHub Discussions on the repo
-       2. Visit https://giscus.app and configure for AntaresYuan/personal_website
-       3. Paste the generated data-repo-id and data-category-id below
-       4. Uncomment the <script> block
-       Until then, this section renders the empty-state placeholder.
-  ──────────────────────────────────────────────────────────────────── -->
-  <section class="section comments-section" aria-label="Comments">
-    <header class="sec-head">
-      <span class="sec-cmd">$ comments</span>
-      <span class="sec-title">notes from readers</span>
-      <span class="sec-meta">via GitHub Discussions</span>
-    </header>
-    <div id="giscus-container">
-      <p class="comments-placeholder">Comments will appear here once Giscus is wired up — see <a href="https://github.com/AntaresYuan/personal_website/issues/49">#49</a>.</p>
-    </div>
-  </section>
-
-  <!-- ── COMMAND PALETTE ─────────────────────────────────────────────
-       Search anything: sections, cards, terminal commands, agent endpoints.
-       Owns the global ⌘K / Ctrl+K shortcut and the floating trigger below.
-       Behavior lives in scripts/palette.js.
-  ──────────────────────────────────────────────────────────────────── -->
-
-  <!-- Persistent, clickable command-palette trigger — bottom-right. Doubles
-       as the discoverability cue for the ⌘K shortcut. Hidden while the
-       palette is open, and on narrow / touch viewports (no physical keyboard;
-       the palette's content is all reachable via the visible UI anyway). -->
-  <button type="button" class="palette-fab" id="palette-fab"
-          title="Search sections, cards, commands — ⌘K"
-          aria-label="Search — open the command palette (Cmd K)">
-    <span class="palette-fab-label">Search</span>
-    <kbd class="palette-fab-kbd" aria-hidden="true">⌘K</kbd>
-  </button>
-
-  <div class="palette-backdrop" id="palette-backdrop" hidden></div>
-  <div class="palette" id="palette" role="dialog" aria-modal="true" aria-label="Command palette" hidden>
-    <div class="palette-header">
-      <span class="palette-icon" aria-hidden="true">⌘</span>
-      <input
-        type="text"
-        class="palette-input"
-        id="palette-input"
-        placeholder="Search · or just ask…"
-        autocomplete="off"
-        autocapitalize="off"
-        spellcheck="false"
-        aria-label="Search"
-        aria-controls="palette-results"
-        aria-autocomplete="list"
-      />
-      <kbd class="palette-kbd" aria-hidden="true">esc</kbd>
-    </div>
-    <ul class="palette-results" id="palette-results" role="listbox" aria-label="Results"></ul>
-    <div class="palette-footer">
-      <span><kbd>↑↓</kbd> navigate</span>
-      <span><kbd>↵</kbd> open</span>
-      <span><kbd>esc</kbd> close</span>
-    </div>
-  </div>
-
-  <!-- ── CARD DETAIL PANEL ──────────────────────────────────────────
-       Slides in from the right when a card is clicked. Closes on ESC,
-       backdrop click, or X. ↑/↓ navigates between cards. URL hash syncs
-       (#card/SHIP-01) for deep linking.
-       On <768px viewports the panel becomes a full-screen sheet.
-  ──────────────────────────────────────────────────────────────────── -->
-  <div class="modal-backdrop" id="modal-backdrop" hidden></div>
-  <div class="card-modal" id="card-modal" role="dialog" aria-modal="false" aria-labelledby="modal-title" aria-hidden="true">
-    <header class="panel-header">
-      <div class="panel-nav-group">
-        <button type="button" class="panel-nav" id="panel-prev" aria-label="Previous card (↑)" title="↑ prev">
-          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 9l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button type="button" class="panel-nav" id="panel-next" aria-label="Next card (↓)" title="↓ next">
-          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <span class="panel-position" id="panel-position"></span>
-      </div>
-      <button type="button" class="modal-close" id="modal-close" aria-label="Close (Esc)" title="esc">×</button>
-    </header>
-    <div class="panel-body">
-      <div class="modal-meta-top">
-        <span class="modal-id" id="modal-id"></span>
-        <span class="modal-status" id="modal-status"></span>
-      </div>
-      <h2 class="modal-title" id="modal-title"></h2>
-      <p class="modal-summary" id="modal-summary"></p>
-      <div class="modal-tags" id="modal-tags"></div>
-      <div class="modal-details" id="modal-details"></div>
-      <div class="modal-foot">
-        <span class="modal-updated" id="modal-updated"></span>
-        <span class="modal-impact"  id="modal-impact"></span>
-      </div>
-      <div class="modal-links" id="modal-links"></div>
-    </div>
-  </div>
-
-  <!-- ── FOOTER ──────────────────────────────────────────────────── -->
+    <section class="projects" id="projects" aria-labelledby="projects-title">
+      <h2 id="projects-title">Projects</h2>
+      <p class="update"><span class="update-label">Now</span> Building Lark Loom for the ByteDance Lark AI Campus Challenge, AI product innovation track.</p>
+      <ol class="specimens">
+        <li class="specimen">
+          <a href="projects/#shipped-roundtable">
+            <div class="specimen-plate"><img src="media/projects/roundtable-workbench.png" alt="Roundtable workbench with a live AI dev squad around one table." loading="lazy"></div>
+            <div class="specimen-label">
+              <span class="pin" aria-hidden="true"></span>
+              <p class="specimen-no">No. 001 · Flagship</p>
+              <h3>Roundtable</h3>
+              <p class="specimen-latin">Agentia visibilis</p>
+            </div>
+            <p class="specimen-tags">AI Agent · Product Systems · Next.js · TypeScript</p>
+            <p class="specimen-summary">A visible AI dev squad workbench: plan a task, run agents in parallel, review outputs, preserve files, diffs, previews, and decisions.</p>
+            <dl class="specimen-fields"><div><dt>Problem</dt><dd>Multi-agent coding tools hide who planned, who built, what changed, and why a review passed.</dd></div><div><dt>My work</dt><dd>Product concept, dependency-aware task graph, bounded review/fix loop, Next.js app and CLI.</dd></div><div><dt>Outcome</dt><dd>A working workbench with planner, implementer, reviewer, architect and fixer roles.</dd></div></dl>
+          </a>
+        </li>
+        <li class="specimen">
+          <a href="projects/#shipped-memory-benchmark">
+            <div class="specimen-plate"><img src="media/projects/agent-memory-t4-results.png" alt="T4 split-intake benchmark chart comparing memory systems by per-detail recall." loading="lazy"></div>
+            <div class="specimen-label">
+              <span class="pin" aria-hidden="true"></span>
+              <p class="specimen-no">No. 002 · Research</p>
+              <h3>Agent Memory Benchmark</h3>
+              <p class="specimen-latin">Memoria communis</p>
+            </div>
+            <p class="specimen-tags">AI Memory · Evaluation · Python · LLM Systems</p>
+            <p class="specimen-summary">A benchmark for shared-memory LLM systems, testing whether multiple agents can preserve, update, and retrieve memories without silent loss.</p>
+            <dl class="specimen-fields"><div><dt>Problem</dt><dd>Memory benchmarks assume one agent owns its memory; real work shares memory across many agents.</dd></div><div><dt>My work</dt><dd>v1 task suite, Python runners, system adapters, programmatic judges.</dd></div><div><dt>Result</dt><dd>~95% per-detail recall for extraction-free systems on T4 split intake; mem0 trailed substantially.</dd></div></dl>
+          </a>
+        </li>
+        <li class="specimen">
+          <a href="projects/#now-lark-loom">
+            <div class="specimen-plate is-drawing"><img src="media/projects/lark-loom-logo.png" alt="Lark Loom project logo." loading="lazy"></div>
+            <div class="specimen-label">
+              <span class="pin" aria-hidden="true"></span>
+              <p class="specimen-no">No. 003 · Competition</p>
+              <h3>Lark Loom</h3>
+              <p class="specimen-latin">Textrix colloquii</p>
+            </div>
+            <p class="specimen-tags">AI Agent · Collaboration · TypeScript · Lark</p>
+            <p class="specimen-summary">A Feishu group-chat AI agent that turns fragmented project conversations into docs, task tables, updates, and presentation drafts.</p>
+            <dl class="specimen-fields"><div><dt>Problem</dt><dd>Student teams make decisions inside messy group chats, and the context gets lost.</dd></div><div><dt>My work</dt><dd>Product direction, skill router, TypeScript monorepo across contracts, bot and skills.</dd></div><div><dt>Track</dt><dd>ByteDance Lark AI Campus Challenge, AI product innovation.</dd></div></dl>
+          </a>
+        </li>
+        <li class="specimen">
+          <a href="projects/#shipped-personal-website">
+            <div class="specimen-plate is-drawing"><img src="media/avatar-calm.png" alt="Gloria Qi portfolio avatar used as the site&#39;s visual identity." loading="lazy"></div>
+            <div class="specimen-label">
+              <span class="pin" aria-hidden="true"></span>
+              <p class="specimen-no">No. 004 · Portfolio</p>
+              <h3>Personal Website</h3>
+              <p class="specimen-latin">Speculum sui</p>
+            </div>
+            <p class="specimen-tags">Agent-Friendly · Vanilla JS · Cloudflare · CMS</p>
+            <p class="specimen-summary">A PM-style portfolio dashboard with JSON content, pre-rendered HTML, llms.txt surfaces, CMS editing, and a terminal resume.</p>
+            <dl class="specimen-fields"><div><dt>Problem</dt><dd>Portfolios are written only for humans, while agents increasingly read them too.</dd></div><div><dt>My work</dt><dd>Content model, pre-rendered HTML, Decap CMS editing, Cloudflare deploy.</dd></div><div><dt>Outcome</dt><dd>One source of truth, readable as HTML, JSON, llms.txt and a terminal CV.</dd></div></dl>
+          </a>
+        </li>
+        <li class="specimen">
+          <a href="projects/#shipped-fitty">
+            
+            <div class="specimen-label">
+              <span class="pin" aria-hidden="true"></span>
+              <p class="specimen-no">No. 005 · Earlier</p>
+              <h3>fitty</h3>
+              <p class="specimen-latin">Mochi nutrix</p>
+            </div>
+            <p class="specimen-tags">Full-stack · React · Node.js · Supabase</p>
+            <p class="specimen-summary">A calorie tracking app with Mochi, an animated companion that reacts to daily nutrition progress. Built full-stack from scratch.</p>
+            <dl class="specimen-fields"><div><dt>Idea</dt><dd>Make calorie tracking feel personal instead of clinical.</dd></div><div><dt>My work</dt><dd>React + Vite frontend, Node + Supabase backend, the Mochi animation system.</dd></div><div><dt>Outcome</dt><dd>Live at fitty-nu.vercel.app.</dd></div></dl>
+          </a>
+        </li>
+      </ol>
+      <p class="see-all"><a href="projects/">All 12 specimens in the cabinet →</a></p>
+    </section>
+  </main>
   <footer class="site-footer">
-    <span id="footer-copyright">© 2026 Gloria Qi · <em>This site is a working portfolio: human-readable, agent-readable, and built from the same source of truth.</em></span>
-    <span>
-      <a href="/admin/">edit</a> ·
-      <a href="https://github.com/Gloria-Qi0311/personal_website">source</a> ·
-      <a href="/llms.txt" title="agent-readable summary">/llms.txt</a>
-    </span>
+    <p>© 2026 Gloria Qi</p>
+    <p class="footer-links"><a href="mailto:qpt0311@uw.edu">qpt0311@uw.edu</a><span aria-hidden="true"> · </span><a href="https://www.linkedin.com/in/peitong-qi-4478ba293" target="_blank" rel="noopener">Linkedin</a><span aria-hidden="true"> · </span><a href="https://github.com/Gloria-Qi0311" target="_blank" rel="noopener">Github</a><span aria-hidden="true"> · </span><a href="/admin/">Edit</a><span aria-hidden="true"> · </span><a href="/llms.txt">llms.txt</a><span aria-hidden="true"> · </span><a href="https://github.com/Gloria-Qi0311/personal_website" target="_blank" rel="noopener">Source</a></p>
   </footer>
-
-</main>
-
-<!-- defer keeps these out of the critical path on slow mobile networks.
-     Pre-rendered HTML means no script is needed for first paint; these
-     just add interactivity (modal, terminal, ⌘K palette). They still
-     execute in document order after parse. -->
-<script src="scripts/render.js?v=56e2ec9e"   defer></script>
-<script src="scripts/terminal.js?v=c7e4f7c1" defer></script>
-<script src="scripts/palette.js?v=6001bc05"  defer></script>
+</div>
+<img class="farewell" src="media/avatar-talking.png" alt="" width="140" height="140" loading="lazy">
 </body>
 </html>
