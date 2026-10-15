@@ -2,11 +2,14 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "gloria-qi",
   "compatibility_date": "2026-05-12",
+  // Handles POST /api/chat; every other path is served from the assets.
+  "main": "workers/site/index.js",
   "observability": {
     "enabled": true
   },
   "assets": {
-    "directory": "."
+    "directory": ".",
+    "binding": "ASSETS"
   },
   "compatibility_flags": [
     "nodejs_compat"
