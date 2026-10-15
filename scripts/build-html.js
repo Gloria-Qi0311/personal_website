@@ -1,16 +1,20 @@
 #!/usr/bin/env node
 /* ════════════════════════════════════════════════════════════════════════
-   build-html.js — pre-render content/*.json into index.html.
+   build-html.js — render content/*.json into static HTML pages.
 
-   Why: the runtime renderer (scripts/render.js) populates the page from
-   JSON in the browser. Agents that don't execute JS (Claude Code, search
-   crawlers, plain curl) get an empty shell otherwise. This script bakes
-   the same content into the static HTML so a no-JS reader sees the slogan,
-   every card, lens entries, and contact info immediately.
+   Pages:
+     index.html           the home page: a chat with Gloria
+     projects/index.html  every project, with its full write-up, as one page
 
-   Strategy: walk known element IDs in the existing index.html and replace
-   their innerHTML with the same markup render.js would emit. Idempotent —
-   re-running with unchanged content produces an identical file.
+   Home layout (three columns on desktop):
+     left    profile, nav (Home, Projects, Skills, Gallery), suggested questions
+     center  the chat: a welcome, then the conversation and the composer
+     right   a detail panel for whatever was opened on the left (or by the
+             chat). Closed on first visit; #home, #skills and #<card-id>
+             open it.
+
+   Every panel is pre-rendered, so agents and crawlers that don't execute
+   scripts still read all content. Runtime behavior: scripts/app.js.
 
    Run:
      node scripts/build-html.js
@@ -25,8 +29,8 @@ const read = (p) => JSON.parse(fs.readFileSync(path.join(root, p), 'utf8'));
 const site    = read('content/site.json');
 const profile = read('content/profile.json');
 const board   = read('content/board.json');
-const lens    = read('content/lens.json');
 const contact = read('content/contact.json');
+const home    = read('content/home.json');
 
 /* ── Helpers ──────────────────────────────────────────────────────────── */
 const escape = (s) =>
@@ -34,408 +38,365 @@ const escape = (s) =>
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
   }[c]));
 
-// Match the exact set of tags render.js's safeRich allows (em / strong / br)
-const safeRich = (s) => escape(s).replace(/&lt;(\/?(em|strong|br)\s*\/?)&gt;/gi, '<$1>');
+const isExternal = (href) => /^https?:\/\//i.test(href ?? '');
+const extAttrs = (href) => (isExternal(href) ? ' target="_blank" rel="noopener"' : '');
 
-// Replace innerHTML of an element matched by `openRe`. The regex must
-// capture the tag name as group 1. Walks the HTML balancing same-name
-// opens/closes so nested same-tag elements (e.g. divs inside divs) are
-// handled correctly — that matters on re-runs where the previous build
-// already populated the container.
-const replaceInnerOpenMatch = (html, openRe, content, label) => {
-  const openMatch = openRe.exec(html);
-  if (!openMatch) {
-    console.warn(`[build-html] no element matched: ${label}`);
-    return html;
-  }
-  const tagName = openMatch[1].toLowerCase();
-  const contentStart = openMatch.index + openMatch[0].length;
-
-  const openTagRe  = new RegExp(`<${tagName}\\b[^>]*>`, 'gi');
-  const closeTagRe = new RegExp(`</${tagName}\\s*>`, 'gi');
-
-  let depth = 1;
-  let pos = contentStart;
-  while (depth > 0) {
-    openTagRe.lastIndex  = pos;
-    closeTagRe.lastIndex = pos;
-    const nextOpen  = openTagRe.exec(html);
-    const nextClose = closeTagRe.exec(html);
-    if (!nextClose) {
-      console.warn(`[build-html] unterminated <${tagName}> for ${label}`);
-      return html;
-    }
-    if (nextOpen && nextOpen.index < nextClose.index) {
-      depth++;
-      pos = nextOpen.index + nextOpen[0].length;
-    } else {
-      depth--;
-      if (depth === 0) {
-        return html.slice(0, contentStart) + content + html.slice(nextClose.index);
-      }
-      pos = nextClose.index + nextClose[0].length;
-    }
-  }
-  return html;
-};
-
-const replaceInner = (html, id, content) =>
-  replaceInnerOpenMatch(
-    html,
-    new RegExp(`<([a-zA-Z][a-zA-Z0-9]*)([^>]*\\sid=["']${id}["'][^>]*)>`, 'i'),
-    content,
-    `id="${id}"`
-  );
-
-// Set or replace an attribute on the element with the given id.
-const setAttr = (html, id, attr, value) => {
-  const re = new RegExp(
-    `<([a-zA-Z][a-zA-Z0-9]*)([^>]*\\sid=["']${id}["'][^>]*)>`,
-    'i'
-  );
-  return html.replace(re, (m, tag, attrs) => {
-    const attrRe = new RegExp(`\\s${attr}=["'][^"']*["']`);
-    const newAttrs = attrRe.test(attrs)
-      ? attrs.replace(attrRe, ` ${attr}="${value}"`)
-      : attrs + ` ${attr}="${value}"`;
-    return `<${tag}${newAttrs}>`;
-  });
-};
-
-/* ── Card index (mirrors render.js) ───────────────────────────────────── */
-const ID_PREFIX = { shipped: 'SHIP', now: 'NOW', next: 'NEXT', later: 'LATER' };
-const pad2 = (n) => String(n).padStart(2, '0');
-
-const allCards = () => {
-  const cards = (board.cards ?? []).slice().sort((a, b) => {
-    const ao = a.order ?? 99, bo = b.order ?? 99;
-    if (ao !== bo) return ao - bo;
-    return (b.updated ?? '').localeCompare(a.updated ?? '');
-  });
-  const cols = ['shipped', 'now', 'next', 'later'];
-  const out = [];
-  cols.forEach((col) => {
-    cards.filter(c => c.status === col).forEach((c, i) => {
-      out.push({ ...c, displayId: `${ID_PREFIX[col]}-${pad2(i + 1)}` });
-    });
-  });
-  return out;
-};
-
-/* ── Per-region renderers ─────────────────────────────────────────────── */
-
-// Hero name with optional accent
-const heroNameHtml = () => {
-  const accent = profile.nameAccent
-    ? ` <em>${escape(profile.nameAccent)}</em>`
-    : '';
-  return escape(profile.name) + accent;
-};
-
-// Hero meta row: role · location · status · pills(tags)
-const heroMetaHtml = () => {
-  const parts = [];
-  if (profile.role)     parts.push(`<span>${escape(profile.role)}</span>`);
-  if (profile.location) parts.push(`<span class="sep">·</span><span>${escape(profile.location)}</span>`);
-  if (profile.status)   parts.push(`<span class="sep">·</span><span class="now-pill"><span class="pulse"></span>${escape(profile.status)}</span>`);
-  (profile.tags ?? []).forEach((t) => parts.push(`<span class="pill">${escape(t)}</span>`));
-  return parts.join('');
-};
-
-// Hero CTAs
-const heroCtasHtml = () =>
-  (profile.ctas ?? []).map((c) => `
-        <a class="cta" href="${escape(c.anchor || '#')}">
-          <div>
-            <div class="cta-label">${escape(c.audience ?? '')}</div>
-            <div class="cta-text">${escape(c.label ?? '')}</div>
-          </div>
-          <span class="cta-arrow">→</span>
-        </a>`).join('');
-
-// One card -> button HTML (matches render.js exactly, including data-attrs)
-const cardHtml = (c) => {
-  const tags = (c.tags ?? []).map((t, i) =>
-    `<span class="tag${i % 2 ? ' tag-blue' : ''}">${escape(t)}</span>`
-  ).join('');
-
-  const heroMedia = (c.media ?? []).find((m) => m.src);
-  const mediaHtml = heroMedia
-    ? `<figure class="card-media">
-                <img src="${escape(heroMedia.src)}" alt="${escape(heroMedia.alt ?? '')}" loading="lazy">
-              </figure>`
-    : '';
-
-  const links = (c.links ?? [])
-    .filter(l => l.href && l.href !== '#')
-    .map((l) => `<a href="${escape(l.href)}" target="_blank" rel="noopener">${escape(l.label)} ↗</a>`)
-    .join('');
-
-  const tagSlugs = (c.tags ?? []).map((t) => t.toLowerCase()).join('|');
-
-  return `
-            <button type="button" class="card" data-id="${escape(c.id)}" data-card-id="${c.displayId}" data-tags="${escape(tagSlugs)}" aria-label="Open details for ${escape(c.title)}">
-              <div class="card-meta-top">
-                <span class="card-id">${c.displayId}</span>
-                <span class="card-handle" aria-hidden="true">⋮⋮</span>
-              </div>
-              <div class="card-title">${escape(c.title)}</div>
-              ${mediaHtml}
-              ${c.summary ? `<div class="card-summary">${safeRich(c.summary)}</div>` : ''}
-              ${tags ? `<div class="card-tags">${tags}</div>` : ''}
-              <div class="card-footer">
-                <span class="card-footer-left">
-                  <span>${escape(c.updated ?? '')}</span>
-                  <span class="card-comments">0</span>
-                </span>
-                ${c.impact ? `<span class="card-impact">${escape(c.impact)}</span>` : ''}
-              </div>
-              ${links ? `<div class="card-links">${links}</div>` : ''}
-            </button>`;
-};
-
-// Filter chips (top 6 tags by frequency, plus the "All" pre-baked in HTML)
-const filterChipsHtml = () => {
-  const cards = allCards();
-  const counts = new Map();
-  cards.forEach((c) => (c.tags ?? []).forEach((t) => {
-    counts.set(t, (counts.get(t) ?? 0) + 1);
-  }));
-  const top = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 6).map(([t]) => t);
-  const allChip = `<button class="filter-chip is-active" type="button" data-filter="all" aria-pressed="true">All</button>`;
-  const tagChips = top.map((tag) =>
-    `<button class="filter-chip" type="button" data-filter="${escape(tag.toLowerCase())}" aria-pressed="false">${escape(tag)}</button>`
-  ).join('');
-  return allChip + tagChips;
-};
-
-// Lens items
-const lensListHtml = () =>
-  (lens.items ?? []).map((it) => {
-    const aside = it.aside ? `<em>${escape(it.aside)}</em>` : '';
-    return `
-        <div class="lens-card">
-          <div class="lens-num">${escape(it.num ?? '')}</div>
-          <div class="lens-text">${escape(it.main ?? '')}${aside}</div>
-        </div>`;
-  }).join('');
-
-// Contact list
-const contactListHtml = () =>
-  (contact.items ?? []).map((it) => {
-    const tgt = it.href?.startsWith('http') ? ` target="_blank" rel="noopener"` : '';
-    return `<a href="${escape(it.href ?? '#')}"${tgt}><span class="key">${escape(it.key ?? '')}</span><span>${escape(it.label ?? '')}</span></a>`;
-  }).join('');
-
-// Footer copyright (mirrors render.js)
-const footerHtml = () => {
-  const parts = [];
-  if (site.footer?.copyright) parts.push(escape(site.footer.copyright));
-  if (site.footer?.tagline)   parts.push(`<em>${escape(site.footer.tagline)}</em>`);
-  return parts.join(' · ');
-};
-
-/* ── Apply replacements ───────────────────────────────────────────────── */
-const tplPath = path.join(root, 'index.html');
-let html = fs.readFileSync(tplPath, 'utf8');
-
-// Insert (or refresh) a GENERATED banner right after <!DOCTYPE> so anyone
-// opening the file sees it's a build artifact. Strip any prior banner first
-// so the script stays idempotent.
-html = html.replace(/<!--\s*GENERATED — do not edit[\s\S]*?-->\s*\n?/i, '');
-html = html.replace(
-  /(<!doctype html>)/i,
-  `$1\n<!--\n  GENERATED — do not edit by hand.\n  Source of truth: content/*.json (and the structural template in this file).\n  Regenerate: \`node scripts/build.js\`\n-->`
-);
-
-// Mark as prerendered so render.js can short-circuit DOM population
-html = html.replace(/<html\b[^>]*>/, (m) => {
-  if (/data-prerendered=/.test(m)) return m.replace(/data-prerendered="[^"]*"/, 'data-prerendered="true"');
-  return m.replace(/<html/, '<html data-prerendered="true"');
-});
-
-// ── Cloudflare Web Analytics ──────────────────────────────────────────
-// Strip any prior beacon (idempotent), then inject before </head> if
-// site.analytics.cfAnalyticsToken is set. No script when empty — the
-// page loads without any tracking until the token is configured.
-html = html.replace(/[ \t]*<!--\s*cf-analytics\s*-->[\s\S]*?<!--\s*\/cf-analytics\s*-->\n?/g, '');
-const cfToken = site.analytics?.cfAnalyticsToken?.trim();
-if (cfToken) {
-  const block = `  <!-- cf-analytics -->\n  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${escape(cfToken)}"}'></script>\n  <!-- /cf-analytics -->\n`;
-  html = html.replace('</head>', `${block}</head>`);
-}
-
-// ── Giscus (GitHub Discussions comments) ──────────────────────────────
-// Replace the @giscus marker (or any prior injected block) inside the
-// #giscus-container with either the live script or the placeholder.
-const giscus = site.giscus ?? {};
-const giscusReady = giscus.repo && giscus.repoId && giscus.category && giscus.categoryId;
-const giscusInner = giscusReady
-  ? `<script src="https://giscus.app/client.js"
-        data-repo="${escape(giscus.repo)}"
-        data-repo-id="${escape(giscus.repoId)}"
-        data-category="${escape(giscus.category)}"
-        data-category-id="${escape(giscus.categoryId)}"
-        data-mapping="${escape(giscus.mapping ?? 'pathname')}"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="${escape(giscus.inputPosition ?? 'top')}"
-        data-theme="${escape(giscus.theme ?? 'light')}"
-        data-lang="en"
-        crossorigin="anonymous"
-        async></script>`
-  : `<p class="comments-placeholder">Comments will appear here once Giscus is wired up — see <a href="https://github.com/AntaresYuan/personal_website/issues/49">#49</a>.</p>`;
-html = replaceInner(html, 'giscus-container', `\n      ${giscusInner}\n    `);
-
-// <title> + description / OG / Twitter meta from site.json
-const setMetaContent = (selector, content) => {
-  const re = new RegExp(`(<meta\\s+${selector}\\s+content=")[^"]*(")`, 'i');
-  html = html.replace(re, `$1${escape(content)}$2`);
-};
-const setLinkHref = (rel, value) => {
-  const re = new RegExp(`(<link\\s+rel=["']${rel}["'][^>]*\\shref=")[^"']*("[^>]*>)`, 'i');
-  html = html.replace(re, `$1${escape(value)}$2`);
-};
 const absoluteUrl = (relPath) => {
   if (!relPath) return '';
-  if (/^https?:\/\//i.test(relPath)) return relPath;
+  if (isExternal(relPath)) return relPath;
   const base = (site.meta?.url ?? '').replace(/\/+$/, '');
   return base ? `${base}/${relPath.replace(/^\/+/, '')}` : relPath;
 };
 
-if (site.meta?.title) {
-  html = html.replace(/<title>[^<]*<\/title>/i, `<title>${escape(site.meta.title)}</title>`);
-  setMetaContent('property="og:title"',      site.meta.title);
-  setMetaContent('name="twitter:title"',     site.meta.title);
-}
-if (site.meta?.description) {
-  setMetaContent('name="description"',          site.meta.description);
-  setMetaContent('property="og:description"',   site.meta.description);
-  setMetaContent('name="twitter:description"',  site.meta.description);
-}
-if (site.meta?.author)   setMetaContent('name="author"',          site.meta.author);
-if (site.meta?.url) {
-  setMetaContent('property="og:url"', site.meta.url);
-  setLinkHref('canonical',            site.meta.url);
-}
-if (site.meta?.siteName) setMetaContent('property="og:site_name"', site.meta.siteName);
-if (site.meta?.locale)   setMetaContent('property="og:locale"',    site.meta.locale);
-if (site.meta?.ogImage) {
-  const ogUrl = absoluteUrl(site.meta.ogImage);
-  setMetaContent('property="og:image"',  ogUrl);
-  setMetaContent('name="twitter:image"', ogUrl);
-  setLinkHref('apple-touch-icon',        site.meta.ogImage);
-}
-if (site.meta?.ogImageWidth)  setMetaContent('property="og:image:width"',  site.meta.ogImageWidth);
-if (site.meta?.ogImageHeight) setMetaContent('property="og:image:height"', site.meta.ogImageHeight);
+// Cards in board order (order, then most recently updated).
+const sortedCards = () => (board.cards ?? []).slice().sort((a, b) => {
+  const ao = a.order ?? 99, bo = b.order ?? 99;
+  if (ao !== bo) return ao - bo;
+  return (b.updated ?? '').localeCompare(a.updated ?? '');
+});
 
-// JSON-LD Person schema — rebuilt from profile + contact + site
-const sameAs = (contact.items ?? [])
-  .map((i) => i.href)
-  .filter((h) => h && /^https?:\/\//i.test(h));
-const personLd = {
+// Featured cards first (in home.json order), then everything else.
+const catalogue = () => {
+  const byId = new Map((board.cards ?? []).map((c) => [c.id, c]));
+  const featured = (home.projects?.featured ?? []).map((id) => byId.get(id)).filter(Boolean);
+  const rest = sortedCards().filter((c) => !featured.includes(c));
+  return { featured, rest, all: [...featured, ...rest] };
+};
+
+const category = (c) => {
+  const first = (c.tags ?? [])[0] ?? '';
+  return first.charAt(0) + first.slice(1).toLowerCase();
+};
+
+// Minimal markdown for card details: ## headings, - lists, paragraphs,
+// `code`, **bold**.
+const inlineMd = (s) => escape(s)
+  .replace(/`([^`]+)`/g, '<code>$1</code>')
+  .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+const markdown = (md) => {
+  const out = [];
+  let list = null;
+  const flush = () => { if (list) { out.push(`<ul>${list.join('')}</ul>`); list = null; } };
+  for (const block of String(md ?? '').split(/\n{2,}/)) {
+    for (const line of block.split('\n')) {
+      if (/^##\s+/.test(line)) { flush(); out.push(`<h4>${inlineMd(line.replace(/^##\s+/, ''))}</h4>`); }
+      else if (/^-\s+/.test(line)) { (list ??= []).push(`<li>${inlineMd(line.replace(/^-\s+/, ''))}</li>`); }
+      else if (line.trim()) { flush(); out.push(`<p>${inlineMd(line)}</p>`); }
+    }
+    flush();
+  }
+  return out.join('\n');
+};
+
+// Projects that carry a given tag (case-insensitive), for the Skills panel.
+const projectsWithTag = (tag) => (board.cards ?? [])
+  .filter((c) => (c.tags ?? []).slice(1).some((t) => t.toLowerCase() === tag.toLowerCase()));
+
+/* ── Shared page chrome ───────────────────────────────────────────────── */
+const FONTS = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap';
+
+const personLd = () => JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: [profile.name, profile.nameAccent].filter(Boolean).join(' '),
-  alternateName: site.meta?.author,
+  name: `${profile.name} ${profile.nameAccent ?? ''}`.trim(),
+  alternateName: home.profileName || undefined,
   url: site.meta?.url,
   jobTitle: profile.role,
   description: profile.slogan,
-  image: absoluteUrl(site.meta?.ogImage ?? profile.avatar?.calm),
+  image: absoluteUrl(profile.avatar?.calm),
   knowsAbout: profile.tags ?? [],
-  ...(sameAs.length ? { sameAs } : {}),
+  sameAs: (contact.items ?? []).map((i) => i.href).filter(isExternal),
+}, null, 2);
+
+const head = ({ base, title, description, url }) => {
+  const cfToken = site.analytics?.cfAnalyticsToken?.trim();
+  const ogImage = absoluteUrl(site.meta?.ogImage);
+  return `<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${escape(title)}</title>
+<meta name="description" content="${escape(description)}">
+<meta name="author" content="${escape(site.meta?.author)}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="${escape(url)}">
+<meta name="theme-color" content="#F7F5F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1B1A17" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="${base}favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="${base}${escape(site.meta?.ogImage)}">
+<link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable summary">
+<link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLM-readable full content">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="${escape(url)}">
+<meta property="og:site_name" content="${escape(site.meta?.siteName)}">
+<meta property="og:locale" content="${escape(site.meta?.locale)}">
+<meta property="og:title" content="${escape(title)}">
+<meta property="og:description" content="${escape(description)}">
+<meta property="og:image" content="${escape(ogImage)}">
+<meta property="og:image:width" content="${escape(site.meta?.ogImageWidth)}">
+<meta property="og:image:height" content="${escape(site.meta?.ogImageHeight)}">
+<meta property="og:image:alt" content="${escape(profile.avatar?.alt)}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escape(title)}">
+<meta name="twitter:description" content="${escape(description)}">
+<meta name="twitter:image" content="${escape(ogImage)}">
+
+<script type="application/ld+json">${personLd()}</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="${FONTS}" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="${FONTS}"></noscript>
+<link rel="stylesheet" href="${base}styles/site.css">
+${cfToken ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${escape(cfToken)}"}'></script>\n` : ''}</head>`;
 };
-html = replaceInner(html, 'ld-person', JSON.stringify(personLd, null, 2));
 
-// Topnav brand + last-updated
-html = replaceInner(html, 'brand-name', escape(site.meta?.title?.split('—')[0]?.trim() ?? ''));
-html = replaceInner(html, 'last-updated',
-  site.footer?.lastUpdated ? `updated ${escape(site.footer.lastUpdated)}` : ''
-);
+// Line icons (24px grid, stroke = currentColor).
+const ICONS = {
+  home:   '<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
+  folder: '<path d="M3 6h6l2 2h10v11H3z"/>',
+  spark:  '<path d="M12 3v6M12 15v6M3 12h6M15 12h6"/>',
+  image:  '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/>',
+  chev:   '<path d="M9 6l6 6-6 6"/>',
+  send:   '<path d="M5 12h13M13 6l6 6-6 6"/>',
+  x:      '<path d="M6 6l12 12M18 6L6 18"/>',
+  ext:    '<path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/>',
+  dl:     '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
+  plus:   '<path d="M12 5v14M5 12h14"/>',
+  menu:   '<path d="M4 7h16M4 12h16M4 17h16"/>',
+  chat:   '<path d="M4 5h16v11H9l-5 4z"/>',
+  left:   '<path d="M15 5l-7 7 7 7"/>',
+};
+const icon = (name, size = 18) =>
+  `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] ?? ''}</svg>`;
 
-// Hero
-html = replaceInner(html, 'hero-name',   heroNameHtml());
-html = replaceInner(html, 'hero-slogan', escape(profile.slogan ?? ''));
-html = replaceInner(html, 'hero-meta',   heroMetaHtml());
-html = replaceInner(html, 'hero-ctas',   heroCtasHtml());
+const fullName = `${profile.name} ${profile.nameAccent ?? ''}`.trim();
+const avatar = (base, cls, size) =>
+  `<img class="${cls}" src="${base}${escape(profile.avatar?.calm)}" alt="" width="${size}" height="${size}">`;
 
-// Avatar src — set image attributes + alt
-if (profile.avatar?.calm) {
-  html = setAttr(html, 'avatar-calm',    'src', profile.avatar.calm);
-  if (profile.avatar.alt) html = setAttr(html, 'avatar-calm', 'alt', profile.avatar.alt);
-}
-if (profile.avatar?.talking) {
-  html = setAttr(html, 'avatar-talking', 'src', profile.avatar.talking);
-}
+const doc = ({ base, title, description, url, bodyClass, body }) => `<!DOCTYPE html>
+<!--
+  GENERATED — do not edit by hand.
+  Source of truth: content/*.json. Regenerate: \`node scripts/build.js\`
+-->
+<html lang="${escape(site.meta?.lang ?? 'en')}">
+${head({ base, title, description, url })}
+<body class="${bodyClass}">
+${body}
+</body>
+</html>
+`;
 
-// Board cards by status + counts + total + filter chips
-const cards = allCards();
-['shipped', 'now', 'next', 'later'].forEach((col) => {
-  const filtered = cards.filter(c => c.status === col);
-  const inner = filtered.length === 0
-    ? `<div class="col-empty">no cards yet</div>`
-    : filtered.map(cardHtml).join('');
+/* ── Home: left sidebar ───────────────────────────────────────────────── */
+const sidebarHtml = () => {
+  const { featured, rest } = catalogue();
+  const projectLink = (c) => `<li><a href="#${escape(c.id)}" data-open="${escape(c.id)}">${escape(c.title)}</a></li>`;
+  const gallery = home.gallery ?? {};
+  return `<aside class="left" id="sidebar" aria-label="Site">
+  <a class="brand" href="./" data-reset>
+    <span class="mark" aria-hidden="true">${escape(fullName.charAt(0))}</span>
+    <span><b>${escape(fullName)}</b><small>${escape(profile.role)}</small></span>
+  </a>
+  <button type="button" class="newchat" id="new-chat">${icon('plus', 16)} New conversation</button>
+  <div class="left-scroll">
+  <nav class="nav">
+    <a class="nav-item" href="#home" data-open="home">${icon('home')}<span>Home</span></a>
+    <details class="nav-group" id="nav-projects" open>
+      <summary class="nav-item">${icon('folder')}<span>Projects</span><span class="count">${featured.length + rest.length}</span>${icon('chev', 14)}</summary>
+      <ul class="sub">${featured.map(projectLink).join('')}</ul>
+      ${rest.length ? `<details class="more" id="nav-more"><summary>More<span class="count">${rest.length}</span></summary><ul class="sub">${rest.map(projectLink).join('')}</ul></details>` : ''}
+    </details>
+    <a class="nav-item" href="#skills" data-open="skills">${icon('spark')}<span>Skills</span></a>
+    ${gallery.href
+      ? `<a class="nav-item" href="${escape(gallery.href)}">${icon('image')}<span>${escape(gallery.label)}</span></a>`
+      : `<span class="nav-item is-soon" aria-disabled="true">${icon('image')}<span>${escape(gallery.label ?? 'Gallery')}</span><span class="soon">soon</span></span>`}
+  </nav>
+  <div class="try">
+    <p class="label">Try asking</p>
+    ${(home.suggestions ?? []).map((q) => `<button type="button" class="try-q" data-ask="${escape(q)}">${escape(q)}</button>`).join('\n    ')}
+  </div>
+  </div>
+  <a class="me" href="#home" data-open="home">
+    ${avatar('', 'me-avatar', 38)}
+    <span><b>${escape(home.profileName || fullName)}</b><small>${escape(home.profileLine)}</small></span>
+    <span class="online" title="Ask me anything" aria-hidden="true"></span>
+  </a>
+</aside>`;
+};
 
-  // .col-cards container is identified by data-cards="X" attribute.
-  html = replaceInnerOpenMatch(
-    html,
-    new RegExp(`<(div)([^>]*\\sdata-cards="${col}"[^>]*)>`, 'i'),
-    inner,
-    `data-cards="${col}"`
-  );
+/* ── Home: center chat ────────────────────────────────────────────────── */
+const chatHtml = () => `<main class="center" id="main-content">
+  <header class="mobile-bar">
+    <button type="button" class="icon-btn" id="menu-btn" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">${icon('menu', 20)}</button>
+    <span>${escape(fullName)}</span>
+    <a class="icon-btn" href="#home" data-open="home" aria-label="About Gloria">${avatar('', 'mini-avatar', 28)}</a>
+  </header>
+  <div class="scroll" id="chat-scroll">
+    <section class="hello" id="hello" aria-labelledby="hello-title">
+      ${avatar('', 'hello-avatar', 64)}
+      <h1 id="hello-title">${(home.greeting ?? []).map((l) => `<span>${escape(l)}</span>`).join('')}</h1>
+      <p>${escape(home.intro)}</p>
+      <div class="chips">${(home.suggestions ?? []).map((q) => `<button type="button" class="chip" data-ask="${escape(q)}">${escape(q)}</button>`).join('')}</div>
+    </section>
+    <ol class="thread" id="thread" aria-live="polite" aria-label="Conversation"></ol>
+  </div>
+  <form class="composer" id="composer" autocomplete="off">
+    <div class="box">
+      <label class="sr-only" for="ask-input">${escape(home.inputPlaceholder)}</label>
+      <textarea id="ask-input" rows="1" maxlength="1000" placeholder="${escape(home.inputPlaceholder)}"></textarea>
+      <button type="submit" class="send" aria-label="Send">${icon('send', 18)}</button>
+    </div>
+    <p class="fine">${escape(home.disclaimer)}</p>
+  </form>
+</main>`;
 
-  // Count badge — span with data-count="X"
-  html = replaceInnerOpenMatch(
-    html,
-    new RegExp(`<(span)([^>]*\\sdata-count="${col}"[^>]*)>`, 'i'),
-    String(filtered.length),
-    `data-count="${col}"`
-  );
-});
-html = replaceInner(html, 'board-total-count', String(cards.length));
-html = replaceInner(html, 'board-shipped-count',
-  `${cards.filter(c => c.status === 'shipped').length} shipped`
-);
+/* ── Home: right panels ───────────────────────────────────────────────── */
+const panelHead = (crumb) => `<div class="panel-head">
+      <span class="crumb">${crumb}</span>
+      <a class="icon-btn close" href="#" data-close aria-label="Close panel">${icon('x', 16)}</a>
+    </div>`;
 
-// Filter chips: replace the children inside #board-filters
-html = replaceInner(html, 'board-filters', filterChipsHtml());
+const homePanel = () => {
+  const { featured } = catalogue();
+  const resume = (home.resume ?? []).map((r, i) => r.href
+    ? `<a class="btn${i ? ' ghost' : ''}" href="${escape(r.href)}"${extAttrs(r.href)}>${icon('dl', 15)} ${escape(r.label)}</a>`
+    : `<span class="btn${i ? ' ghost' : ''} is-soon" title="Coming soon">${icon('dl', 15)} ${escape(r.label)}</span>`).join('');
+  const photo = home.photo
+    ? `<img class="portrait" src="${escape(home.photo)}" alt="${escape(fullName)}" loading="lazy">`
+    : `<div class="portrait is-drawing">${avatar('', '', 160)}</div>`;
+  return `<section class="panel" id="panel-home" data-panel="home" aria-label="About ${escape(fullName)}">
+    ${panelHead('Home')}
+    <div class="panel-body">
+      ${photo}
+      <h2>${escape(fullName)}${home.profileName && home.profileName !== fullName ? ` <small>${escape(home.profileName)}</small>` : ''}${home.nameZh ? ` <small lang="zh">${escape(home.nameZh)}</small>` : ''}</h2>
+      <p class="lead">${(home.roles ?? []).map(escape).join(' · ')}</p>
+      <p class="muted">${escape(profile.location)}</p>
+      <div class="actions">${resume}</div>
+      ${home.now ? `<h5>Now</h5><p>${escape(home.now)}</p>` : ''}
+      <h5>About</h5><p>${escape(profile.manifesto)}</p>
+      <h5>Featured</h5>
+      <ul class="rows">${featured.map((c) => `<li><a href="#${escape(c.id)}" data-open="${escape(c.id)}"><b>${escape(c.title)}</b><span>${escape(category(c))}</span></a></li>`).join('')}</ul>
+      <h5>Contact</h5>
+      <ul class="rows">${(contact.items ?? []).map((i) => `<li><a href="${escape(i.href)}"${extAttrs(i.href)}><b>${escape(i.key.charAt(0).toUpperCase() + i.key.slice(1))}</b><span>${escape(i.label)}</span></a></li>`).join('')}</ul>
+    </div>
+  </section>`;
+};
 
-// Lens header + list
-if (lens.head) {
-  html = replaceInner(html, 'lens-cmd',   escape(lens.head.cmd ?? ''));
-  html = replaceInner(html, 'lens-title', escape(lens.head.title ?? ''));
-  html = replaceInner(html, 'lens-meta',  escape(lens.head.meta ?? ''));
-}
-html = replaceInner(html, 'lens-list', lensListHtml());
+const projectPanel = (c) => {
+  const media = (c.media ?? []).filter((m) => m.src && !/avatar/.test(m.src));
+  const links = (c.links ?? []).filter((l) => l.href);
+  return `<section class="panel" id="panel-${escape(c.id)}" data-panel="${escape(c.id)}" aria-label="${escape(c.title)}">
+    ${panelHead(`Projects / ${escape(c.title)}`)}
+    <div class="panel-body">
+      ${media.map((m) => `<figure class="shot${/logo/.test(m.src) ? ' is-logo' : ''}"><img src="${escape(m.src)}" alt="${escape(m.alt)}" loading="lazy">${m.caption ? `<figcaption>${escape(m.caption)}</figcaption>` : ''}</figure>`).join('')}
+      <p class="kicker">${escape(category(c))}${c.updated ? ` · ${escape(c.updated)}` : ''}</p>
+      <h2>${escape(c.title)}</h2>
+      <p class="lead">${escape(c.summary)}</p>
+      ${(c.fields ?? []).length ? `<dl class="facts">${c.fields.map((f) => `<div><dt>${escape(f.label)}</dt><dd>${escape(f.value)}</dd></div>`).join('')}</dl>` : ''}
+      <p class="tags">${(c.tags ?? []).slice(1).map((t) => `<span>${escape(t)}</span>`).join('')}</p>
+      <div class="actions">
+        ${links.map((l, i) => `<a class="btn${i ? ' ghost' : ''}" href="${escape(l.href)}"${extAttrs(l.href)}>${icon('ext', 15)} ${escape(l.label)}</a>`).join('')}
+        <button type="button" class="btn ghost" data-ask="Tell me about ${escape(c.title)}">${icon('chat', 15)} Ask about this</button>
+      </div>
+      ${c.details ? `<div class="details">${markdown(c.details)}</div>` : ''}
+    </div>
+  </section>`;
+};
 
-// Contact header + intro + list
-if (contact.head) {
-  html = replaceInner(html, 'contact-cmd',   escape(contact.head.cmd ?? ''));
-  html = replaceInner(html, 'contact-title', escape(contact.head.title ?? ''));
-}
-html = replaceInner(html, 'contact-intro', safeRich(contact.intro ?? ''));
-html = replaceInner(html, 'contact-list',  contactListHtml());
+const skillsPanel = () => {
+  const groups = (home.skills?.groups ?? []).map((g) => ({
+    title: g.title,
+    items: (g.items ?? []).map((name) => ({ name, used: projectsWithTag(name) })),
+  }));
+  return `<section class="panel" id="panel-skills" data-panel="skills" aria-label="Skills">
+    ${panelHead('Skills')}
+    <div class="panel-body">
+      <h2>Skills</h2>
+      ${home.skills?.note ? `<p class="muted">${escape(home.skills.note)}</p>` : ''}
+      ${groups.map((g) => `<h5>${escape(g.title)}</h5>
+      <ul class="skills">${g.items.map((s) => `<li><span class="skill">${escape(s.name)}</span>${s.used.length ? `<span class="used">${s.used.map((c) => `<a href="#${escape(c.id)}" data-open="${escape(c.id)}">${escape(c.title)}</a>`).join(', ')}</span>` : ''}</li>`).join('')}</ul>`).join('\n      ')}
+    </div>
+  </section>`;
+};
 
-// Footer
-html = replaceInner(html, 'footer-copyright', footerHtml());
+const panelsHtml = () => `<aside class="right" id="panel-host" aria-label="Details">
+  ${homePanel()}
+  ${skillsPanel()}
+  ${catalogue().all.map(projectPanel).join('\n  ')}
+</aside>
+<div class="scrim" id="scrim" hidden></div>`;
 
-// Cache-bust the runtime scripts: append a content hash as `?v=` to each
-// <script src="scripts/*.js">. index.html is served must-revalidate (so it's
-// always fresh) but the .js files get a longer CDN TTL — without this, a fresh
-// index.html can pair with a stale render.js. Idempotent: an existing `?v=` is
-// re-derived from the current file content each build.
-const crypto = require('crypto');
-['render.js', 'terminal.js', 'palette.js'].forEach((f) => {
-  const v = crypto.createHash('sha1')
-    .update(fs.readFileSync(path.join(root, 'scripts', f)))
-    .digest('hex').slice(0, 8);
-  html = html.replace(
-    new RegExp(`src="scripts/${f.replace('.', '\\.')}(\\?v=[^"]*)?"`),
-    `src="scripts/${f}?v=${v}"`
-  );
-});
+// What the chat knows without the server: titles, ids and summaries for
+// matching questions to panels, plus the facts the offline replies use.
+const chatData = () => {
+  const { all } = catalogue();
+  return {
+    projects: all.map((c) => ({ id: c.id, title: c.title, summary: c.summary, category: category(c), status: c.status, tags: (c.tags ?? []).slice(1) })),
+    featured: home.projects?.featured ?? [],
+    now: home.now ?? '',
+    skills: (home.skills?.groups ?? []).map((g) => ({ title: g.title, items: g.items ?? [] })),
+    contact: (contact.items ?? []).map((i) => ({ key: i.key, label: i.label, href: i.href })),
+    resume: (home.resume ?? []).filter((r) => r.href),
+    roles: home.roles ?? [],
+  };
+};
 
-/* ── Write ────────────────────────────────────────────────────────────── */
-fs.writeFileSync(tplPath, html);
-console.log(`✓ wrote index.html     (${fs.statSync(tplPath).size} bytes, ${cards.length} cards inlined)`);
+/* ── Projects page (one long page, for reading and linking) ───────────── */
+const projectsPage = () => {
+  const { all } = catalogue();
+  const entry = (c) => {
+    const media = (c.media ?? []).filter((m) => m.src && !/avatar/.test(m.src));
+    const links = (c.links ?? []).filter((l) => l.href).map((l) => `<a href="${escape(l.href)}"${extAttrs(l.href)}>${escape(l.label)} ↗</a>`).join(' · ');
+    return `<article class="entry" id="${escape(c.id)}">
+      <p class="kicker">${escape(category(c))}${c.updated ? ` · ${escape(c.updated)}` : ''}</p>
+      <h2>${escape(c.title)}</h2>
+      <p class="lead">${escape(c.summary)}</p>
+      ${links ? `<p class="links">${links}</p>` : ''}
+      ${media.map((m) => `<figure class="shot${/logo/.test(m.src) ? ' is-logo' : ''}"><img src="../${escape(m.src)}" alt="${escape(m.alt)}" loading="lazy">${m.caption ? `<figcaption>${escape(m.caption)}</figcaption>` : ''}</figure>`).join('')}
+      ${(c.fields ?? []).length ? `<dl class="facts">${c.fields.map((f) => `<div><dt>${escape(f.label)}</dt><dd>${escape(f.value)}</dd></div>`).join('')}</dl>` : ''}
+      <div class="details">${markdown(c.details)}</div>
+    </article>`;
+  };
+  return `<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="archive-bar"><a href="../">${icon('left', 16)} Back to the chat</a><span>${escape(fullName)}</span></header>
+<main class="archive" id="main-content">
+  <h1>Projects</h1>
+  <p class="muted">${all.length} projects, each with the problem, my role and what came of it.</p>
+  <ol class="index">${all.map((c) => `<li><a href="#${escape(c.id)}"><b>${escape(c.title)}</b><span>${escape(category(c))}</span></a></li>`).join('')}</ol>
+  ${all.map(entry).join('\n  ')}
+  <footer class="archive-foot">${escape(site.footer?.copyright)} · <a href="/llms.txt">llms.txt</a> · <a href="/admin/">Edit</a></footer>
+</main>`;
+};
+
+/* ── Emit ─────────────────────────────────────────────────────────────── */
+const siteUrl = (site.meta?.url ?? '').replace(/\/+$/, '');
+const write = (rp, html) => {
+  const out = path.join(root, rp);
+  fs.mkdirSync(path.dirname(out), { recursive: true });
+  fs.writeFileSync(out, html);
+  console.log(`✓ wrote ${rp.padEnd(20)} (${fs.statSync(out).size} bytes)`);
+};
+
+write('index.html', doc({
+  base: '',
+  title: site.meta?.title,
+  description: site.meta?.description,
+  url: siteUrl,
+  bodyClass: 'app',
+  body: `<a class="skip-link" href="#ask-input">Skip to the chat</a>
+${sidebarHtml()}
+${chatHtml()}
+${panelsHtml()}
+<noscript><style>.right{display:block;position:static}.panel{display:block}.panel .close,.composer,.scrim{display:none}</style></noscript>
+<script type="application/json" id="chat-data">${JSON.stringify(chatData()).replace(/</g, '\\u003c')}</script>
+<script src="scripts/app.js" defer></script>`,
+}));
+
+write('projects/index.html', doc({
+  base: '../',
+  title: `Projects — ${site.meta?.siteName}`,
+  description: `Every project by ${site.meta?.author}, with problem, role, decisions and outcome.`,
+  url: `${siteUrl}/projects/`,
+  bodyClass: 'page',
+  body: projectsPage(),
+}));

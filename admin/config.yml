@@ -90,6 +90,55 @@ collections:
               - { label: "Anchor (#shipped, #now, #contact, …)", name: "anchor", widget: "string" }
               - { label: "Helper note", name: "note",   widget: "string", required: false }
 
+  # ── Home page ──────────────────────────────────────────────────────
+  - name: "home"
+    label: "Home page"
+    files:
+      - file: "content/home.json"
+        label: "Home"
+        name: "home"
+        format: "json"
+        fields:
+          - { label: "Greeting lines", name: "greeting", widget: "list", field: { label: "Line", name: "line", widget: "string" } }
+          - { label: "Intro under the greeting", name: "intro", widget: "text" }
+          - { label: "Suggested questions", name: "suggestions", widget: "list", field: { label: "Question", name: "q", widget: "string" } }
+          - { label: "Chat box placeholder", name: "inputPlaceholder", widget: "string" }
+          - { label: "Note under the chat box", name: "disclaimer", widget: "string" }
+          - { label: "Name on the profile card", name: "profileName", widget: "string" }
+          - { label: "Line on the profile card", name: "profileLine", widget: "string" }
+          - { label: "Chinese name", name: "nameZh", widget: "string", required: false }
+          - { label: "Photo (empty = avatar drawing)", name: "photo", widget: "image", required: false }
+          - { label: "Roles", name: "roles", widget: "list", field: { label: "Role", name: "role", widget: "string" } }
+          - label: "Résumé links"
+            name: "resume"
+            widget: "list"
+            fields:
+              - { label: "Label", name: "label", widget: "string" }
+              - { label: "Link (empty = coming soon)", name: "href", widget: "string", required: false }
+          - { label: "Now (what I'm working on)", name: "now", widget: "text", required: false }
+          - label: "Projects"
+            name: "projects"
+            widget: "object"
+            fields:
+              - { label: "Featured card IDs (in order)", name: "featured", widget: "list", field: { label: "Card ID", name: "id", widget: "string" } }
+          - label: "Skills"
+            name: "skills"
+            widget: "object"
+            fields:
+              - { label: "Note", name: "note", widget: "string", required: false }
+              - label: "Groups"
+                name: "groups"
+                widget: "list"
+                fields:
+                  - { label: "Title", name: "title", widget: "string" }
+                  - { label: "Skills (match project tags to link projects)", name: "items", widget: "list", field: { label: "Skill", name: "skill", widget: "string" } }
+          - label: "Gallery"
+            name: "gallery"
+            widget: "object"
+            fields:
+              - { label: "Label", name: "label", widget: "string" }
+              - { label: "Link (empty = coming soon)", name: "href", widget: "string", required: false }
+
   # ── Board: project cards ───────────────────────────────────────────
   - name: "board"
     label: "Board (Shipped/Now/Next/Later)"
@@ -126,6 +175,14 @@ collections:
                   - { label: "URL",   name: "href",  widget: "string" }
               - { label: "Updated (YYYY-MM-DD)", name: "updated", widget: "string" }
               - { label: "Order within column", name: "order", widget: "number", default: 1 }
+              - { label: "Specimen name (Latin-ish, shown under the title)", name: "specimen", widget: "string", required: false }
+              - label: "Home card fields"
+                name: "fields"
+                widget: "list"
+                required: false
+                fields:
+                  - { label: "Label", name: "label", widget: "string" }
+                  - { label: "Value", name: "value", widget: "text" }
 
   # ── Lens: principles ───────────────────────────────────────────────
   - name: "lens"

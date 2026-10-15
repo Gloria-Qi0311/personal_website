@@ -1,0 +1,65 @@
+{
+  "greeting": [
+    "Hi dear,",
+    "I'm Gloria Qi."
+  ],
+  "intro": "I'm a junior at UW Informatics working toward AI product management. I like problems where the model is the easy part and the hard part is trust. Ask me anything, or open a project on the left.",
+  "suggestions": [
+    "What are you building now?",
+    "Show me your best project",
+    "What skills do you have?",
+    "Are you open to internships?"
+  ],
+  "inputPlaceholder": "Ask me anything about my work…",
+  "disclaimer": "Answers are written by an AI that has read this site. It can make mistakes.",
+  "profileName": "Peitong Qi",
+  "profileLine": "AI product builder · UW",
+  "nameZh": "",
+  "photo": "",
+  "roles": [
+    "AI Product Builder",
+    "Informatics @ UW",
+    "Open to internship"
+  ],
+  "resume": [
+    {
+      "label": "Résumé",
+      "href": ""
+    },
+    {
+      "label": "简历",
+      "href": ""
+    }
+  ],
+  "now": "Building Lark Loom for the ByteDance Lark AI Campus Challenge, AI product innovation track.",
+  "projects": {
+    "featured": [
+      "shipped-roundtable",
+      "shipped-memory-benchmark",
+      "now-lark-loom",
+      "shipped-personal-website",
+      "shipped-fitty"
+    ]
+  },
+  "skills": {
+    "note": "Drawn from the tags on my projects. A fuller list is coming.",
+    "groups": [
+      {
+        "title": "AI systems",
+        "items": ["AI Agent", "AI Memory", "LLM Systems", "Evaluation", "Information Retrieval", "OpenAI"]
+      },
+      {
+        "title": "Engineering",
+        "items": ["TypeScript", "Python", "React", "Next.js", "Node.js", "FastAPI", "Supabase", "Cloudflare", "Chrome Extension"]
+      },
+      {
+        "title": "Product & design",
+        "items": ["Product Systems", "UI/UX Design", "Figma", "Information Architecture", "Collaboration"]
+      }
+    ]
+  },
+  "gallery": {
+    "label": "Gallery",
+    "href": ""
+  }
+}

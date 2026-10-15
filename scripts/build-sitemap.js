@@ -37,7 +37,7 @@ const cardLinks = [];
   cards.filter(c => c.status === col).forEach((c, i) => {
     const id = `${ID_PREFIX[col]}-${pad2(i + 1)}`;
     cardLinks.push({
-      loc: `${SITE_URL}/#card/${id}`,
+      loc: `${SITE_URL}/projects/#${c.id}`,
       lastmod: c.updated ?? lastmod,
       priority: '0.6',
     });
@@ -46,6 +46,7 @@ const cardLinks = [];
 
 const urls = [
   { loc: `${SITE_URL}/`,             lastmod, priority: '1.0' },
+  { loc: `${SITE_URL}/projects/`,    lastmod, priority: '0.8' },
   { loc: `${SITE_URL}/llms.txt`,     lastmod, priority: '0.5' },
   { loc: `${SITE_URL}/llms-full.txt`,lastmod, priority: '0.5' },
   ...cardLinks,

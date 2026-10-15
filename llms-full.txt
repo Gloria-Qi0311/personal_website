@@ -347,7 +347,7 @@ Junior at UW Informatics, open to AI PM / product-engineering internships and co
 - github: @Gloria-Qi0311 (https://github.com/Gloria-Qi0311)
 
 ---
-Generated 2026-07-30 from content/*.json. Last site update: 2026-07-30
+Generated 2026-10-15 from content/*.json. Last site update: 2026-07-30
 
 
 ---

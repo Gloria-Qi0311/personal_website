@@ -12,15 +12,15 @@ The repo has two kinds of files. **Only edit the source.**
 SOURCE (edit these — directly or via /admin/)
 ├── content/
 │   ├── site.json           ← title, description, footer
-│   ├── profile.json        ← name, slogan, audience CTAs, tags
-│   ├── board.json          ← project cards (status: shipped/now/next/later)
+│   ├── home.json           ← home page: greeting, suggested questions, profile, skills, featured projects
+│   ├── profile.json        ← name, slogan, avatar, tags
+│   ├── board.json          ← project cards (+ Problem / My work / Outcome fields)
 │   ├── lens.json           ← short-form principles
 │   └── contact.json        ← email + socials + "open to" line
-├── styles/main.css         ← design tokens + dashboard styles
+├── styles/site.css         ← all styles (tokens in :root, dark mode included)
 ├── scripts/
-│   ├── render.js           ← runtime: hydrates the page for interactive use
-│   ├── terminal.js         ← runtime: embedded Agent Terminal
-│   ├── build-html.js       ← build:   pre-renders content into index.html
+│   ├── app.js              ← runtime: chat, detail panels, mobile menu
+│   ├── build-html.js       ← build:   renders index.html + projects/index.html
 │   ├── build-llms.js       ← build:   regen /llms.txt + /llms-full.txt
 │   ├── build.js            ← build:   runs both
 │   └── install-hooks.sh    ← installs the pre-commit hook (run once)
@@ -32,6 +32,7 @@ SOURCE (edit these — directly or via /admin/)
 
 ARTIFACTS (generated — do not hand-edit)
 ├── index.html              ← built by scripts/build-html.js
+├── projects/index.html     ← built by scripts/build-html.js
 ├── llms.txt                ← built by scripts/build-llms.js
 └── llms-full.txt           ← built by scripts/build-llms.js
 ```
@@ -147,6 +148,7 @@ See [Issue #39](https://github.com/AntaresYuan/personal_website/issues/39) for t
 
 ## Design
 
-- **Palette:** warm yellow (`#F5C518`) primary, cobalt blue (`#2347D9`) accent, cream (`#FAF7F0`) background.
-- **Type:** Inter (body) · Fraunces (display) · JetBrains Mono (accent).
-- All tokens live in `styles/main.css` `:root`. Edit there to retheme globally.
+- **Layout:** the home page is a chat with Gloria. Left: profile and navigation (Home, Projects, Skills, Gallery). Center: a welcome, then the conversation. Right: a detail panel for whatever was opened, closed on first visit. `#home`, `#skills` and `#<card-id>` link straight to a panel.
+- **Chat:** questions go to `POST /api/chat` (`{messages: [{role, content}]}` → `{reply}`). Until that endpoint is live, `scripts/app.js` answers from the site's own content. A reply that names a project opens it on the right.
+- **Type:** Instrument Serif (headings) · Inter (everything else).
+- All tokens live in `styles/site.css` `:root`. Edit there to retheme globally.

@@ -33,7 +33,22 @@
         }
       ],
       "updated": "2026-07-13",
-      "id": "shipped-roundtable"
+      "id": "shipped-roundtable",
+      "specimen": "Agentia visibilis",
+      "fields": [
+        {
+          "label": "Problem",
+          "value": "Multi-agent coding tools hide who planned, who built, what changed, and why a review passed."
+        },
+        {
+          "label": "My work",
+          "value": "Product concept, dependency-aware task graph, bounded review/fix loop, Next.js app and CLI."
+        },
+        {
+          "label": "Outcome",
+          "value": "A working workbench with planner, implementer, reviewer, architect and fixer roles."
+        }
+      ]
     },
     {
       "details": "## Problem\n\nModern memory benchmarks mostly assume one agent owns its own memory. Real AI work is moving toward shared memory across Claude, ChatGPT, Codex, custom agents, MCP tools, and product-specific runtimes. That creates a different question: when multiple agents write to and read from the same memory layer, do memory systems still preserve the details that matter?\n\n## My Role\n\n- Designed the v1 benchmark suite for non-trivial multi-agent shared-memory behavior\n- Built Python runners, case generators, system adapters, and programmatic judges\n- Compared baselines against mem0 and documented decisions, limitations, and findings\n- Produced reproducible cases, result analysis scripts, and charts for benchmark writeups\n\n## Product Decisions\n\n- Moved beyond atomic one-fact memories because they do not discriminate modern systems\n- Focused v1 on split intake, compound updates, surgical edits, and cross-memory updates\n- Used programmatic scoring where possible to reduce LLM-as-judge ambiguity\n\n## System Design\n\nPython benchmark harness with DeepSeek agent/judge clients, memory system adapters, generated JSON cases, analysis scripts, and committed docs for task specs, findings, and design decisions.\n\n## Outcome\n\nT4 split-intake results showed extraction-free systems around 95% per-detail recall while mem0 trailed substantially. T2 preview work surfaced silent collateral damage during compound updates.\n\n## Reflection\n\nThe project taught me that evaluation design is product design. The benchmark only became useful once the tasks resembled realistic memory events instead of clean textbook facts.",
@@ -63,7 +78,22 @@
         }
       ],
       "updated": "2026-07-08",
-      "id": "shipped-memory-benchmark"
+      "id": "shipped-memory-benchmark",
+      "specimen": "Memoria communis",
+      "fields": [
+        {
+          "label": "Problem",
+          "value": "Memory benchmarks assume one agent owns its memory; real work shares memory across many agents."
+        },
+        {
+          "label": "My work",
+          "value": "v1 task suite, Python runners, system adapters, programmatic judges."
+        },
+        {
+          "label": "Result",
+          "value": "~95% per-detail recall for extraction-free systems on T4 split intake; mem0 trailed substantially."
+        }
+      ]
     },
     {
       "details": "## Problem\n\nA normal portfolio is optimized for humans, while the people and agents reading it increasingly need structured, stable, machine-readable context. I wanted the site to be more than a resume: it should be a living product surface for what I have shipped, what I am building, and how I think.\n\n## My Role\n\n- Designed and built the static portfolio system end to end\n- Created JSON content sources for profile, project board, principles, and contact data\n- Built pre-rendered HTML plus runtime hydration so the same content works with or without JavaScript\n- Added Decap CMS editing, Cloudflare deployment support, llms.txt surfaces, and a terminal-shaped resume CLI\n\n## Product Decisions\n\n- Treated the portfolio as a dashboard instead of a landing page\n- Kept stable card IDs so agents and people can cite projects across conversations\n- Made the site readable through HTML, JSON, llms.txt, llms-full.txt, and `npx antares-cv`\n\n## System Design\n\nVanilla HTML/CSS/JS, build scripts that generate static artifacts from `content/*.json`, Decap CMS for browser edits, Cloudflare Pages/Worker support, and a single-file Node CLI that reads the same public content.\n\n## Outcome\n\nA content-managed, agent-friendly portfolio where the website, terminal resume, and machine-readable files all share one source of truth.\n\n## Reflection\n\nThis project is a small statement of taste: if agents are going to read our work, the source material should be deliberate, structured, and still pleasant for humans.",
@@ -97,7 +127,22 @@
         }
       ],
       "updated": "2026-07-30",
-      "id": "shipped-personal-website"
+      "id": "shipped-personal-website",
+      "specimen": "Speculum sui",
+      "fields": [
+        {
+          "label": "Problem",
+          "value": "Portfolios are written only for humans, while agents increasingly read them too."
+        },
+        {
+          "label": "My work",
+          "value": "Content model, pre-rendered HTML, Decap CMS editing, Cloudflare deploy."
+        },
+        {
+          "label": "Outcome",
+          "value": "One source of truth, readable as HTML, JSON, llms.txt and a terminal CV."
+        }
+      ]
     },
     {
       "details": "## Problem\n\nStudent project teams often make decisions inside messy group chats. Requirements, deadlines, ownership, and meeting prep get scattered across messages, documents, tables, and slides.\n\n## My Role\n\n- Designed the product direction for a Feishu/Lark group-chat collaboration agent\n- Built the TypeScript monorepo structure across contracts, bot runtime, and skills\n- Implemented the Skill Router direction for recall, summary, archive, requirement docs, task assignment, progress updates, and rehearsal flows\n- Documented product boundaries, Feishu permissions, API constraints, and compliance limits\n\n## Product Decisions\n\n- Let the agent live in the group chat instead of requiring users to switch tools\n- Avoided private 1:1 monitoring and kept the product centered on project group spaces\n- Turned fragmented IM context into structured docs, task tables, and presentation drafts\n\n## System Design\n\npnpm monorepo with `contracts`, `bot`, and `skills` packages. The architecture includes message/card contracts, bot runtime interfaces, Bitable clients, LLM/retriever abstractions, and skill implementations for collaboration workflows.\n\n## Outcome\n\nBuilt as a ByteDance Lark AI Campus Challenge project for the AI product innovation track, with product docs, engineering docs, and a working skill-oriented bot foundation.\n\n## Reflection\n\nLark Loom made the product boundary very concrete: the impressive part is not that an agent can summarize chat, but whether it can do that inside the permission, UI, and workflow limits of a real collaboration platform.",
@@ -127,7 +172,22 @@
         }
       ],
       "updated": "2026-07-06",
-      "id": "now-lark-loom"
+      "id": "now-lark-loom",
+      "specimen": "Textrix colloquii",
+      "fields": [
+        {
+          "label": "Problem",
+          "value": "Student teams make decisions inside messy group chats, and the context gets lost."
+        },
+        {
+          "label": "My work",
+          "value": "Product direction, skill router, TypeScript monorepo across contracts, bot and skills."
+        },
+        {
+          "label": "Track",
+          "value": "ByteDance Lark AI Campus Challenge, AI product innovation."
+        }
+      ]
     },
     {
       "details": "## Context\n\nfitty is a calorie tracking app built around Mochi, an animated companion that reacts to your daily nutrition progress. The goal was to make habit tracking feel less clinical and more personal.\n\n## What I owned\n\n- Designed and built the full frontend in React + Vite + TypeScript\n- Wired up Node.js backend and Supabase for food logging and user data\n- Built the Mochi animation system that responds to daily progress state\n- Shipped to Vercel (frontend) + Railway (backend)\n\n## Outcome\n\nLive and accessible. The Mochi feedback loop made calorie logging feel less like a chore.",
@@ -154,7 +214,22 @@
         }
       ],
       "updated": "2026-04-22",
-      "id": "shipped-fitty"
+      "id": "shipped-fitty",
+      "specimen": "Mochi nutrix",
+      "fields": [
+        {
+          "label": "Idea",
+          "value": "Make calorie tracking feel personal instead of clinical."
+        },
+        {
+          "label": "My work",
+          "value": "React + Vite frontend, Node + Supabase backend, the Mochi animation system."
+        },
+        {
+          "label": "Outcome",
+          "value": "Live at fitty-nu.vercel.app."
+        }
+      ]
     },
     {
       "details": "## Context\n\nHuskyMatch (HuskyConnect) is a student networking platform for UW students to find classmates, collaborators, and community connections through profile-based matching.\n\n## What I owned\n\n- Built the React 19 + Vite frontend with profile creation and editing flows\n- Integrated OpenAI embeddings for interest-based recommendation engine\n- Set up FastAPI backend with SQLAlchemy and Supabase Postgres\n- Implemented direct messaging and social feed features\n\n## Outcome\n\nFull-stack platform with AI-powered matching across student profiles.",

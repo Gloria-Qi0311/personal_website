@@ -6,6 +6,11 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://gloria-qi.glqi63583.workers.dev/projects/</loc>
+    <lastmod>2026-07-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://gloria-qi.glqi63583.workers.dev/llms.txt</loc>
     <lastmod>2026-07-30</lastmod>
     <priority>0.5</priority>
@@ -16,62 +21,62 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://gloria-qi.glqi63583.workers.dev/#card/SHIP-01</loc>
+    <loc>https://gloria-qi.glqi63583.workers.dev/projects/#shipped-roundtable</loc>
     <lastmod>2026-07-13</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://gloria-qi.glqi63583.workers.dev/#card/SHIP-02</loc>
+    <loc>https://gloria-qi.glqi63583.workers.dev/projects/#shipped-memory-benchmark</loc>
     <lastmod>2026-07-08</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://gloria-qi.glqi63583.workers.dev/#card/SHIP-03</loc>
+    <loc>https://gloria-qi.glqi63583.workers.dev/projects/#shipped-personal-website</loc>
     <lastmod>2026-07-30</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://gloria-qi.glqi63583.workers.dev/#card/SHIP-04</loc>
+    <loc>https://gloria-qi.glqi63583.workers.dev/projects/#shipped-fitty</loc>
     <lastmod>2026-04-22</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://gloria-qi.glqi63583.workers.dev/#card/SHIP-05</loc>
+    <loc>https://gloria-qi.glqi63583.workers.dev/projects/#shipped-huskymatch</loc>
     <lastmod>2026-04-23</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://gloria-qi.glqi63583.workers.dev/#card/SHIP-06</loc>
+    <loc>https://gloria-qi.glqi63583.workers.dev/projects/#shipped-savorly</loc>
     <lastmod>2025-11-30</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://gloria-qi.glqi63583.workers.dev/#card/SHIP-07</loc>
+    <loc>https://gloria-qi.glqi63583.workers.dev/projects/#shipped-discounted-airfare</loc>
     <lastmod>2026-04-12</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://gloria-qi.glqi63583.workers.dev/#card/NOW-01</loc>
+    <loc>https://gloria-qi.glqi63583.workers.dev/projects/#now-lark-loom</loc>
     <lastmod>2026-07-06</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://gloria-qi.glqi63583.workers.dev/#card/NOW-02</loc>
+    <loc>https://gloria-qi.glqi63583.workers.dev/projects/#now-lexvault</loc>
     <lastmod>2026-04-24</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://gloria-qi.glqi63583.workers.dev/#card/NOW-03</loc>
+    <loc>https://gloria-qi.glqi63583.workers.dev/projects/#now-boss-auto-apply</loc>
     <lastmod>2026-05-12</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://gloria-qi.glqi63583.workers.dev/#card/NEXT-01</loc>
+    <loc>https://gloria-qi.glqi63583.workers.dev/projects/#next-evidence-pass</loc>
     <lastmod>2026-07-30</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://gloria-qi.glqi63583.workers.dev/#card/LATER-01</loc>
+    <loc>https://gloria-qi.glqi63583.workers.dev/projects/#later-reader-paths</loc>
     <lastmod>2026-07-30</lastmod>
     <priority>0.6</priority>
   </url>
