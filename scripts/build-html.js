@@ -3,17 +3,18 @@
    build-html.js — render content/*.json into static HTML pages.
 
    Pages:
-     index.html           the home page ("cabinet of curiosities")
-     projects/index.html  every project, with its full write-up
+     index.html           the home page: a chat with Gloria
+     projects/index.html  every project, with its full write-up, as one page
 
-   Both pages are fully pre-rendered: no runtime JS is needed to read them,
-   so agents and crawlers that don't execute scripts see everything.
+   Home layout (three columns on desktop):
+     left    profile, nav (Home, Projects, Skills, Gallery), suggested questions
+     center  the chat: a welcome, then the conversation and the composer
+     right   a detail panel for whatever was opened on the left (or by the
+             chat). Closed on first visit; #home, #skills and #<card-id>
+             open it.
 
-   Home layout: top bar (label; language, dark mode, sepia toggles), a
-   floating icon rail on the left, a three-column hero (name + résumé +
-   roles | token-consumption stats | a message), then Projects with a pager,
-   an update banner and a horizontal carousel of specimen cards, and a
-   bottom-center "Ask Gloria" pill. Runtime behavior: scripts/home.js.
+   Every panel is pre-rendered, so agents and crawlers that don't execute
+   scripts still read all content. Runtime behavior: scripts/app.js.
 
    Run:
      node scripts/build-html.js
@@ -47,16 +48,6 @@ const absoluteUrl = (relPath) => {
   return base ? `${base}/${relPath.replace(/^\/+/, '')}` : relPath;
 };
 
-// Site-root links ("/projects/") become relative to the page so the build
-// works from any host path and from a plain static server.
-const rel = (base, href) => {
-  if (!href || isExternal(href) || href.startsWith('#') || href.startsWith('mailto:')) return href;
-  if (href === '/') return base || './';
-  return base + href.replace(/^\/+/, '');
-};
-
-const pad3 = (n) => String(n).padStart(3, '0');
-
 // Cards in board order (order, then most recently updated).
 const sortedCards = () => (board.cards ?? []).slice().sort((a, b) => {
   const ao = a.order ?? 99, bo = b.order ?? 99;
@@ -69,14 +60,13 @@ const catalogue = () => {
   const byId = new Map((board.cards ?? []).map((c) => [c.id, c]));
   const featured = (home.projects?.featured ?? []).map((id) => byId.get(id)).filter(Boolean);
   const rest = sortedCards().filter((c) => !featured.includes(c));
-  return [...featured, ...rest].map((c, i) => ({ ...c, no: pad3(i + 1) }));
+  return { featured, rest, all: [...featured, ...rest] };
 };
 
 const category = (c) => {
   const first = (c.tags ?? [])[0] ?? '';
   return first.charAt(0) + first.slice(1).toLowerCase();
 };
-const tagLine = (c) => (c.tags ?? []).slice(1).join(' · ');
 
 // Minimal markdown for card details: ## headings, - lists, paragraphs,
 // `code`, **bold**.
@@ -89,7 +79,7 @@ const markdown = (md) => {
   const flush = () => { if (list) { out.push(`<ul>${list.join('')}</ul>`); list = null; } };
   for (const block of String(md ?? '').split(/\n{2,}/)) {
     for (const line of block.split('\n')) {
-      if (/^##\s+/.test(line)) { flush(); out.push(`<h3>${inlineMd(line.replace(/^##\s+/, ''))}</h3>`); }
+      if (/^##\s+/.test(line)) { flush(); out.push(`<h4>${inlineMd(line.replace(/^##\s+/, ''))}</h4>`); }
       else if (/^-\s+/.test(line)) { (list ??= []).push(`<li>${inlineMd(line.replace(/^-\s+/, ''))}</li>`); }
       else if (line.trim()) { flush(); out.push(`<p>${inlineMd(line)}</p>`); }
     }
@@ -98,13 +88,18 @@ const markdown = (md) => {
   return out.join('\n');
 };
 
+// Projects that carry a given tag (case-insensitive), for the Skills panel.
+const projectsWithTag = (tag) => (board.cards ?? [])
+  .filter((c) => (c.tags ?? []).slice(1).some((t) => t.toLowerCase() === tag.toLowerCase()));
+
 /* ── Shared page chrome ───────────────────────────────────────────────── */
-const FONTS = 'https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+DW+Pica:ital@0;1&display=swap';
+const FONTS = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap';
 
 const personLd = () => JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: `${profile.name} ${profile.nameAccent ?? ''}`.trim(),
+  alternateName: home.profileName || undefined,
   url: site.meta?.url,
   jobTitle: profile.role,
   description: profile.slogan,
@@ -124,8 +119,8 @@ const head = ({ base, title, description, url }) => {
 <meta name="author" content="${escape(site.meta?.author)}">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="${escape(url)}">
-<meta name="theme-color" content="#ECE2CB" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1C1711" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F7F5F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1B1A17" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="${base}favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="${base}${escape(site.meta?.ogImage)}">
 <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable summary">
@@ -152,223 +147,225 @@ const head = ({ base, title, description, url }) => {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="${FONTS}" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="${FONTS}"></noscript>
-<link rel="stylesheet" href="${base}styles/cabinet.css">
-<script>try{var t=localStorage.getItem('cabinet-theme');if(t)document.documentElement.dataset.theme=t;if(localStorage.getItem('cabinet-sepia')==='off')document.documentElement.dataset.sepia='off';}catch(e){}</script>
+<link rel="stylesheet" href="${base}styles/site.css">
 ${cfToken ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${escape(cfToken)}"}'></script>\n` : ''}</head>`;
 };
 
-const sprig = `<svg class="sprig" width="120" height="40" viewBox="0 0 120 40" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M5 20 Q60 4 115 20"/>${
-  [20, 35, 50, 65, 80, 95].map((x, i) => `<path d="M${x} ${17 - (i % 3)} q6 -12 14 -8 q-4 9 -14 8z"/><path d="M${x + 4} 20 q6 12 14 8 q-4 -9 -14 -8z"/>`).join('')
-}</svg>`;
-
 // Line icons (24px grid, stroke = currentColor).
 const ICONS = {
-  home:   '<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
+  home:   '<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
   folder: '<path d="M3 6h6l2 2h10v11H3z"/>',
-  plus:   '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/>',
+  spark:  '<path d="M12 3v6M12 15v6M3 12h6M15 12h6"/>',
   image:  '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/>',
-  doc:    '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/>',
-  moon:   '<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
-  drop:   '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
+  chev:   '<path d="M9 6l6 6-6 6"/>',
+  send:   '<path d="M5 12h13M13 6l6 6-6 6"/>',
+  x:      '<path d="M6 6l12 12M18 6L6 18"/>',
+  ext:    '<path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/>',
+  dl:     '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
+  plus:   '<path d="M12 5v14M5 12h14"/>',
+  menu:   '<path d="M4 7h16M4 12h16M4 17h16"/>',
+  chat:   '<path d="M4 5h16v11H9l-5 4z"/>',
   left:   '<path d="M15 5l-7 7 7 7"/>',
-  right:  '<path d="M9 5l7 7-7 7"/>',
-  down:   '<path d="M12 5v13M6 12l6 6 6-6"/>',
 };
-const icon = (name, size = 20) =>
-  `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] ?? ''}</svg>`;
+const icon = (name, size = 18) =>
+  `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] ?? ''}</svg>`;
 
-// Top bar: cabinet label on the left, language / dark mode / theme on the right.
-const topbarHtml = (base) => `<header class="topbar">
-    <a class="topbar-label" href="${base || './'}">${escape(home.label)}</a>
-    <div class="topbar-controls">
-      <div class="lang-toggle" role="group" aria-label="Language">
-        <span class="is-active" aria-current="true">EN</span>
-        <span class="is-forthcoming" title="Chinese version forthcoming" lang="zh">中</span>
-      </div>
-      <button type="button" class="round-btn" id="theme-toggle" aria-label="Toggle candlelight (dark) mode" title="Candlelight">${icon('moon', 18)}</button>
-      <button type="button" class="round-btn" id="sepia-toggle" aria-label="Toggle sepia plates" aria-pressed="true" title="Sepia plates">${icon('drop', 18)}</button>
-    </div>
-  </header>`;
+const fullName = `${profile.name} ${profile.nameAccent ?? ''}`.trim();
+const avatar = (base, cls, size) =>
+  `<img class="${cls}" src="${base}${escape(profile.avatar?.calm)}" alt="" width="${size}" height="${size}">`;
 
-// Floating vertical icon rail on the left edge.
-const railHtml = (base, current) => `<nav class="rail" aria-label="Site">
-    <ul>${(home.nav ?? []).map((n) => {
-      if (!n.href) return `<li><span class="rail-item is-forthcoming" title="${escape(n.label)} — forthcoming" aria-label="${escape(n.label)} (forthcoming)">${icon(n.icon)}</span></li>`;
-      const here = n.href === current ? ' aria-current="page"' : '';
-      return `<li><a class="rail-item" href="${escape(rel(base, n.href))}" title="${escape(n.label)}" aria-label="${escape(n.label)}"${here}>${icon(n.icon)}</a></li>`;
-    }).join('')}</ul>
-  </nav>`;
-
-const footerHtml = () => {
-  const links = [
-    ...(contact.items ?? []).map((i) => `<a href="${escape(i.href)}"${extAttrs(i.href)}>${escape(i.key === 'email' ? i.label : i.key.charAt(0).toUpperCase() + i.key.slice(1))}</a>`),
-    `<a href="/admin/">Edit</a>`,
-    `<a href="/llms.txt">llms.txt</a>`,
-    `<a href="https://github.com/Gloria-Qi0311/personal_website"${extAttrs('https://')}>Source</a>`,
-  ];
-  return `<footer class="site-footer">
-    <p>${escape(site.footer?.copyright)}</p>
-    <p class="footer-links">${links.join('<span aria-hidden="true"> · </span>')}</p>
-  </footer>`;
-};
-
-// Bottom-center chat pill. Placeholder until the site agent lands; it fires
-// a `gloria:ask` event so the chat widget can open itself from here.
-const chatPillHtml = (base) => `<button type="button" class="chat-pill" id="chat-pill" title="Coming soon">
-    <img src="${base}${escape(profile.avatar?.calm)}" alt="" width="32" height="32">
-    <span>${escape(home.chatPrompt)}</span>
-  </button>`;
-
-const page = ({ base, current, title, description, url, main }) => `<!DOCTYPE html>
+const doc = ({ base, title, description, url, bodyClass, body }) => `<!DOCTYPE html>
 <!--
   GENERATED — do not edit by hand.
   Source of truth: content/*.json. Regenerate: \`node scripts/build.js\`
 -->
 <html lang="${escape(site.meta?.lang ?? 'en')}">
 ${head({ base, title, description, url })}
-<body>
-<a class="skip-link" href="#main-content">Skip to content</a>
-${railHtml(base, current)}
-<div class="shell">
-  ${topbarHtml(base)}
-${main}
-  ${footerHtml()}
-</div>
-${chatPillHtml(base)}
-<script src="${base}scripts/home.js" defer></script>
+<body class="${bodyClass}">
+${body}
 </body>
 </html>
 `;
 
-/* ── Home ─────────────────────────────────────────────────────────────── */
-
-// The card "plate": the project's labeled fields drawn as a flow of
-// specimen tags joined by arrows, like a naturalist's diagram.
-const flowPlate = (c) => {
-  const fields = c.fields ?? [];
-  if (!fields.length) return '';
-  return `<div class="flow" aria-hidden="true">${fields.map((f, i) =>
-    `${i ? '<span class="flow-arrow">→</span>' : ''}<div class="flow-step"><span class="flow-label">${escape(f.label)}</span><p>${escape(f.value)}</p></div>`
-  ).join('')}</div>`;
+/* ── Home: left sidebar ───────────────────────────────────────────────── */
+const sidebarHtml = () => {
+  const { featured, rest } = catalogue();
+  const projectLink = (c) => `<li><a href="#${escape(c.id)}" data-open="${escape(c.id)}">${escape(c.title)}</a></li>`;
+  const gallery = home.gallery ?? {};
+  return `<aside class="left" id="sidebar" aria-label="Site">
+  <a class="brand" href="./" data-reset>
+    <span class="mark" aria-hidden="true">${escape(fullName.charAt(0))}</span>
+    <span><b>${escape(fullName)}</b><small>${escape(profile.role)}</small></span>
+  </a>
+  <button type="button" class="newchat" id="new-chat">${icon('plus', 16)} New conversation</button>
+  <div class="left-scroll">
+  <nav class="nav">
+    <a class="nav-item" href="#home" data-open="home">${icon('home')}<span>Home</span></a>
+    <details class="nav-group" id="nav-projects" open>
+      <summary class="nav-item">${icon('folder')}<span>Projects</span><span class="count">${featured.length + rest.length}</span>${icon('chev', 14)}</summary>
+      <ul class="sub">${featured.map(projectLink).join('')}</ul>
+      ${rest.length ? `<details class="more" id="nav-more"><summary>More<span class="count">${rest.length}</span></summary><ul class="sub">${rest.map(projectLink).join('')}</ul></details>` : ''}
+    </details>
+    <a class="nav-item" href="#skills" data-open="skills">${icon('spark')}<span>Skills</span></a>
+    ${gallery.href
+      ? `<a class="nav-item" href="${escape(gallery.href)}">${icon('image')}<span>${escape(gallery.label)}</span></a>`
+      : `<span class="nav-item is-soon" aria-disabled="true">${icon('image')}<span>${escape(gallery.label ?? 'Gallery')}</span><span class="soon">soon</span></span>`}
+  </nav>
+  <div class="try">
+    <p class="label">Try asking</p>
+    ${(home.suggestions ?? []).map((q) => `<button type="button" class="try-q" data-ask="${escape(q)}">${escape(q)}</button>`).join('\n    ')}
+  </div>
+  </div>
+  <a class="me" href="#home" data-open="home">
+    ${avatar('', 'me-avatar', 38)}
+    <span><b>${escape(home.profileName || fullName)}</b><small>${escape(home.profileLine)}</small></span>
+    <span class="online" title="Ask me anything" aria-hidden="true"></span>
+  </a>
+</aside>`;
 };
 
-const specimenCard = (c) => {
-  const fieldsText = (c.fields ?? []).map((f) => `<div><dt>${escape(f.label)}</dt><dd>${escape(f.value)}</dd></div>`).join('');
-  return `<li class="specimen">
-          <a href="projects/#${escape(c.id)}">
-            <div class="specimen-plate">
-              <span class="pin" aria-hidden="true"></span>
-              <p class="plate-no">No. ${c.no}${c.specimen ? ` · <i>${escape(c.specimen)}</i>` : ''}</p>
-              ${flowPlate(c)}
-            </div>
-            <div class="specimen-body">
-              <p class="specimen-tags">${escape(category(c))} · ${escape(tagLine(c))}</p>
-              <h3>${escape(c.title)}</h3>
-              <p class="specimen-summary">${escape(c.summary)}</p>
-              ${fieldsText ? `<dl class="sr-only">${fieldsText}</dl>` : ''}
-            </div>
-          </a>
-        </li>`;
-};
-
-const usageChart = () => {
-  const series = (home.usage?.series ?? []).map(Number).filter((n) => Number.isFinite(n) && n >= 0);
-  if (!series.length) {
-    return `<div class="usage-chart is-empty"><span>specimens of usage to be collected</span></div>`;
-  }
-  const max = Math.max(...series) || 1;
-  const avg = series.reduce((a, b) => a + b, 0) / series.length;
-  return `<div class="usage-chart">
-          <span class="usage-avg" style="bottom:${(avg / max) * 100}%">avg</span>
-          ${series.map((v) => `<i style="height:${Math.max(2, (v / max) * 100)}%"></i>`).join('')}
-        </div>`;
-};
-
-const homeMain = () => {
-  const all = catalogue();
-  const featured = all.slice(0, (home.projects?.featured ?? []).length);
-  const lines = home.nameLines?.length ? home.nameLines : [`${profile.name} ${profile.nameAccent ?? ''}`.trim()];
-  const resume = (home.resume ?? []).map((r) => r.href
-    ? `<a class="chip chip-strong" href="${escape(r.href)}"${extAttrs(r.href)}>${escape(r.label)} ${icon('down', 14)}</a>`
-    : `<span class="chip chip-strong is-forthcoming" title="Forthcoming">${escape(r.label)} ${icon('down', 14)}</span>`).join('');
-  const usageTitle = home.usage?.href
-    ? `<a href="${escape(home.usage.href)}">${escape(home.usage.title)} ›</a>`
-    : `${escape(home.usage?.title)} ›`;
-  const p = home.projects ?? {};
-  const update = p.update
-    ? `<p class="update"><strong>${escape(p.updateLabel)}</strong>${p.updateDate ? ` <span class="update-date">${escape(p.updateDate)}</span>` : ''} ${escape(p.update)}</p>`
-    : '';
-
-  return `  <main id="main-content">
-    <section class="hero" aria-label="Introduction">
-      <div class="hero-col hero-id">
-        <h1>${lines.map((l, i) => `<span class="${i ? 'name-strong' : 'name-light'}">${escape(l)}</span>`).join(' ')}</h1>
-        <div class="hero-row">
-          ${home.nameZh ? `<span class="name-zh" lang="zh">${escape(home.nameZh)}</span>` : ''}
-          ${resume}
-        </div>
-        <ul class="roles">${(home.roles ?? []).map((r) => `<li class="chip">${escape(r)}</li>`).join('')}</ul>
-      </div>
-
-      <section class="hero-col hero-usage" aria-labelledby="usage-title">
-        <h2 class="col-title" id="usage-title">${usageTitle}</h2>
-        <dl class="usage-stats">${(home.usage?.stats ?? []).map((s) => `<div><dt>${escape(s.label)}</dt><dd>${escape(s.value)}</dd>${s.note ? `<dd class="usage-note">${escape(s.note)}</dd>` : ''}</div>`).join('')}</dl>
-        ${usageChart()}
-      </section>
-
-      <section class="hero-col hero-message" aria-labelledby="message-title">
-        <h2 class="col-title" id="message-title">${escape(home.message?.title)}</h2>
-        <p>${escape(home.message?.body)}</p>
-      </section>
+/* ── Home: center chat ────────────────────────────────────────────────── */
+const chatHtml = () => `<main class="center" id="main-content">
+  <header class="mobile-bar">
+    <button type="button" class="icon-btn" id="menu-btn" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">${icon('menu', 20)}</button>
+    <span>${escape(fullName)}</span>
+    <a class="icon-btn" href="#home" data-open="home" aria-label="About Gloria">${avatar('', 'mini-avatar', 28)}</a>
+  </header>
+  <div class="scroll" id="chat-scroll">
+    <section class="hello" id="hello" aria-labelledby="hello-title">
+      ${avatar('', 'hello-avatar', 64)}
+      <h1 id="hello-title">${(home.greeting ?? []).map((l) => `<span>${escape(l)}</span>`).join('')}</h1>
+      <p>${escape(home.intro)}</p>
+      <div class="chips">${(home.suggestions ?? []).map((q) => `<button type="button" class="chip" data-ask="${escape(q)}">${escape(q)}</button>`).join('')}</div>
     </section>
+    <ol class="thread" id="thread" aria-live="polite" aria-label="Conversation"></ol>
+  </div>
+  <form class="composer" id="composer" autocomplete="off">
+    <div class="box">
+      <label class="sr-only" for="ask-input">${escape(home.inputPlaceholder)}</label>
+      <textarea id="ask-input" rows="1" maxlength="1000" placeholder="${escape(home.inputPlaceholder)}"></textarea>
+      <button type="submit" class="send" aria-label="Send">${icon('send', 18)}</button>
+    </div>
+    <p class="fine">${escape(home.disclaimer)}</p>
+  </form>
+</main>`;
 
-    <section class="projects" id="projects" aria-labelledby="projects-title">
-      <div class="projects-head">
-        <h2 id="projects-title">${escape(p.title)}</h2>
-        <div class="pager">
-          <span class="pager-count" id="pager-count" aria-live="polite">1–2 of ${featured.length}</span>
-          <button type="button" class="round-btn" id="pager-prev" aria-label="Previous projects" disabled>${icon('left', 18)}</button>
-          <button type="button" class="round-btn" id="pager-next" aria-label="Next projects">${icon('right', 18)}</button>
-        </div>
+/* ── Home: right panels ───────────────────────────────────────────────── */
+const panelHead = (crumb) => `<div class="panel-head">
+      <span class="crumb">${crumb}</span>
+      <a class="icon-btn close" href="#" data-close aria-label="Close panel">${icon('x', 16)}</a>
+    </div>`;
+
+const homePanel = () => {
+  const { featured } = catalogue();
+  const resume = (home.resume ?? []).map((r, i) => r.href
+    ? `<a class="btn${i ? ' ghost' : ''}" href="${escape(r.href)}"${extAttrs(r.href)}>${icon('dl', 15)} ${escape(r.label)}</a>`
+    : `<span class="btn${i ? ' ghost' : ''} is-soon" title="Coming soon">${icon('dl', 15)} ${escape(r.label)}</span>`).join('');
+  const photo = home.photo
+    ? `<img class="portrait" src="${escape(home.photo)}" alt="${escape(fullName)}" loading="lazy">`
+    : `<div class="portrait is-drawing">${avatar('', '', 160)}</div>`;
+  return `<section class="panel" id="panel-home" data-panel="home" aria-label="About ${escape(fullName)}">
+    ${panelHead('Home')}
+    <div class="panel-body">
+      ${photo}
+      <h2>${escape(fullName)}${home.profileName && home.profileName !== fullName ? ` <small>${escape(home.profileName)}</small>` : ''}${home.nameZh ? ` <small lang="zh">${escape(home.nameZh)}</small>` : ''}</h2>
+      <p class="lead">${(home.roles ?? []).map(escape).join(' · ')}</p>
+      <p class="muted">${escape(profile.location)}</p>
+      <div class="actions">${resume}</div>
+      ${home.now ? `<h5>Now</h5><p>${escape(home.now)}</p>` : ''}
+      <h5>About</h5><p>${escape(profile.manifesto)}</p>
+      <h5>Featured</h5>
+      <ul class="rows">${featured.map((c) => `<li><a href="#${escape(c.id)}" data-open="${escape(c.id)}"><b>${escape(c.title)}</b><span>${escape(category(c))}</span></a></li>`).join('')}</ul>
+      <h5>Contact</h5>
+      <ul class="rows">${(contact.items ?? []).map((i) => `<li><a href="${escape(i.href)}"${extAttrs(i.href)}><b>${escape(i.key.charAt(0).toUpperCase() + i.key.slice(1))}</b><span>${escape(i.label)}</span></a></li>`).join('')}</ul>
+    </div>
+  </section>`;
+};
+
+const projectPanel = (c) => {
+  const media = (c.media ?? []).filter((m) => m.src && !/avatar/.test(m.src));
+  const links = (c.links ?? []).filter((l) => l.href);
+  return `<section class="panel" id="panel-${escape(c.id)}" data-panel="${escape(c.id)}" aria-label="${escape(c.title)}">
+    ${panelHead(`Projects / ${escape(c.title)}`)}
+    <div class="panel-body">
+      ${media.map((m) => `<figure class="shot${/logo/.test(m.src) ? ' is-logo' : ''}"><img src="${escape(m.src)}" alt="${escape(m.alt)}" loading="lazy">${m.caption ? `<figcaption>${escape(m.caption)}</figcaption>` : ''}</figure>`).join('')}
+      <p class="kicker">${escape(category(c))}${c.updated ? ` · ${escape(c.updated)}` : ''}</p>
+      <h2>${escape(c.title)}</h2>
+      <p class="lead">${escape(c.summary)}</p>
+      ${(c.fields ?? []).length ? `<dl class="facts">${c.fields.map((f) => `<div><dt>${escape(f.label)}</dt><dd>${escape(f.value)}</dd></div>`).join('')}</dl>` : ''}
+      <p class="tags">${(c.tags ?? []).slice(1).map((t) => `<span>${escape(t)}</span>`).join('')}</p>
+      <div class="actions">
+        ${links.map((l, i) => `<a class="btn${i ? ' ghost' : ''}" href="${escape(l.href)}"${extAttrs(l.href)}>${icon('ext', 15)} ${escape(l.label)}</a>`).join('')}
+        <button type="button" class="btn ghost" data-ask="Tell me about ${escape(c.title)}">${icon('chat', 15)} Ask about this</button>
       </div>
-      ${update}
-      <ol class="carousel" id="carousel">
-        ${featured.map(specimenCard).join('\n        ')}
-      </ol>
-      <p class="see-all"><a href="projects/">All ${all.length} specimens in the cabinet →</a></p>
-    </section>
-  </main>`;
+      ${c.details ? `<div class="details">${markdown(c.details)}</div>` : ''}
+    </div>
+  </section>`;
 };
 
-/* ── Projects page ────────────────────────────────────────────────────── */
-const projectEntry = (c) => {
-  const media = (c.media ?? []).filter((m) => m.src);
-  const links = (c.links ?? []).map((l) => `<a href="${escape(l.href)}"${extAttrs(l.href)}>${escape(l.label)} ↗</a>`).join(' · ');
-  return `<article class="entry" id="${escape(c.id)}">
-        <header>
-          <p class="specimen-no">No. ${c.no} · ${escape(category(c))} · ${escape(c.updated)}</p>
-          <h2>${escape(c.title)}</h2>
-          ${c.specimen ? `<p class="specimen-latin">${escape(c.specimen)}</p>` : ''}
-          <p class="specimen-tags">${escape(tagLine(c))}</p>
-          <p class="entry-summary">${escape(c.summary)}</p>
-          ${links ? `<p class="entry-links">${links}</p>` : ''}
-        </header>
-        ${media.length ? `<div class="entry-plates">${media.map((m) => `<figure class="specimen-plate${/logo|avatar/.test(m.src) ? ' is-drawing' : ''}"><img src="../${escape(m.src)}" alt="${escape(m.alt)}" loading="lazy"><figcaption>${escape(m.caption)}</figcaption></figure>`).join('')}</div>` : ''}
-        <div class="entry-body">${markdown(c.details)}</div>
-      </article>`;
+const skillsPanel = () => {
+  const groups = (home.skills?.groups ?? []).map((g) => ({
+    title: g.title,
+    items: (g.items ?? []).map((name) => ({ name, used: projectsWithTag(name) })),
+  }));
+  return `<section class="panel" id="panel-skills" data-panel="skills" aria-label="Skills">
+    ${panelHead('Skills')}
+    <div class="panel-body">
+      <h2>Skills</h2>
+      ${home.skills?.note ? `<p class="muted">${escape(home.skills.note)}</p>` : ''}
+      ${groups.map((g) => `<h5>${escape(g.title)}</h5>
+      <ul class="skills">${g.items.map((s) => `<li><span class="skill">${escape(s.name)}</span>${s.used.length ? `<span class="used">${s.used.map((c) => `<a href="#${escape(c.id)}" data-open="${escape(c.id)}">${escape(c.title)}</a>`).join(', ')}</span>` : ''}</li>`).join('')}</ul>`).join('\n      ')}
+    </div>
+  </section>`;
 };
 
-const projectsMain = () => {
-  const all = catalogue();
-  return `  <main id="main-content">
-    <header class="page-title">
-      <h1>The Specimens</h1>
-      <p class="intro-subtitle">${all.length} works, catalogued in full</p>
-    </header>
-    <div class="divider" aria-hidden="true">${sprig}</div>
-    <ol class="ledger">${all.map((c) => `<li><a href="#${escape(c.id)}"><span>No. ${c.no}</span><strong>${escape(c.title)}</strong><em>${escape(category(c))}</em></a></li>`).join('')}</ol>
-    ${all.map(projectEntry).join('\n    ')}
-  </main>`;
+const panelsHtml = () => `<aside class="right" id="panel-host" aria-label="Details">
+  ${homePanel()}
+  ${skillsPanel()}
+  ${catalogue().all.map(projectPanel).join('\n  ')}
+</aside>
+<div class="scrim" id="scrim" hidden></div>`;
+
+// What the chat knows without the server: titles, ids and summaries for
+// matching questions to panels, plus the facts the offline replies use.
+const chatData = () => {
+  const { all } = catalogue();
+  return {
+    projects: all.map((c) => ({ id: c.id, title: c.title, summary: c.summary, category: category(c), status: c.status, tags: (c.tags ?? []).slice(1) })),
+    featured: home.projects?.featured ?? [],
+    now: home.now ?? '',
+    skills: (home.skills?.groups ?? []).map((g) => ({ title: g.title, items: g.items ?? [] })),
+    contact: (contact.items ?? []).map((i) => ({ key: i.key, label: i.label, href: i.href })),
+    resume: (home.resume ?? []).filter((r) => r.href),
+    roles: home.roles ?? [],
+  };
+};
+
+/* ── Projects page (one long page, for reading and linking) ───────────── */
+const projectsPage = () => {
+  const { all } = catalogue();
+  const entry = (c) => {
+    const media = (c.media ?? []).filter((m) => m.src && !/avatar/.test(m.src));
+    const links = (c.links ?? []).filter((l) => l.href).map((l) => `<a href="${escape(l.href)}"${extAttrs(l.href)}>${escape(l.label)} ↗</a>`).join(' · ');
+    return `<article class="entry" id="${escape(c.id)}">
+      <p class="kicker">${escape(category(c))}${c.updated ? ` · ${escape(c.updated)}` : ''}</p>
+      <h2>${escape(c.title)}</h2>
+      <p class="lead">${escape(c.summary)}</p>
+      ${links ? `<p class="links">${links}</p>` : ''}
+      ${media.map((m) => `<figure class="shot${/logo/.test(m.src) ? ' is-logo' : ''}"><img src="../${escape(m.src)}" alt="${escape(m.alt)}" loading="lazy">${m.caption ? `<figcaption>${escape(m.caption)}</figcaption>` : ''}</figure>`).join('')}
+      ${(c.fields ?? []).length ? `<dl class="facts">${c.fields.map((f) => `<div><dt>${escape(f.label)}</dt><dd>${escape(f.value)}</dd></div>`).join('')}</dl>` : ''}
+      <div class="details">${markdown(c.details)}</div>
+    </article>`;
+  };
+  return `<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="archive-bar"><a href="../">${icon('left', 16)} Back to the chat</a><span>${escape(fullName)}</span></header>
+<main class="archive" id="main-content">
+  <h1>Projects</h1>
+  <p class="muted">${all.length} projects, each with the problem, my role and what came of it.</p>
+  <ol class="index">${all.map((c) => `<li><a href="#${escape(c.id)}"><b>${escape(c.title)}</b><span>${escape(category(c))}</span></a></li>`).join('')}</ol>
+  ${all.map(entry).join('\n  ')}
+  <footer class="archive-foot">${escape(site.footer?.copyright)} · <a href="/llms.txt">llms.txt</a> · <a href="/admin/">Edit</a></footer>
+</main>`;
 };
 
 /* ── Emit ─────────────────────────────────────────────────────────────── */
@@ -380,20 +377,26 @@ const write = (rp, html) => {
   console.log(`✓ wrote ${rp.padEnd(20)} (${fs.statSync(out).size} bytes)`);
 };
 
-write('index.html', page({
+write('index.html', doc({
   base: '',
-  current: '/',
   title: site.meta?.title,
   description: site.meta?.description,
   url: siteUrl,
-  main: homeMain(),
+  bodyClass: 'app',
+  body: `<a class="skip-link" href="#ask-input">Skip to the chat</a>
+${sidebarHtml()}
+${chatHtml()}
+${panelsHtml()}
+<noscript><style>.right{display:block;position:static}.panel{display:block}.panel .close,.composer,.scrim{display:none}</style></noscript>
+<script type="application/json" id="chat-data">${JSON.stringify(chatData()).replace(/</g, '\\u003c')}</script>
+<script src="scripts/app.js" defer></script>`,
 }));
 
-write('projects/index.html', page({
+write('projects/index.html', doc({
   base: '../',
-  current: '/projects/',
-  title: `Specimens — ${site.meta?.siteName}`,
+  title: `Projects — ${site.meta?.siteName}`,
   description: `Every project by ${site.meta?.author}, with problem, role, decisions and outcome.`,
   url: `${siteUrl}/projects/`,
-  main: projectsMain(),
+  bodyClass: 'page',
+  body: projectsPage(),
 }));

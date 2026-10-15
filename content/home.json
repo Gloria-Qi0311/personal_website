@@ -1,38 +1,26 @@
 {
-  "label": "A Cabinet of Curiosities",
-  "subtitle": "Collection of Things Built & Questions Asked",
-  "nav": [
-    {
-      "label": "Home",
-      "icon": "home",
-      "href": "/"
-    },
-    {
-      "label": "Projects",
-      "icon": "folder",
-      "href": "/projects/"
-    },
-    {
-      "label": "Skills",
-      "icon": "plus",
-      "href": ""
-    },
-    {
-      "label": "Gallery",
-      "icon": "image",
-      "href": ""
-    },
-    {
-      "label": "Journal",
-      "icon": "doc",
-      "href": ""
-    }
+  "greeting": [
+    "Hi dear,",
+    "I'm Gloria Qi."
   ],
-  "nameLines": [
-    "Gloria",
-    "Qi"
+  "intro": "I'm a junior at UW Informatics working toward AI product management. I like problems where the model is the easy part and the hard part is trust. Ask me anything, or open a project on the left.",
+  "suggestions": [
+    "What are you building now?",
+    "Show me your best project",
+    "What skills do you have?",
+    "Are you open to internships?"
   ],
+  "inputPlaceholder": "Ask me anything about my work…",
+  "disclaimer": "Answers are written by an AI that has read this site. It can make mistakes.",
+  "profileName": "Peitong Qi",
+  "profileLine": "AI product builder · UW",
   "nameZh": "",
+  "photo": "",
+  "roles": [
+    "AI Product Builder",
+    "Informatics @ UW",
+    "Open to internship"
+  ],
   "resume": [
     {
       "label": "Résumé",
@@ -43,37 +31,8 @@
       "href": ""
     }
   ],
-  "roles": [
-    "AI Product Builder",
-    "Informatics @ UW",
-    "Open to internship"
-  ],
-  "usage": {
-    "title": "Personal token consumption",
-    "href": "",
-    "stats": [
-      {
-        "label": "Total tokens",
-        "value": "—",
-        "note": ""
-      },
-      {
-        "label": "Top agent",
-        "value": "—",
-        "note": ""
-      }
-    ],
-    "series": []
-  },
-  "message": {
-    "title": "A message from Gloria",
-    "body": "I'm a junior at UW Informatics working toward AI product management. I like problems where the model is the easy part and the hard part is trust: who did what, what changed, and why the result should be believed. Everything in this cabinet started as a question like that."
-  },
+  "now": "Building Lark Loom for the ByteDance Lark AI Campus Challenge, AI product innovation track.",
   "projects": {
-    "title": "Projects",
-    "updateLabel": "Update",
-    "updateDate": "",
-    "update": "Building Lark Loom for the ByteDance Lark AI Campus Challenge, AI product innovation track.",
     "featured": [
       "shipped-roundtable",
       "shipped-memory-benchmark",
@@ -82,5 +41,25 @@
       "shipped-fitty"
     ]
   },
-  "chatPrompt": "Ask Gloria anything"
+  "skills": {
+    "note": "Drawn from the tags on my projects. A fuller list is coming.",
+    "groups": [
+      {
+        "title": "AI systems",
+        "items": ["AI Agent", "AI Memory", "LLM Systems", "Evaluation", "Information Retrieval", "OpenAI"]
+      },
+      {
+        "title": "Engineering",
+        "items": ["TypeScript", "Python", "React", "Next.js", "Node.js", "FastAPI", "Supabase", "Cloudflare", "Chrome Extension"]
+      },
+      {
+        "title": "Product & design",
+        "items": ["Product Systems", "UI/UX Design", "Figma", "Information Architecture", "Collaboration"]
+      }
+    ]
+  },
+  "gallery": {
+    "label": "Gallery",
+    "href": ""
+  }
 }
