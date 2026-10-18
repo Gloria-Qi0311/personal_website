@@ -149,6 +149,6 @@ See [Issue #39](https://github.com/AntaresYuan/personal_website/issues/39) for t
 ## Design
 
 - **Layout:** the home page is a chat with Gloria. Left: profile and navigation (Home, Projects, Skills, Gallery). Center: a welcome, then the conversation. Right: a detail panel for whatever was opened, closed on first visit. `#home`, `#skills` and `#<card-id>` link straight to a panel.
-- **Chat:** questions go to `POST /api/chat` (`{messages: [{role, content}]}` → `{reply}`). Until that endpoint is live, `scripts/app.js` answers from the site's own content. A reply that names a project opens it on the right.
+- **Chat:** questions go to `POST /api/chat` (`{messages: [{role, content}]}` → `{reply, source}`), served by `worker/index.js`: the local model on Gloria's Mac answers first (via `local/agent.mjs`, which scans her recent work at question time), Workers AI answers when the Mac is offline, and `scripts/app.js` answers from the site's own content if both fail. Both models also read Gloria's own memory from the `MEMORY` KV namespace. Setup: [`docs/local-model.md`](docs/local-model.md). A reply that names a project opens it on the right.
 - **Type:** Instrument Serif (headings) · Inter (everything else).
 - All tokens live in `styles/site.css` `:root`. Edit there to retheme globally.
