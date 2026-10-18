@@ -5,7 +5,8 @@
      panel on the right; closing it clears the hash. The welcome screen
      has no panel.
    - Chat: messages go to POST /api/chat as {messages:[{role, content}]}
-     and come back as {reply}. When the server can't answer (not deployed
+     and come back as {reply, source}; source "local" means the model on
+     Gloria's laptop answered (worker/index.js). When the server can't answer (not deployed
      yet, not configured, offline), a small local responder answers from
      the site's own content so the page still works.
    - Whenever a reply names a project, that project opens on the right.
@@ -177,13 +178,14 @@
     scrollDown();
 
     let reply = null;
+    let source = null;
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ messages: history }),
       });
-      if (res.ok) reply = (await res.json()).reply || null;
+      if (res.ok) ({ reply = null, source = null } = await res.json());
     } catch { /* no server: fall through to the local responder */ }
 
     let target = null;
@@ -198,7 +200,8 @@
     save();
 
     const project = target && find(target.id);
-    $('.text', pending).innerHTML = formatReply(reply) + (project ? openCard(project) : '');
+    const via = source === 'local' ? '<p class="via">Answered by a small model running on my own laptop.</p>' : '';
+    $('.text', pending).innerHTML = formatReply(reply) + (project ? openCard(project) : '') + via;
     if (target) open(target.id);
     scrollDown();
     busy = false;
