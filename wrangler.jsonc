@@ -1,14 +1,37 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "gloria-qi",
+  "main": "worker/index.js",
   "compatibility_date": "2026-05-12",
   "observability": {
     "enabled": true
   },
   "assets": {
-    "directory": "."
+    "directory": ".",
+    "binding": "ASSETS",
+    // Only /api/* runs the Worker; everything else is served as a static file.
+    "run_worker_first": ["/api/*"]
   },
   "compatibility_flags": [
     "nodejs_compat"
-  ]
+  ],
+  // Cloud fallback for the chat when the Mac is off (Workers AI free tier).
+  "ai": {
+    "binding": "AI"
+  },
+  // 10 chat messages per visitor IP per minute.
+  "ratelimits": [
+    {
+      "name": "CHAT_LIMIT",
+      "namespace_id": "1001",
+      "simple": { "limit": 10, "period": 60 }
+    }
+  ],
+  // Secrets (set with `npx wrangler secret put <NAME>`, never committed):
+  //   LOCAL_LLM_URL, LOCAL_LLM_KEY, CF_ACCESS_ID, CF_ACCESS_SECRET
+  // See docs/local-model.md.
+  "vars": {
+    "LOCAL_LLM_MODEL": "qwen3.5-9b-mlx",
+    "FALLBACK_MODEL": "@cf/qwen/qwen3-30b-a3b-fp8"
+  }
 }
