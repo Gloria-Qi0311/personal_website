@@ -1,46 +1,80 @@
-# 把本地模型接到网站聊天框
+# 网站聊天：本地模型 + 长期记忆 + 提问时现扫
 
-网站的聊天框发消息到 `POST /api/chat`，由 `worker/index.js` 处理，按这个顺序找人回答：
+访客在网站聊天框提问时，`worker/index.js` 这样找人回答：
 
-1. **本地**：Mac 上 LM Studio 里跑的 Qwen，经 Cloudflare Tunnel 访问。
-2. **云端兜底**：Mac 关机、合盖或隧道断了，就用 Workers AI（免费额度每天 10,000 neurons）。
-3. **都不行**：浏览器里的 `scripts/app.js` 用网站自己的内容简单回答，聊天框不会挂。
+1. **本地**：通过 Cloudflare Tunnel 问你 Mac 上的 `local/agent.mjs`。它**当场**扫一遍你最近在做的事（最近几天你自己的 git 提交，加上 `~/now.md`），再交给 LM Studio 里的 Qwen 回答。
+2. **云端兜底**：Mac 关机、合盖或隧道断了，就用 Workers AI 回答。它看不到你今天在做什么，被问到时会说"最新动态要等我电脑在线才能看"。
+3. **都不行**：浏览器里的 `scripts/app.js` 用网站内容简单回答。
 
-本地回答时，回复下面会多一行小字 "Answered by a small model running on my own laptop."
+两种模型都会先读**你自己写的长期记忆**（存在 Cloudflare KV 里，见第 6 步），再读网站内容。本地回答时，回复下面会多一行小字 "Answered by a small model running on my own laptop."
 
-只部署代码、不做下面的步骤也能用：这时所有回答都走 Workers AI。
+只做第 6 步也有用：云端模型马上就会按你写的记忆说话。
 
 ---
 
 ## 1. LM Studio 开服务
 
-1. LM Studio → **Developer** → 加载 Qwen3.5 9B → **Start Server**（默认端口 `1234`）。
-2. 在设置里关掉闲置自动卸载模型（或把 TTL 调长），不然第一个访客要等模型重新加载。
-3. 查模型 id，填到 `wrangler.jsonc` 的 `LOCAL_LLM_MODEL`：
+LM Studio → **Developer** → 加载 Qwen3.5 9B → 打开本地服务器。端口以设置页「基础 URL」为准，你的是 `1235`。建议关掉闲置自动卸载模型。
 
-   ```bash
-   curl -s localhost:1234/v1/models | jq -r '.data[].id'
-   ```
+## 2. 装 Mac 小程序（agent）
 
-## 2. Cloudflare Tunnel（给本地服务一个公网地址）
+需要 Node.js（`node -v` 能看到版本就行，没有就 `brew install node`）。在仓库根目录：
 
-固定地址需要一个托管在 Cloudflare 上的域名（Cloudflare Registrar 买一个即可）。
+```bash
+# 第一次运行会生成 ~/.gloria-agent.json，里面已经有随机生成的 token
+node local/agent.mjs
+```
+
+打开 `~/.gloria-agent.json`，把 `dirs` 改成你放项目的文件夹，比如 `["~/Projects", "~/Documents/GitHub"]`。其他可选项：
+
+- `exclude`：不想让模型提到的仓库文件夹名
+- `authors`：只算这些邮箱的提交（默认是你的 git user.email，队友的提交不算）
+- `days`：多少天内算"最近"（默认 7）
+- `note`：你自己写近况的文件（默认 `~/now.md`，写一两句"这周在忙什么"，优先级最高）
+
+先看看它扫到了什么：
+
+```bash
+node local/agent.mjs --scan
+```
+
+没问题就装成后台常驻（开机自动启动，挂了自动重启）：
+
+```bash
+bash local/install-launchd.sh
+```
+
+本机测试（把 TOKEN 换成配置文件里的 token）：
+
+```bash
+curl -s localhost:8788/health -H "authorization: Bearer TOKEN"
+curl -s localhost:8788/chat -H "authorization: Bearer TOKEN" -H 'content-type: application/json' \
+  -d '{"system":"You are Gloria.","messages":[{"role":"user","content":"你最近在做什么？"}]}'
+```
+
+日志在 `~/Library/Logs/gloria-agent.log`。
+
+> 如果项目放在「文稿」或「桌面」里，macOS 会挡住后台程序读取。到 系统设置 → 隐私与安全性 → 完全磁盘访问权限，把 `node` 加进去（路径用 `which node` 查）。
+
+## 3. Cloudflare Tunnel（让网站连到 Mac 小程序）
+
+前提：`gloriaqi.site` 已经加进 Cloudflare 并显示「活动」。
 
 ```bash
 brew install cloudflared
 cloudflared tunnel login
 cloudflared tunnel create gloria-llm
-cloudflared tunnel route dns gloria-llm llm.你的域名.com
+cloudflared tunnel route dns gloria-llm llm.gloriaqi.site
 ```
 
-`~/.cloudflared/config.yml`：
+`~/.cloudflared/config.yml`（隧道只连小程序，LM Studio 不暴露出去）：
 
 ```yaml
 tunnel: gloria-llm
 credentials-file: /Users/你的用户名/.cloudflared/<tunnel-id>.json
 ingress:
-  - hostname: llm.你的域名.com
-    service: http://localhost:1234
+  - hostname: llm.gloriaqi.site
+    service: http://localhost:8788
   - service: http_status:404
 ```
 
@@ -49,46 +83,46 @@ cloudflared tunnel run gloria-llm          # 先手动跑一次试试
 sudo cloudflared service install           # 之后开机自动启动
 ```
 
-> 暂时没有域名：`cloudflared tunnel --url http://localhost:1234` 会给一个 `*.trycloudflare.com` 临时地址，可以先试通，但每次重启都会变，也没法加下一步的访问保护。只适合测试。
+## 4. 加访问保护
 
-## 3. 加访问保护（必须做）
-
-LM Studio 本身没有鉴权，隧道地址一旦泄露，谁都能用你的电脑跑模型。用 Cloudflare Access 只放行网站的 Worker：
+小程序本身要 token，再用 Cloudflare Access 加一层，只放行网站的 Worker：
 
 1. Zero Trust → **Access → Service Auth → Service Tokens** → Create，记下 Client ID 和 Client Secret。
-2. **Access → Applications → Add → Self-hosted**，域名填 `llm.你的域名.com`。
+2. **Access → Applications → Add → Self-hosted**，域名填 `llm.gloriaqi.site`。
 3. 策略：Action 选 **Service Auth**，Include 选刚才的 service token。
 
-## 4. 把地址和密钥交给 Worker
+## 5. 把地址和密钥交给 Worker
 
-在仓库根目录：
+Cloudflare 后台 → Workers 和 Pages → `gloria-qi` → 设置 → 变量和机密，添加这四个「机密」（或用 `npx wrangler secret put <名字>`）：
+
+| 名字 | 值 |
+| - | - |
+| `LOCAL_AGENT_URL` | `https://llm.gloriaqi.site` |
+| `LOCAL_AGENT_TOKEN` | `~/.gloria-agent.json` 里的 token |
+| `CF_ACCESS_ID` | 第 4 步的 Client ID |
+| `CF_ACCESS_SECRET` | 第 4 步的 Client Secret |
+
+## 6. 写你的长期记忆
+
+Cloudflare 后台 → 存储和数据库 (Storage & databases) → Workers KV → 打开名字里带 `MEMORY` 的那个（第一次部署后自动创建）→ 添加条目：
+
+- 键 (Key)：`memory`
+- 值 (Value)：用你自己的话写，比如你是谁、性格、偏好、说话风格、哪些话题不想聊
+
+保存后一分钟内生效，想改随时回来改。注意：访客在聊天里可能把这些内容问出来，真正的秘密不要写进去。
+
+## 7. 验证
 
 ```bash
-npx wrangler secret put LOCAL_LLM_URL      # https://llm.你的域名.com（不带 /v1）
-npx wrangler secret put CF_ACCESS_ID
-npx wrangler secret put CF_ACCESS_SECRET
-```
-
-（如果你的 LM Studio 版本开了 API token，再加 `LOCAL_LLM_KEY`。）
-
-## 5. 验证
-
-```bash
-# 隧道 + Access 通了吗（应返回模型列表；不带 header 应被拦）
-curl -s https://llm.你的域名.com/v1/models \
-  -H "CF-Access-Client-Id: $ID" -H "CF-Access-Client-Secret: $SECRET"
-
-# 网站接口：source 是 "local" 说明 Mac 在回答，"cloud" 说明走了兜底
-curl -s https://gloria-qi.glqi63583.workers.dev/api/chat \
-  -H 'content-type: application/json' \
+curl -s https://gloriaqi.site/api/chat -H 'content-type: application/json' \
   -d '{"messages":[{"role":"user","content":"你最近在做什么？"}]}'
 ```
 
-Worker 日志（Cloudflare 后台 → Workers → gloria-qi → Logs）里会看到 `chat: local failed: ...`，说明为什么切到了云端。
+返回里 `source` 是 `"local"` 说明是你的 Mac 在回答，`"cloud"` 说明走了兜底。为什么切到云端可以看 Cloudflare 后台 → Workers → gloria-qi → 日志，里面会有 `chat: local failed: ...`。
 
 ## 注意
 
-- 想让本地多接访客，Mac 要保持唤醒：插电时 `caffeinate -s`，或用 Amphetamine。合盖就会切到云端。
+- 要让本地模型接访客，Mac 要开着、醒着。插电时可以 `caffeinate -s`，或用 Amphetamine。
 - 每个访客 IP 每分钟最多 10 条（`wrangler.jsonc` 里的 `CHAT_LIMIT`）。
-- 两个模型都只拿到 `/llms-full.txt` 作为资料，回答范围就是网站内容。改了网站内容重新 build 就会同步。
-- 9B 模型偶尔会答偏或编细节，系统提示已经要求它只用网站内容，页面底部也有 "It can make mistakes" 的提示。
+- 小程序只读 git 提交记录和 `now.md`，不会读别的文件；离开 Mac 的只有模型写出的回答。
+- 9B 模型偶尔会答偏，页面底部有 "It can make mistakes" 的提示。

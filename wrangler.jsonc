@@ -19,6 +19,11 @@
   "ai": {
     "binding": "AI"
   },
+  // Gloria's own long-term memory for the chat (key "memory"), edited in
+  // the Cloudflare dashboard. No id: wrangler creates it on first deploy.
+  "kv_namespaces": [
+    { "binding": "MEMORY" }
+  ],
   // 10 chat messages per visitor IP per minute.
   "ratelimits": [
     {
@@ -28,10 +33,9 @@
     }
   ],
   // Secrets (set with `npx wrangler secret put <NAME>`, never committed):
-  //   LOCAL_LLM_URL, LOCAL_LLM_KEY, CF_ACCESS_ID, CF_ACCESS_SECRET
+  //   LOCAL_AGENT_URL, LOCAL_AGENT_TOKEN, CF_ACCESS_ID, CF_ACCESS_SECRET
   // See docs/local-model.md.
   "vars": {
-    "LOCAL_LLM_MODEL": "qwen3.5-9b-mlx",
     "FALLBACK_MODEL": "@cf/qwen/qwen3-30b-a3b-fp8"
   }
 }
