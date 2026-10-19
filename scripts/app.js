@@ -5,7 +5,7 @@
      panel on the right; closing it clears the hash. The welcome screen
      has no panel.
    - Chat: messages go to POST /api/chat as {messages:[{role, content}]}
-     and come back as {reply, source}; source "local" means the model on
+     and come back as {reply, source, traceId}; source "local" means the model on
      Gloria's laptop answered (worker/index.js). When the server can't answer (not deployed
      yet, not configured, offline), a small local responder answers from
      the site's own content so the page still works.
@@ -111,9 +111,21 @@
 
   const openCard = (p) => `<button type="button" class="open-card" data-open-card="${esc(p.id)}"><span><b>${esc(p.title)}</b><small>${esc(p.category)}</small></span><span class="go">Opened →</span></button>`;
 
+  // Trace id under each answer, so a bad answer can be reported exactly.
+  const traceLine = (id) => (id
+    ? `<p class="trace"><span>${esc(id)}</span><button type="button" class="trace-copy" data-copy="${esc(id)}" aria-label="Copy trace id">Copy</button></p>`
+    : '');
+
   thread.addEventListener('click', (e) => {
     const card = e.target.closest('[data-open-card]');
     if (card) open(card.dataset.openCard);
+    const copy = e.target.closest('[data-copy]');
+    if (copy) {
+      navigator.clipboard?.writeText(copy.dataset.copy).then(() => {
+        copy.textContent = 'Copied';
+        setTimeout(() => { copy.textContent = 'Copy'; }, 1500);
+      }).catch(() => {});
+    }
   });
 
   // The project a text names first (on a tie, the longer title wins, so
@@ -132,7 +144,7 @@
   // ── Local responder (used when /api/chat can't answer) ───────────────
   const find = (id) => projects.find((p) => p.id === id);
   const contactLine = () => (data.contact || []).map((c) => `[${c.label}](${c.href})`).join(' · ');
-  const local = (q) => {
+  const local = (q, recent = []) => {
     const t = q.toLowerCase();
     const project = mentioned(q) || byTitle.find((p) => p.id.split('-').slice(1).some((w) => w.length > 3 && t.includes(w)));
     if (project) return { text: `**${project.title}**: ${project.summary}\n\nThe details are open on the right.`, open: project.id };
@@ -141,6 +153,10 @@
       if (p) return { text: `I'd start with **${p.title}**. ${p.summary}\n\nIt's open on the right.`, open: p.id };
     }
     if (/now|current|working on|building|最近|正在|在做/.test(t)) {
+      if (recent.length) {
+        const lines = recent.map((r) => `- **${r.url ? `[${r.name}](${r.url})` : r.name}**${r.description ? `: ${r.description}` : ''} (last worked on ${r.pushed})`).join('\n');
+        return { text: `Lately I've been working on:\n\n${lines}` };
+      }
       const p = projects.find((x) => x.status === 'now' && (data.featured || []).includes(x.id));
       return { text: data.now || 'A few things at once. Have a look at the projects on the left.', open: p?.id };
     }
@@ -179,29 +195,33 @@
 
     let reply = null;
     let source = null;
+    let traceId = null;
+    let recent = [];
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ messages: history }),
+        body: JSON.stringify({ messages: history.map(({ role, content }) => ({ role, content })) }),
       });
-      if (res.ok) ({ reply = null, source = null } = await res.json());
+      const body = await res.json().catch(() => ({}));
+      ({ traceId = null, recent = [] } = body);
+      if (res.ok) ({ reply = null, source = null } = body);
     } catch { /* no server: fall through to the local responder */ }
 
     let target = null;
     if (reply) {
       target = mentioned(reply);
     } else {
-      const answer = local(q);
+      const answer = local(q, recent);
       reply = answer.text;
       target = answer.open ? (find(answer.open) || { id: answer.open }) : null;
     }
-    history.push({ role: 'assistant', content: reply });
+    history.push({ role: 'assistant', content: reply, ...(traceId ? { traceId } : {}) });
     save();
 
     const project = target && find(target.id);
     const via = source === 'local' ? '<p class="via">Answered by a small model running on my own laptop.</p>' : '';
-    $('.text', pending).innerHTML = formatReply(reply) + (project ? openCard(project) : '') + via;
+    $('.text', pending).innerHTML = formatReply(reply) + (project ? openCard(project) : '') + via + traceLine(traceId);
     if (target) open(target.id);
     scrollDown();
     busy = false;
@@ -240,7 +260,7 @@
   // ── Start ───────────────────────────────────────────────────────────
   if (history.length) {
     app.classList.add('is-chatting');
-    history.forEach((m) => (m.role === 'user' ? addUser(m.content) : addBot(formatReply(m.content))));
+    history.forEach((m) => (m.role === 'user' ? addUser(m.content) : addBot(formatReply(m.content) + traceLine(m.traceId))));
     scrollDown();
   }
   route();

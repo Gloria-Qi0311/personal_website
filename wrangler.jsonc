@@ -27,8 +27,15 @@
       "simple": { "limit": 10, "period": 60 }
     }
   ],
+  // Chat log for trace ids (worker/trace.js). Created on first deploy.
+  "d1_databases": [
+    { "binding": "DB", "database_name": "gloria-chat-logs" }
+  ],
+  // Lets each log row record which deployed version answered.
+  "version_metadata": { "binding": "CF_VERSION_METADATA" },
   // Secrets (set with `npx wrangler secret put <NAME>`, never committed):
-  //   LOCAL_LLM_URL, LOCAL_LLM_KEY, CF_ACCESS_ID, CF_ACCESS_SECRET
+  //   LOCAL_LLM_URL, LOCAL_LLM_KEY, CF_ACCESS_ID, CF_ACCESS_SECRET,
+  //   GITHUB_TOKEN (fine-grained, all repos, Contents: read-only)
   // See docs/local-model.md.
   "vars": {
     "LOCAL_LLM_MODEL": "qwen3.5-9b-mlx",

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "BC-001",
+    "traceId": null,
+    "reported": "2026-10-19",
+    "question": "What are you building now?",
+    "badAnswer": "Lark Loom (from July; the site's Now section was stale). Other visitors got a different old project.",
+    "expected": "Names what Gloria has worked on most recently on GitHub, not Lark Loom.",
+    "checks": { "mustNotInclude": ["Lark Loom"] }
+  },
+  {
+    "id": "BC-002",
+    "traceId": null,
+    "reported": "2026-10-19",
+    "question": "你最近在做什么？",
+    "badAnswer": "Same as BC-001, asked in Chinese.",
+    "expected": "Answers in Chinese with recent GitHub work, not Lark Loom.",
+    "checks": { "mustNotInclude": ["Lark Loom"] }
+  }
+]

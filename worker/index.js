@@ -2,7 +2,12 @@
    worker/index.js — the site's Worker. Only /api/* reaches it (see
    run_worker_first in wrangler.jsonc); every other path is a static asset.
 
-   POST /api/chat  {messages:[{role, content}]}  →  {reply, source}
+   POST /api/chat  {messages:[{role, content}]}  →  {reply, source, traceId}
+
+   Every answer gets a trace id and is logged to D1 (worker/trace.js), so a
+   bad answer can be reported by id and turned into a case in
+   evals/bad-cases.json. Questions about current work are answered from
+   recent GitHub activity (worker/github.js), not only the site's Now section.
 
    Who answers:
      1. "local": the Qwen model in LM Studio on Gloria's Mac, reached
@@ -25,6 +30,9 @@
    See docs/local-model.md for the setup on the Mac.
    ════════════════════════════════════════════════════════════════════════ */
 
+import { githubActivity } from './github.js';
+import { logAnswer, newTraceId } from './trace.js';
+
 const MAX_TURNS = 12;          // history sent to the model
 const MAX_CHARS = 2000;        // per message
 const PROBE_MS = 2500;         // is the Mac reachable at all?
@@ -43,20 +51,27 @@ const clean = (text) => String(text || '')
   .trim();
 
 let siteText = null;
-const systemPrompt = async (env, request) => {
+const systemPrompt = async (env, request, ctx) => {
   if (siteText === null) {
     const res = await env.ASSETS.fetch(new URL('/llms-full.txt', request.url));
     siteText = res.ok ? await res.text() : '';
   }
+  const { text: activity } = await githubActivity(env, ctx);
   return [
     'You are Gloria Qi, answering visitors in the chat on your personal website.',
     'Speak in the first person as Gloria, warm and concise: a few short paragraphs at most, Markdown allowed.',
     'Answer in the language the visitor writes in.',
     'Use only the facts in the site content below. If something is not there, say you have not written about it yet and suggest emailing you. Never invent projects, numbers, employers, or links.',
     'When you talk about a project, use its exact title so the site can open it.',
+    ...(activity ? [
+      `Today is ${new Date().toISOString().slice(0, 10)}.`,
+      'For questions about what you are building, doing or working on now or lately, answer from RECENT GITHUB ACTIVITY below (most recent first), not from the Now section of the site content, which can be out of date.',
+      'Private repos: describe them only from their description and README, never share a link to them, and never quote code.',
+    ] : []),
     '',
     '--- SITE CONTENT ---',
     siteText,
+    ...(activity ? ['', '--- RECENT GITHUB ACTIVITY ---', activity] : []),
   ].join('\n');
 };
 
@@ -110,7 +125,7 @@ const askCloud = async (env, messages) => {
   return clean(out?.response ?? out?.choices?.[0]?.message?.content);
 };
 
-const chat = async (request, env) => {
+const chat = async (request, env, ctx) => {
   if (env.CHAT_LIMIT) {
     const ip = request.headers.get('cf-connecting-ip') || 'anon';
     const { success } = await env.CHAT_LIMIT.limit({ key: ip });
@@ -122,25 +137,36 @@ const chat = async (request, env) => {
   const history = readMessages(body);
   if (!history.length || history.at(-1).role !== 'user') return json({ error: 'No question' }, 400);
 
-  const messages = [{ role: 'system', content: await systemPrompt(env, request) }, ...history];
+  const messages = [{ role: 'system', content: await systemPrompt(env, request, ctx) }, ...history];
+  const traceId = newTraceId();
+  const log = (answer, source) => ctx.waitUntil(logAnswer(env, {
+    traceId, question: history.at(-1).content, answer, source, history: history.slice(0, -1),
+    version: env.CF_VERSION_METADATA?.id,
+  }));
 
   for (const [source, ask] of [['local', askLocal], ['cloud', askCloud]]) {
     try {
       const reply = await ask(env, messages);
-      if (reply) return json({ reply, source });
+      if (reply) {
+        log(reply, source);
+        return json({ reply, source, traceId });
+      }
     } catch (err) {
       console.log(`chat: ${source} failed: ${err?.message || err}`);
     }
   }
-  return json({ error: 'No model available' }, 503);
+  // The page answers from its own content now; the id still lets that be traced.
+  log(null, 'page');
+  const { recent } = await githubActivity(env, ctx);
+  return json({ error: 'No model available', traceId, recent }, 503);
 };
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const { pathname } = new URL(request.url);
     if (pathname === '/api/chat') {
       if (request.method !== 'POST') return json({ error: 'Use POST' }, 405);
-      return chat(request, env);
+      return chat(request, env, ctx);
     }
     if (pathname.startsWith('/api/')) return json({ error: 'Not found' }, 404);
     return env.ASSETS.fetch(request);
