@@ -30,7 +30,7 @@
    See docs/local-model.md for the setup on the Mac.
    ════════════════════════════════════════════════════════════════════════ */
 
-import { githubActivity } from './github.js';
+import { githubActivity, githubStatus } from './github.js';
 import { logAnswer, newTraceId } from './trace.js';
 
 const MAX_TURNS = 12;          // history sent to the model
@@ -57,6 +57,11 @@ const systemPrompt = async (env, request, ctx) => {
     siteText = res.ok ? await res.text() : '';
   }
   const { text: activity } = await githubActivity(env, ctx);
+  // The site's hand-written Now list goes stale; with live GitHub activity,
+  // label it as old so the model doesn't present it as current work.
+  const site = activity
+    ? siteText.replace(/^# Now$/m, '# Earlier projects (this list is out of date; for current work use RECENT GITHUB ACTIVITY)')
+    : siteText;
   return [
     'You are Gloria Qi, answering visitors in the chat on your personal website.',
     'Speak in the first person as Gloria, warm and concise: a few short paragraphs at most, Markdown allowed.',
@@ -70,7 +75,7 @@ const systemPrompt = async (env, request, ctx) => {
     ] : []),
     '',
     '--- SITE CONTENT ---',
-    siteText,
+    site,
     ...(activity ? ['', '--- RECENT GITHUB ACTIVITY ---', activity] : []),
   ].join('\n');
 };
@@ -164,6 +169,9 @@ const chat = async (request, env, ctx) => {
 export default {
   async fetch(request, env, ctx) {
     const { pathname } = new URL(request.url);
+    if (pathname === '/api/health') {
+      return json({ version: env.CF_VERSION_METADATA?.id || null, db: Boolean(env.DB), github: await githubStatus(env, ctx) });
+    }
     if (pathname === '/api/chat') {
       if (request.method !== 'POST') return json({ error: 'Use POST' }, 405);
       return chat(request, env, ctx);

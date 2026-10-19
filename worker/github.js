@@ -18,7 +18,8 @@ const README_CHARS = 900;     // per README, enough for "what it is"
 const TTL_S = 3600;
 const CACHE_KEY = 'https://gloria-qi.internal/github-activity-v2';
 
-let memo = null;              // { text, recent, at }
+let memo = null;              // { text, recent, count, at }
+let lastError = null;
 
 const gh = (env, path, accept = 'application/vnd.github+json') => fetch(`https://api.github.com${path}`, {
   headers: {
@@ -62,6 +63,8 @@ const build = async (env) => {
     .slice(0, REPOS);
   const readmes = await Promise.all(repos.map((r) => readmeText(env, r).catch(() => '')));
   return {
+    count: repos.length,
+    newest: (repos[0]?.pushed_at || '').slice(0, 10),
     text: repos.map((r, i) => describe(r, readmes[i])).join('\n\n'),
     // Short list for the page's offline answer; no links for private repos.
     recent: repos.slice(0, 3).map((r) => ({
@@ -82,13 +85,21 @@ export const githubActivity = async (env, ctx) => {
     }
     const fresh = await build(env);
     memo = { ...fresh, at: Date.now() };
+    lastError = null;
     if (cache) {
       const put = cache.put(CACHE_KEY, new Response(JSON.stringify(fresh), { headers: { 'cache-control': `max-age=${TTL_S}` } }));
       ctx?.waitUntil ? ctx.waitUntil(put) : await put;
     }
     return memo;
   } catch (err) {
-    console.log(`github: ${err?.message || err}`);
-    return memo || { text: '', recent: [] };
+    lastError = String(err?.message || err);
+    console.log(`github: ${lastError}`);
+    return memo || { text: '', recent: [], count: 0 };
   }
+};
+
+// For /api/health: counts and dates only, never repo names.
+export const githubStatus = async (env, ctx) => {
+  const { count = 0, newest = null } = await githubActivity(env, ctx);
+  return { token: Boolean(env.GITHUB_TOKEN), repos: count, newest, error: lastError };
 };
