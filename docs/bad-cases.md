@@ -25,6 +25,7 @@ SELECT * FROM chat_logs WHERE trace_id = 'GQ-20261019-E3967B0C';
 | `expected` | 应该怎么答 |
 | `checks.mustInclude` | 回答里至少要出现其中一个词（可选） |
 | `checks.mustNotInclude` | 回答里不能出现的词（可选） |
+| `checks.mustNotMatch` | 回答里不能匹配的正则，比如日期格式（可选） |
 
 **报一个 bad case**：把编号和“应该怎么答”发给 Claude，它会查记录、加一条，并修好。
 

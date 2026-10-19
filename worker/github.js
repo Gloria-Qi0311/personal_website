@@ -16,7 +16,7 @@ const OWNER = 'Gloria-Qi0311';
 const REPOS = 8;              // most recently pushed repos to describe
 const README_CHARS = 900;     // per README, enough for "what it is"
 const TTL_S = 3600;
-const CACHE_KEY = 'https://gloria-qi.internal/github-activity-v2';
+const CACHE_KEY = 'https://gloria-qi.internal/github-activity-v3';
 
 let memo = null;              // { text, recent, count, at }
 let lastError = null;
@@ -43,11 +43,12 @@ const readmeText = async (env, repo) => {
     .slice(0, README_CHARS);
 };
 
+// No dates: the order (most recent first) is all the model needs, and
+// visitors shouldn't be told when Gloria last worked on something.
 const describe = (repo, readme) => {
-  const day = (repo.pushed_at || '').slice(0, 10);
   const head = repo.private
-    ? `### ${repo.name} (private repo, last worked on ${day}; do not share a link)`
-    : `### ${repo.name} (public, last worked on ${day}) ${repo.html_url}`;
+    ? `### ${repo.name} (private repo; do not share a link)`
+    : `### ${repo.name} (public) ${repo.html_url}`;
   return [head, repo.description ? `Description: ${repo.description}` : '', readme ? `README excerpt:\n${readme}` : '']
     .filter(Boolean).join('\n');
 };
@@ -68,7 +69,7 @@ const build = async (env) => {
     text: repos.map((r, i) => describe(r, readmes[i])).join('\n\n'),
     // Short list for the page's offline answer; no links for private repos.
     recent: repos.slice(0, 3).map((r) => ({
-      name: r.name, description: r.description || '', url: r.private ? null : r.html_url, pushed: (r.pushed_at || '').slice(0, 10),
+      name: r.name, description: r.description || '', url: r.private ? null : r.html_url,
     })),
   };
 };

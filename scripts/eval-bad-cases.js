@@ -8,6 +8,7 @@
    /api/chat and applies the case's checks (case-insensitive):
      mustInclude     at least one of these must appear
      mustNotInclude  none of these may appear
+     mustNotMatch    none of these regular expressions may match
    Prints PASS/FAIL with the trace id, and exits 1 if any case fails.
    Run it before merging any change to the chat. Note: answers come from
    whichever model is up (local Qwen first, then Workers AI).
@@ -22,11 +23,15 @@ if (!base) {
 }
 const cases = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'evals', 'bad-cases.json'), 'utf8'));
 
-const check = (answer, { mustInclude = [], mustNotInclude = [] } = {}) => {
+const check = (answer, { mustInclude = [], mustNotInclude = [], mustNotMatch = [] } = {}) => {
   const a = answer.toLowerCase();
   const problems = [];
   if (mustInclude.length && !mustInclude.some((w) => a.includes(w.toLowerCase()))) problems.push(`missing one of: ${mustInclude.join(', ')}`);
   for (const w of mustNotInclude) if (a.includes(w.toLowerCase())) problems.push(`contains "${w}"`);
+  for (const r of mustNotMatch) {
+    const m = answer.match(new RegExp(r, 'i'));
+    if (m) problems.push(`matches /${r}/ ("${m[0]}")`);
+  }
   return problems;
 };
 

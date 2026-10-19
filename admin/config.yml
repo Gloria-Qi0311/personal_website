@@ -234,3 +234,36 @@ collections:
               - { label: "Key (email / linkedin / …)", name: "key",   widget: "string" }
               - { label: "Display label", name: "label", widget: "string" }
               - { label: "URL",           name: "href",  widget: "string" }
+
+  # ── Chat assistant rules ───────────────────────────────────────────
+  # Read by the chat (worker/agent.js). Keep each rule to one short
+  # sentence: the small model follows a few short rules better than many.
+  - name: "agent"
+    label: "Chat assistant"
+    files:
+      - file: "content/agent.json"
+        label: "Chat assistant rules"
+        name: "agent"
+        format: "json"
+        fields:
+          - { label: "Always do", name: "must", widget: "list", required: false, field: { label: "Rule", name: "rule", widget: "string" } }
+          - { label: "Never do", name: "mustNot", widget: "list", required: false, field: { label: "Rule", name: "rule", widget: "string" } }
+          - { label: "Tone", name: "tone", widget: "list", required: false, field: { label: "Rule", name: "rule", widget: "string" } }
+          - label: "Topics to decline"
+            name: "avoid"
+            widget: "list"
+            required: false
+            summary: "{{fields.topic}}"
+            fields:
+              - { label: "Topic", name: "topic", widget: "string" }
+              - { label: "What to say instead", name: "reply", widget: "string", required: false }
+          - label: "Fixed answers (sent as written, without the model)"
+            name: "faq"
+            widget: "list"
+            required: false
+            summary: "{{fields.question}}"
+            fields:
+              - { label: "Question (for your reference)", name: "question", widget: "string" }
+              - { label: "Trigger words (any one in the question)", name: "keywords", widget: "list", field: { label: "Word", name: "word", widget: "string" } }
+              - { label: "Answer", name: "answer", widget: "markdown" }
+              - { label: "Answer in Chinese (optional)", name: "answerZh", widget: "markdown", required: false }

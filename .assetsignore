@@ -5,3 +5,4 @@ docs/
 node_modules/
 .dev.vars*
 evals/
+content/agent.json

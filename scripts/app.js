@@ -154,7 +154,7 @@
     }
     if (/now|current|working on|building|最近|正在|在做/.test(t)) {
       if (recent.length) {
-        const lines = recent.map((r) => `- **${r.url ? `[${r.name}](${r.url})` : r.name}**${r.description ? `: ${r.description}` : ''} (last worked on ${r.pushed})`).join('\n');
+        const lines = recent.map((r) => `- **${r.url ? `[${r.name}](${r.url})` : r.name}**${r.description ? `: ${r.description}` : ''}`).join('\n');
         return { text: `Lately I've been working on:\n\n${lines}` };
       }
       const p = projects.find((x) => x.status === 'now' && (data.featured || []).includes(x.id));

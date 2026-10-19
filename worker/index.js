@@ -17,8 +17,11 @@
    If both fail the endpoint returns 503 and scripts/app.js answers from
    the site's own content, so the chat never goes dead.
 
-   Both models get the same system prompt: a persona plus /llms-full.txt,
-   so answers stay grounded in the site's content.
+   Both models get the same system prompt: Gloria's rules from
+   content/agent.json (worker/agent.js) plus /llms-full.txt, so answers
+   stay grounded in the site's content. A question matching one of her
+   fixed answers ("faq") gets that answer without asking a model, and every
+   answer has its dates removed before it is sent.
 
    Config (wrangler.jsonc vars + `wrangler secret put`):
      LOCAL_LLM_URL     secret  https://llm.example.com (tunnel hostname, no /v1)
@@ -30,6 +33,7 @@
    See docs/local-model.md for the setup on the Mac.
    ════════════════════════════════════════════════════════════════════════ */
 
+import { faqAnswer, rulesText, scrubDates } from './agent.js';
 import { githubActivity, githubStatus } from './github.js';
 import { logAnswer, newTraceId } from './trace.js';
 
@@ -59,24 +63,24 @@ const systemPrompt = async (env, request, ctx) => {
   const { text: activity } = await githubActivity(env, ctx);
   // The site's hand-written Now list goes stale; with live GitHub activity,
   // label it as old so the model doesn't present it as current work.
-  const site = activity
+  const site = scrubDates(activity
     ? siteText.replace(/^# Now$/m, '# Earlier projects (this list is out of date; for current work use RECENT GITHUB ACTIVITY)')
-    : siteText;
+    : siteText);
+  const rules = rulesText();
   return [
-    'You are Gloria Qi, answering visitors in the chat on your personal website.',
-    'Speak in the first person as Gloria, warm and concise: a few short paragraphs at most, Markdown allowed.',
-    'Answer in the language the visitor writes in.',
-    'Use only the facts in the site content below. If something is not there, say you have not written about it yet and suggest emailing you. Never invent projects, numbers, employers, or links.',
+    'You are Gloria Qi, answering visitors in the chat on your personal website. Markdown is allowed.',
+    ...(rules ? ['', rules, ''] : []),
+    'Use only the facts in the site content below. If something is not there, say you have not written about it yet and suggest emailing you.',
     'When you talk about a project, use its exact title so the site can open it.',
+    'Never mention dates or when something was updated.',
     ...(activity ? [
-      `Today is ${new Date().toISOString().slice(0, 10)}.`,
       'For questions about what you are building, doing or working on now or lately, answer from RECENT GITHUB ACTIVITY below (most recent first), not from the Now section of the site content, which can be out of date.',
       'Private repos: describe them only from their description and README, never share a link to them, and never quote code.',
     ] : []),
     '',
     '--- SITE CONTENT ---',
     site,
-    ...(activity ? ['', '--- RECENT GITHUB ACTIVITY ---', activity] : []),
+    ...(activity ? ['', '--- RECENT GITHUB ACTIVITY ---', scrubDates(activity)] : []),
   ].join('\n');
 };
 
@@ -149,9 +153,15 @@ const chat = async (request, env, ctx) => {
     version: env.CF_VERSION_METADATA?.id,
   }));
 
+  const fixed = faqAnswer(history.at(-1).content);
+  if (fixed) {
+    log(fixed, 'faq');
+    return json({ reply: fixed, source: 'faq', traceId });
+  }
+
   for (const [source, ask] of [['local', askLocal], ['cloud', askCloud]]) {
     try {
-      const reply = await ask(env, messages);
+      const reply = scrubDates(await ask(env, messages));
       if (reply) {
         log(reply, source);
         return json({ reply, source, traceId });
