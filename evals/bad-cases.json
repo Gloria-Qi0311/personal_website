@@ -62,5 +62,31 @@
         "(19|20)\\d{2}年\\d{1,2}月"
       ]
     }
+  },
+  {
+    "id": "BC-005",
+    "traceId": "GQ-20261020-C9734A7B",
+    "reported": "2026-10-20",
+    "question": "What are you building now?",
+    "badAnswer": "Named an old project as current work: with all dates removed, the model could not tell recent repos from old ones.",
+    "expected": "Only repos pushed in the last month (marked CURRENT work), and no dates in the answer.",
+    "checks": {
+      "mustNotInclude": [
+        "HuskyMatch",
+        "boss-auto-apply",
+        "BOSS Auto Apply",
+        "Lark Loom",
+        "LexVault",
+        "ai-pm-poc",
+        "calarie",
+        "Calorie",
+        "DiscountedAirfare",
+        "LibraryManagementSystem",
+        "last updated"
+      ],
+      "mustNotMatch": [
+        "(19|20)\\d{2}[-/.]\\d{1,2}[-/.]\\d{1,2}"
+      ]
+    }
   }
 ]
