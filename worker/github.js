@@ -16,7 +16,8 @@ const OWNER = 'Gloria-Qi0311';
 const REPOS = 8;              // most recently pushed repos to describe
 const README_CHARS = 900;     // per README, enough for "what it is"
 const TTL_S = 3600;
-const CACHE_KEY = 'https://gloria-qi.internal/github-activity-v3';
+const CURRENT_DAYS = 30;      // pushed this recently = current work
+const CACHE_KEY = 'https://gloria-qi.internal/github-activity-v4';
 
 let memo = null;              // { text, recent, count, at }
 let lastError = null;
@@ -43,12 +44,15 @@ const readmeText = async (env, repo) => {
     .slice(0, README_CHARS);
 };
 
-// No dates: the order (most recent first) is all the model needs, and
-// visitors shouldn't be told when Gloria last worked on something.
-const describe = (repo, readme) => {
+const isCurrent = (repo, now) => now - Date.parse(repo.pushed_at) < CURRENT_DAYS * 86400000;
+
+// Dates are for the model, so it can tell current work from old projects.
+// Visitors never see them: worker/agent.js strips dates from every answer.
+const describe = (repo, readme, now) => {
+  const when = `${isCurrent(repo, now) ? 'CURRENT work' : 'older project, not current'}; last pushed ${(repo.pushed_at || '').slice(0, 10)}`;
   const head = repo.private
-    ? `### ${repo.name} (private repo; do not share a link)`
-    : `### ${repo.name} (public) ${repo.html_url}`;
+    ? `### ${repo.name} (private repo; ${when}; do not share a link)`
+    : `### ${repo.name} (public; ${when}) ${repo.html_url}`;
   return [head, repo.description ? `Description: ${repo.description}` : '', readme ? `README excerpt:\n${readme}` : '']
     .filter(Boolean).join('\n');
 };
@@ -63,12 +67,14 @@ const build = async (env) => {
     .sort((a, b) => String(b.pushed_at).localeCompare(String(a.pushed_at)))
     .slice(0, REPOS);
   const readmes = await Promise.all(repos.map((r) => readmeText(env, r).catch(() => '')));
+  const now = Date.now();
+  const current = repos.filter((r) => isCurrent(r, now));
   return {
     count: repos.length,
     newest: (repos[0]?.pushed_at || '').slice(0, 10),
-    text: repos.map((r, i) => describe(r, readmes[i])).join('\n\n'),
+    text: repos.map((r, i) => describe(r, readmes[i], now)).join('\n\n'),
     // Short list for the page's offline answer; no links for private repos.
-    recent: repos.slice(0, 3).map((r) => ({
+    recent: (current.length ? current : repos).slice(0, 3).map((r) => ({
       name: r.name, description: r.description || '', url: r.private ? null : r.html_url,
     })),
   };

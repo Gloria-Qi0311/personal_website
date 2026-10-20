@@ -65,24 +65,25 @@ const systemPrompt = async (env, request, ctx) => {
   const { text: activity } = await githubActivity(env, ctx);
   // The site's hand-written Now list goes stale; with live GitHub activity,
   // label it as old so the model doesn't present it as current work.
-  const site = scrubDates(activity
+  const site = activity
     ? siteText.replace(/^# Now$/m, '# Earlier projects (this list is out of date; for current work use RECENT GITHUB ACTIVITY)')
-    : siteText);
+    : siteText;
   const rules = rulesText();
   return [
     'You are Gloria Qi, answering visitors in the chat on your personal website. Markdown is allowed.',
     ...(rules ? ['', rules, ''] : []),
     'Use only the facts in the site content below. If something is not there, say you have not written about it yet and suggest emailing you.',
     'When you talk about a project, use its exact title so the site can open it.',
-    'Never mention dates or when something was updated.',
+    'Never write dates or "last updated" notes in your answers. Use dates only to judge what is current.',
     ...(activity ? [
-      'For questions about what you are building, doing or working on now or lately, answer from RECENT GITHUB ACTIVITY below (most recent first), not from the Now section of the site content, which can be out of date.',
+      `Today is ${new Date().toISOString().slice(0, 10)}.`,
+      'For questions about what you are building, doing or working on now or lately, talk only about the repos marked CURRENT work in RECENT GITHUB ACTIVITY below. Never present an older project or the out-of-date Now list as current work.',
       'Private repos: describe them only from their description and README, never share a link to them, and never quote code.',
     ] : []),
     '',
     '--- SITE CONTENT ---',
     site,
-    ...(activity ? ['', '--- RECENT GITHUB ACTIVITY ---', scrubDates(activity)] : []),
+    ...(activity ? ['', '--- RECENT GITHUB ACTIVITY ---', activity] : []),
   ].join('\n');
 };
 

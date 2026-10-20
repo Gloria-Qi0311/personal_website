@@ -1,130 +1,36 @@
-# personal_website
+# gloriaqi.site
 
-A living **PM-style dashboard** of what I've shipped, what I'm building, and where I'm going. The site is the demo: it shows my product thinking by being a working roadmap.
+My personal site is a conversation. Instead of scrolling a portfolio, you talk to an AI version of me: ask what I'm building, what I'm good at, or where to start, and it answers in my voice and opens the project it mentions right beside the chat. It runs on a small model on my own laptop, reads my GitHub to know what I'm working on this week, and every answer can be traced.
 
-> Edit content in-browser at `/admin/`. Public visitors read + comment.
+**Live:** <https://gloriaqi.site>
 
-## Source vs. artifacts
+## Why a conversation
 
-The repo has two kinds of files. **Only edit the source.**
+I'm working toward AI product management, and in my own projects I kept running into the same lesson: the model is the easy part, the hard part is trust. A portfolio page could only describe that. So I built my site as a small AI product instead, and had to make the calls I'd make on any real one: what the agent may say, what stays hand-written, and how a wrong answer gets caught and fixed.
+
+## A few details I care about
+
+- **It shows its evidence.** When the agent talks about a project, the project opens on the right, so every claim sits next to the work behind it. Every project panel also has an "Ask about this" button that goes the other way.
+- **It's honest about itself.** Answers from my laptop say so, the chat box says the AI can make mistakes, and each answer carries a trace ID visitors can copy. A wrong answer becomes a test case, so the same mistake doesn't ship twice.
+- **It never goes stale or silent.** "What are you working on?" comes from my latest GitHub activity, not a line I forgot to update; my project write-ups stay hand-written. If my laptop is off, a cloud model answers; if that's down too, the site answers from its own content.
+
+---
+
+## How it works
 
 ```
-SOURCE (edit these — directly or via /admin/)
-├── content/
-│   ├── site.json           ← title, description, footer
-│   ├── home.json           ← home page: greeting, suggested questions, profile, skills, featured projects
-│   ├── profile.json        ← name, slogan, avatar, tags
-│   ├── board.json          ← project cards (+ Problem / My work / Outcome fields)
-│   ├── lens.json           ← short-form principles
-│   └── contact.json        ← email + socials + "open to" line
-├── styles/site.css         ← all styles (tokens in :root, dark mode included)
-├── scripts/
-│   ├── app.js              ← runtime: chat, detail panels, mobile menu
-│   ├── build-html.js       ← build:   renders index.html + projects/index.html
-│   ├── build-llms.js       ← build:   regen /llms.txt + /llms-full.txt
-│   ├── build.js            ← build:   runs both
-│   └── install-hooks.sh    ← installs the pre-commit hook (run once)
-├── admin/
-│   ├── index.html          ← Decap CMS bootstrap
-│   └── config.yml          ← collection schemas
-├── media/                  ← avatars + other static images
-└── favicon.svg
-
-ARTIFACTS (generated — do not hand-edit)
-├── index.html              ← built by scripts/build-html.js
-├── projects/index.html     ← built by scripts/build-html.js
-├── llms.txt                ← built by scripts/build-llms.js
-└── llms-full.txt           ← built by scripts/build-llms.js
+visitor ──► /api/chat (Cloudflare Worker)
+              prompt = my rules (content/agent.json) + site content + recent GitHub activity
+              ├─► fixed answer from content/agent.json, if one matches
+              ├─► 1. Qwen3.5-9B on my MacBook, through a Cloudflare Tunnel
+              ├─► 2. Workers AI, when the laptop is off
+              └─► 3. the page answers from its own content
+            reply ──► dates removed ──► trace ID ──► logged to D1 (no visitor IPs)
 ```
 
-Each generated file carries a `GENERATED — do not edit` banner inside.
+- Content lives in `content/*.json` and is edited at `/admin/`. Pages are pre-rendered, with [`/llms.txt`](https://gloriaqi.site/llms.txt) for agents.
+- `worker/`: chat API (`index.js`), my rules (`agent.js`), GitHub activity (`github.js`), trace IDs (`trace.js`), `/admin/` sign-in (`cms-auth.js`).
+- `evals/bad-cases.json`: every reported bad answer. Check a change with `node scripts/eval-bad-cases.js <site-url>`.
+- `node scripts/build.js` rebuilds pages after editing content. Every push to `main` deploys.
 
-### After editing content
-
-```bash
-node scripts/build.js
-git add . && git commit -m "..."
-```
-
-`build.js` rebuilds all three artifacts. They get committed alongside the source so any clone of the repo can deploy without a build step.
-
-### Don't want to remember? Install the hook (one-time)
-
-```bash
-bash scripts/install-hooks.sh
-```
-
-This adds a `pre-commit` hook that detects changes to `content/*.json`, runs `build.js`, and stages the regenerated artifacts automatically. Once installed, you only ever edit JSON; the artifacts stay in sync on commit.
-
-## How agent-friendly is this?
-
-The site exposes three machine-readable surfaces backed by the same JSON:
-
-- **`/llms.txt`** — short summary per [llmstxt.org](https://llmstxt.org)
-- **`/llms-full.txt`** — full content dump in plain text
-- **`/content/*.json`** — typed structured data
-
-Plus: cards have stable IDs (`SHIP-01`, `NOW-01`, …) so agents can cite them across conversations, and the home HTML is **pre-rendered** — agents that don't execute JavaScript still see all content.
-
-## Local preview
-
-```bash
-npx serve .
-# open http://localhost:3000
-```
-
-## Edit content
-
-Two paths — pick whichever's faster for the moment.
-
-### A. Browser (Decap CMS)
-
-1. Go to `/admin/` on the deployed site.
-2. Sign in with GitHub. (Only repo collaborators can save — single-editor by design. First-time setup: [docs/admin-login.md](docs/admin-login.md).)
-3. Edit any collection. Saving commits to `main` directly; the site rebuilds.
-
-> Local dev mode: visit `/admin/?local_backend=true` and run `npx decap-server` in another terminal — no auth, writes straight to the filesystem.
-
-### B. Direct file edits
-
-Edit any `content/*.json` file in your editor or the GitHub web UI. Same outcome.
-
-## Live
-
-Production: <https://gloriaqi.site> (also <https://gloria-qi.glqi63583.workers.dev>), a Cloudflare Worker (`gloria-qi`). Every push to `main` deploys; pull requests get preview builds.
-The same Worker serves the chat API (`worker/`) and the GitHub sign-in for `/admin/` (setup: [docs/admin-login.md](docs/admin-login.md)).
-
-## Add-ons (configured via `content/site.json` or `/admin/`)
-
-### Cloudflare Web Analytics
-
-1. Go to **dash.cloudflare.com → Web Analytics → Add a site**.
-2. Copy the token from the embedded `data-cf-beacon='{"token": "..."}'` snippet.
-3. Paste into `site.json → analytics.cfAnalyticsToken` (or in `/admin/` → Site meta).
-4. Run `node scripts/build.js` and commit. The beacon script gets injected into `<head>` automatically.
-
-Empty token = no script, no tracking.
-
-### Giscus comments
-
-1. **Enable Discussions** on the GitHub repo (Settings → Features → Discussions).
-2. Visit <https://giscus.app>, configure for `Gloria-Qi0311/personal_website`, pick a category.
-3. Copy the generated `data-repo-id` and `data-category-id` into `site.json → giscus.repoId` and `giscus.categoryId` (or via `/admin/`).
-4. Run `node scripts/build.js` and commit. The comments section auto-activates.
-
-While unconfigured, the comments section shows a placeholder.
-
-## Tech stack
-
-- Vanilla HTML / CSS / JS, single-file build script
-- [Decap CMS](https://decapcms.org) for in-browser editing (vendored locally — `admin/decap-cms.js`)
-- Cloudflare Workers (hosting, chat API, `/admin/` sign-in)
-- [Giscus](https://giscus.app) for comments (config-driven via `site.json`)
-- [Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/) (config-driven via `site.json`)
-
-## Design
-
-- **Layout:** the home page is a chat with Gloria. Left: profile and navigation (Home, Projects, Skills, Gallery). Center: a welcome, then the conversation. Right: a detail panel for whatever was opened, closed on first visit. `#home`, `#skills` and `#<card-id>` link straight to a panel.
-- **Chat:** questions go to `POST /api/chat` (`{messages: [{role, content}]}` → `{reply, source, traceId}`), answered by my local model or a cloud fallback (see `worker/index.js`). If neither is up, `scripts/app.js` answers from the site's own content. A reply that names a project opens it on the right. Chat rules: [docs/chat-rules.md](docs/chat-rules.md).
-- **Type:** Instrument Serif (headings) · Inter (everything else).
-- All tokens live in `styles/site.css` `:root`. Edit there to retheme globally.
+Docs: [local model](docs/local-model.md) · [chat rules](docs/chat-rules.md) · [bad cases](docs/bad-cases.md) · [/admin sign-in](docs/admin-login.md)
