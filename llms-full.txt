@@ -96,7 +96,7 @@ Impact: this portfolio is the demo
 Tags: PORTFOLIO, Agent-Friendly, Vanilla JS, Cloudflare, CMS
 Updated: 2026-07-30
 Links:
-  - Live: https://gloria-qi.glqi63583.workers.dev
+  - Live: https://gloriaqi.site
   - GitHub: https://github.com/Gloria-Qi0311/personal_website
 Media:
   - Same content, human and agent readable: /media/avatar.png

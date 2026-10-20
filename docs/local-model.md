@@ -79,7 +79,7 @@ curl -s https://llm.你的域名.com/v1/models \
   -H "CF-Access-Client-Id: $ID" -H "CF-Access-Client-Secret: $SECRET"
 
 # 网站接口：source 是 "local" 说明 Mac 在回答，"cloud" 说明走了兜底
-curl -s https://gloria-qi.glqi63583.workers.dev/api/chat \
+curl -s https://gloriaqi.site/api/chat \
   -H 'content-type: application/json' \
   -d '{"messages":[{"role":"user","content":"你最近在做什么？"}]}'
 ```

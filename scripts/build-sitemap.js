@@ -19,7 +19,7 @@ const read = (p) => JSON.parse(fs.readFileSync(path.join(root, p), 'utf8'));
 const site  = read('content/site.json');
 const board = read('content/board.json');
 
-const SITE_URL = (site.meta?.url ?? 'https://gloria-qi.glqi63583.workers.dev').replace(/\/$/, '');
+const SITE_URL = (site.meta?.url ?? 'https://gloriaqi.site').replace(/\/$/, '');
 const lastmod  = site.footer?.lastUpdated ?? new Date().toISOString().slice(0, 10);
 
 /* ── Build URLs ───────────────────────────────────────────────────────── */

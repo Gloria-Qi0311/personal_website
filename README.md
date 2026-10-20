@@ -91,7 +91,7 @@ Edit any `content/*.json` file in your editor or the GitHub web UI. Same outcome
 
 ## Live
 
-Production: <https://gloria-qi.glqi63583.workers.dev>, a Cloudflare Worker (`gloria-qi`). Every push to `main` deploys; pull requests get preview builds.
+Production: <https://gloriaqi.site> (also <https://gloria-qi.glqi63583.workers.dev>), a Cloudflare Worker (`gloria-qi`). Every push to `main` deploys; pull requests get preview builds.
 The same Worker serves the chat API (`worker/`) and the GitHub sign-in for `/admin/` (setup: [docs/admin-login.md](docs/admin-login.md)).
 
 ## Add-ons (configured via `content/site.json` or `/admin/`)

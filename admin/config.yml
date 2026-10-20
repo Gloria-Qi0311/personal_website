@@ -14,7 +14,7 @@ backend:
   name: github
   repo: Gloria-Qi0311/personal_website
   branch: main
-  base_url: https://gloria-qi.glqi63583.workers.dev
+  base_url: https://gloriaqi.site
   auth_endpoint: api/auth
   auth_scope: public_repo
 

@@ -1,11 +1,11 @@
-# https://gloria-qi.glqi63583.workers.dev
+# https://gloriaqi.site
 # Source: github.com/Gloria-Qi0311/personal_website
 
 User-agent: *
 Allow: /
 Disallow: /admin/
 
-Sitemap: https://gloria-qi.glqi63583.workers.dev/sitemap.xml
+Sitemap: https://gloriaqi.site/sitemap.xml
 
 # Agent-readable summary at /llms.txt
 # Full content dump at /llms-full.txt
