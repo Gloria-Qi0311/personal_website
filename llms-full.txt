@@ -91,15 +91,15 @@ T4 split-intake results showed extraction-free systems around 95% per-detail rec
 The project taught me that evaluation design is product design. The benchmark only became useful once the tasks resembled realistic memory events instead of clean textbook facts.
 
 ## SHIP-03 · SHIPPED · Personal Website
-A PM-style portfolio dashboard with JSON content, pre-rendered HTML, llms.txt surfaces, CMS editing, and a terminal resume.
+A PM-style portfolio dashboard with JSON content, pre-rendered HTML, llms.txt surfaces, and CMS editing.
 Impact: this portfolio is the demo
 Tags: PORTFOLIO, Agent-Friendly, Vanilla JS, Cloudflare, CMS
 Updated: 2026-07-30
 Links:
-  - Live: https://gloria-qi.glqi63583.workers.dev
-  - GitHub: https://github.com/AntaresYuan/personal_website
+  - Live: https://gloriaqi.site
+  - GitHub: https://github.com/Gloria-Qi0311/personal_website
 Media:
-  - Same content, human and agent readable: /media/avatar-calm.png
+  - Same content, human and agent readable: /media/avatar.png
 
 ## Problem
 
@@ -110,21 +110,21 @@ A normal portfolio is optimized for humans, while the people and agents reading 
 - Designed and built the static portfolio system end to end
 - Created JSON content sources for profile, project board, principles, and contact data
 - Built pre-rendered HTML plus runtime hydration so the same content works with or without JavaScript
-- Added Decap CMS editing, Cloudflare deployment support, llms.txt surfaces, and a terminal-shaped resume CLI
+- Added Decap CMS editing, Cloudflare deployment support, and llms.txt surfaces
 
 ## Product Decisions
 
 - Treated the portfolio as a dashboard instead of a landing page
 - Kept stable card IDs so agents and people can cite projects across conversations
-- Made the site readable through HTML, JSON, llms.txt, llms-full.txt, and `npx antares-cv`
+- Made the site readable through HTML, JSON, llms.txt, and llms-full.txt
 
 ## System Design
 
-Vanilla HTML/CSS/JS, build scripts that generate static artifacts from `content/*.json`, Decap CMS for browser edits, Cloudflare Pages/Worker support, and a single-file Node CLI that reads the same public content.
+Vanilla HTML/CSS/JS, build scripts that generate static artifacts from `content/*.json`, Decap CMS for browser edits, and a Cloudflare Worker for hosting.
 
 ## Outcome
 
-A content-managed, agent-friendly portfolio where the website, terminal resume, and machine-readable files all share one source of truth.
+A content-managed, agent-friendly portfolio where the website and its machine-readable files share one source of truth.
 
 ## Reflection
 
@@ -347,7 +347,7 @@ Junior at UW Informatics, open to AI PM / product-engineering internships and co
 - github: @Gloria-Qi0311 (https://github.com/Gloria-Qi0311)
 
 ---
-Generated 2026-10-15 from content/*.json. Last site update: 2026-07-30
+Generated 2026-10-20 from content/*.json. Last site update: 2026-07-30
 
 
 ---

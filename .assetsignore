@@ -4,3 +4,5 @@ docs/
 .wrangler/
 node_modules/
 .dev.vars*
+evals/
+content/agent.json

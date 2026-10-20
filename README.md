@@ -56,16 +56,6 @@ bash scripts/install-hooks.sh
 
 This adds a `pre-commit` hook that detects changes to `content/*.json`, runs `build.js`, and stages the regenerated artifacts automatically. Once installed, you only ever edit JSON; the artifacts stay in sync on commit.
 
-> Note: this is a "stay simple now, switch to deploy-time builds later" choice (issue #X). When the site moves to Cloudflare Pages / Vercel, the build will run on the host instead and the artifacts won't need to live in git.
-
-## Resume in your terminal
-
-```bash
-npx antares-cv
-```
-
-Single-file Node CLI in `cli/` that fetches `content/*.json` from the live site and prints a colored resume. Same data as the website, terminal-shaped. See [`cli/README.md`](cli/README.md) for options (`--full`, `--json`, `--no-color`).
-
 ## How agent-friendly is this?
 
 The site exposes three machine-readable surfaces backed by the same JSON:
@@ -90,7 +80,7 @@ Two paths — pick whichever's faster for the moment.
 ### A. Browser (Decap CMS)
 
 1. Go to `/admin/` on the deployed site.
-2. Sign in with GitHub. (Only repo collaborators can authenticate — single-editor by design.)
+2. Sign in with GitHub. (Only repo collaborators can save — single-editor by design. First-time setup: [docs/admin-login.md](docs/admin-login.md).)
 3. Edit any collection. Saving commits to `main` directly; the site rebuilds.
 
 > Local dev mode: visit `/admin/?local_backend=true` and run `npx decap-server` in another terminal — no auth, writes straight to the filesystem.
@@ -101,14 +91,14 @@ Edit any `content/*.json` file in your editor or the GitHub web UI. Same outcome
 
 ## Live
 
-Production: <https://antaresyuan.site> on Cloudflare Pages.
-OAuth proxy for Decap CMS: a Cloudflare Worker in `workers/decap-oauth/`.
+Production: <https://gloriaqi.site> (also <https://gloria-qi.glqi63583.workers.dev>), a Cloudflare Worker (`gloria-qi`). Every push to `main` deploys; pull requests get preview builds.
+The same Worker serves the chat API (`worker/`) and the GitHub sign-in for `/admin/` (setup: [docs/admin-login.md](docs/admin-login.md)).
 
 ## Add-ons (configured via `content/site.json` or `/admin/`)
 
 ### Cloudflare Web Analytics
 
-1. Go to **dash.cloudflare.com → Web Analytics → Add a site** (or pick the existing Pages site).
+1. Go to **dash.cloudflare.com → Web Analytics → Add a site**.
 2. Copy the token from the embedded `data-cf-beacon='{"token": "..."}'` snippet.
 3. Paste into `site.json → analytics.cfAnalyticsToken` (or in `/admin/` → Site meta).
 4. Run `node scripts/build.js` and commit. The beacon script gets injected into `<head>` automatically.
@@ -118,37 +108,23 @@ Empty token = no script, no tracking.
 ### Giscus comments
 
 1. **Enable Discussions** on the GitHub repo (Settings → Features → Discussions).
-2. Visit <https://giscus.app>, configure for `AntaresYuan/personal_website`, pick a category.
+2. Visit <https://giscus.app>, configure for `Gloria-Qi0311/personal_website`, pick a category.
 3. Copy the generated `data-repo-id` and `data-category-id` into `site.json → giscus.repoId` and `giscus.categoryId` (or via `/admin/`).
 4. Run `node scripts/build.js` and commit. The comments section auto-activates.
 
 While unconfigured, the comments section shows a placeholder.
 
-## Switching to deploy-time builds (when ready)
-
-Right now the artifacts (`index.html`, `llms.txt`, `llms-full.txt`) live in git so any clone can deploy without building. Once you're comfortable with the flow:
-
-1. In **Cloudflare Pages → Settings → Builds & deployments**, set:
-   - Build command: `node scripts/build.js`
-   - Build output directory: `/`
-2. Trigger a deploy and confirm the site rebuilds correctly.
-3. Then in a follow-up PR: add the artifacts to `.gitignore`, run `git rm --cached index.html llms.txt llms-full.txt`, and commit. From then on, the source-of-truth is JSON only and the artifacts are generated at every deploy.
-
-## Roadmap
-
-See [Issue #39](https://github.com/AntaresYuan/personal_website/issues/39) for the live phase plan.
-
 ## Tech stack
 
 - Vanilla HTML / CSS / JS, single-file build script
-- [Decap CMS](https://decapcms.org) for in-browser editing (vendored locally — `admin/decap-cms.min.js`)
-- Cloudflare Pages (hosting) + Cloudflare Worker (OAuth proxy)
+- [Decap CMS](https://decapcms.org) for in-browser editing (vendored locally — `admin/decap-cms.js`)
+- Cloudflare Workers (hosting, chat API, `/admin/` sign-in)
 - [Giscus](https://giscus.app) for comments (config-driven via `site.json`)
 - [Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/) (config-driven via `site.json`)
 
 ## Design
 
 - **Layout:** the home page is a chat with Gloria. Left: profile and navigation (Home, Projects, Skills, Gallery). Center: a welcome, then the conversation. Right: a detail panel for whatever was opened, closed on first visit. `#home`, `#skills` and `#<card-id>` link straight to a panel.
-- **Chat:** questions go to `POST /api/chat` (`{messages: [{role, content}]}` → `{reply}`). Until that endpoint is live, `scripts/app.js` answers from the site's own content. A reply that names a project opens it on the right.
+- **Chat:** questions go to `POST /api/chat` (`{messages: [{role, content}]}` → `{reply, source, traceId}`), answered by my local model or a cloud fallback (see `worker/index.js`). If neither is up, `scripts/app.js` answers from the site's own content. A reply that names a project opens it on the right. Chat rules: [docs/chat-rules.md](docs/chat-rules.md).
 - **Type:** Instrument Serif (headings) · Inter (everything else).
 - All tokens live in `styles/site.css` `:root`. Edit there to retheme globally.
