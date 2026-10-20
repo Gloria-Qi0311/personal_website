@@ -64,7 +64,7 @@ ${profile.slogan ?? ''}
 - [Full content](/llms-full.txt): every card + lens entry + contact, plain text
 
 ## Edit
-This site is content-managed via Decap CMS at /admin/. Source: github.com/AntaresYuan/personal_website
+This site is content-managed via Decap CMS at /admin/. Source: github.com/Gloria-Qi0311/personal_website
 `;
 
 /* ── llms-full.txt — every card + lens + contact ──────────────────────── */

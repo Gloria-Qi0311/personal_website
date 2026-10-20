@@ -8,8 +8,8 @@
   "manifesto": "Junior at UW Informatics, working toward AI product management through shipped products, research benchmarks, and collaboration tools. I think in user problems, system boundaries, and the evidence needed to trust a product.",
   "tags": ["Informatics @ UW", "AI Product", "Agent Workflows", "Memory Systems", "Seattle"],
   "avatar": {
-    "calm":    "media/avatar-calm.png",
-    "talking": "media/avatar-talking.png",
+    "calm":    "media/avatar.png",
+    "talking": "media/avatar.png",
     "alt":     "Gloria Qi"
   },
   "ctas": [
@@ -33,9 +33,9 @@
     },
     {
       "audience": "for agents",
-      "label": "use the CLI",
-      "anchor": "#terminal",
-      "note": "/llms.txt also available"
+      "label": "read llms.txt",
+      "anchor": "/llms.txt",
+      "note": "plain-text version of this site"
     }
   ]
 }

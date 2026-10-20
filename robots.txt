@@ -1,11 +1,11 @@
-# https://antaresyuan.site
-# Source: github.com/AntaresYuan/personal_website
+# https://gloria-qi.glqi63583.workers.dev
+# Source: github.com/Gloria-Qi0311/personal_website
 
 User-agent: *
 Allow: /
 Disallow: /admin/
 
-Sitemap: https://antaresyuan.site/sitemap.xml
+Sitemap: https://gloria-qi.glqi63583.workers.dev/sitemap.xml
 
 # Agent-readable summary at /llms.txt
 # Full content dump at /llms-full.txt

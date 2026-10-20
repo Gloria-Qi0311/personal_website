@@ -1,8 +1,8 @@
 # ─────────────────────────────────────────────────────────────────────
 # Decap CMS configuration.
 #
-# Backend: GitHub OAuth via a self-hosted Cloudflare Worker proxy.
-# Worker source: workers/decap-oauth/  (deploy: see that folder's README)
+# Backend: GitHub sign-in handled by the site's own Worker
+# (worker/cms-auth.js, setup in docs/admin-login.md).
 #
 # Local preview during development:
 #   - run a static server from repo root (e.g. `npx serve .`)
@@ -12,10 +12,11 @@
 
 backend:
   name: github
-  repo: AntaresYuan/personal_website
+  repo: Gloria-Qi0311/personal_website
   branch: main
-  base_url: https://decap-oauth.chenjy4.workers.dev
-  auth_endpoint: auth
+  base_url: https://gloria-qi.glqi63583.workers.dev
+  auth_endpoint: api/auth
+  auth_scope: public_repo
 
 # Allow `?local_backend=true` to use a filesystem proxy during dev.
 local_backend: true
@@ -50,9 +51,9 @@ collections:
           - { label: "Cloudflare Analytics Token", name: "analytics.cfAnalyticsToken", widget: "string", required: false, hint: "From dash.cloudflare.com → Web Analytics. Empty = disabled." }
           # ── Giscus comments ──────────────────────────────────────────
           # Setup: enable Discussions on the GitHub repo, then visit
-          # giscus.app, configure for AntaresYuan/personal_website, and
+          # giscus.app, configure for Gloria-Qi0311/personal_website, and
           # paste the generated repo-id and category-id below.
-          - { label: "Giscus repo (owner/name)", name: "giscus.repo",       widget: "string", required: false, default: "AntaresYuan/personal_website" }
+          - { label: "Giscus repo (owner/name)", name: "giscus.repo",       widget: "string", required: false, default: "Gloria-Qi0311/personal_website" }
           - { label: "Giscus repo ID",           name: "giscus.repoId",     widget: "string", required: false, hint: "From giscus.app — empty = comments disabled" }
           - { label: "Giscus category",          name: "giscus.category",   widget: "string", required: false, default: "General" }
           - { label: "Giscus category ID",       name: "giscus.categoryId", widget: "string", required: false, hint: "From giscus.app" }

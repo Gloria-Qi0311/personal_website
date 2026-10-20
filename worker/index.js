@@ -3,6 +3,7 @@
    run_worker_first in wrangler.jsonc); every other path is a static asset.
 
    POST /api/chat  {messages:[{role, content}]}  →  {reply, source, traceId}
+   GET  /api/auth, /api/callback  GitHub sign-in for /admin/ (worker/cms-auth.js)
 
    Every answer gets a trace id and is logged to D1 (worker/trace.js), so a
    bad answer can be reported by id and turned into a case in
@@ -34,6 +35,7 @@
    ════════════════════════════════════════════════════════════════════════ */
 
 import { faqAnswer, rulesText, scrubDates } from './agent.js';
+import { cmsAuth } from './cms-auth.js';
 import { githubActivity, githubStatus } from './github.js';
 import { logAnswer, newTraceId } from './trace.js';
 
@@ -186,6 +188,7 @@ export default {
       if (request.method !== 'POST') return json({ error: 'Use POST' }, 405);
       return chat(request, env, ctx);
     }
+    if (pathname === '/api/auth' || pathname === '/api/callback') return cmsAuth(request, env);
     if (pathname.startsWith('/api/')) return json({ error: 'Not found' }, 404);
     return env.ASSETS.fetch(request);
   },

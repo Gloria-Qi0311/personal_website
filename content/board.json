@@ -96,12 +96,12 @@
       ]
     },
     {
-      "details": "## Problem\n\nA normal portfolio is optimized for humans, while the people and agents reading it increasingly need structured, stable, machine-readable context. I wanted the site to be more than a resume: it should be a living product surface for what I have shipped, what I am building, and how I think.\n\n## My Role\n\n- Designed and built the static portfolio system end to end\n- Created JSON content sources for profile, project board, principles, and contact data\n- Built pre-rendered HTML plus runtime hydration so the same content works with or without JavaScript\n- Added Decap CMS editing, Cloudflare deployment support, llms.txt surfaces, and a terminal-shaped resume CLI\n\n## Product Decisions\n\n- Treated the portfolio as a dashboard instead of a landing page\n- Kept stable card IDs so agents and people can cite projects across conversations\n- Made the site readable through HTML, JSON, llms.txt, llms-full.txt, and `npx antares-cv`\n\n## System Design\n\nVanilla HTML/CSS/JS, build scripts that generate static artifacts from `content/*.json`, Decap CMS for browser edits, Cloudflare Pages/Worker support, and a single-file Node CLI that reads the same public content.\n\n## Outcome\n\nA content-managed, agent-friendly portfolio where the website, terminal resume, and machine-readable files all share one source of truth.\n\n## Reflection\n\nThis project is a small statement of taste: if agents are going to read our work, the source material should be deliberate, structured, and still pleasant for humans.",
+      "details": "## Problem\n\nA normal portfolio is optimized for humans, while the people and agents reading it increasingly need structured, stable, machine-readable context. I wanted the site to be more than a resume: it should be a living product surface for what I have shipped, what I am building, and how I think.\n\n## My Role\n\n- Designed and built the static portfolio system end to end\n- Created JSON content sources for profile, project board, principles, and contact data\n- Built pre-rendered HTML plus runtime hydration so the same content works with or without JavaScript\n- Added Decap CMS editing, Cloudflare deployment support, and llms.txt surfaces\n\n## Product Decisions\n\n- Treated the portfolio as a dashboard instead of a landing page\n- Kept stable card IDs so agents and people can cite projects across conversations\n- Made the site readable through HTML, JSON, llms.txt, and llms-full.txt\n\n## System Design\n\nVanilla HTML/CSS/JS, build scripts that generate static artifacts from `content/*.json`, Decap CMS for browser edits, and a Cloudflare Worker for hosting.\n\n## Outcome\n\nA content-managed, agent-friendly portfolio where the website and its machine-readable files share one source of truth.\n\n## Reflection\n\nThis project is a small statement of taste: if agents are going to read our work, the source material should be deliberate, structured, and still pleasant for humans.",
       "impact": "this portfolio is the demo",
-      "summary": "A PM-style portfolio dashboard with JSON content, pre-rendered HTML, llms.txt surfaces, CMS editing, and a terminal resume.",
+      "summary": "A PM-style portfolio dashboard with JSON content, pre-rendered HTML, llms.txt surfaces, and CMS editing.",
       "media": [
         {
-          "src": "media/avatar-calm.png",
+          "src": "media/avatar.png",
           "alt": "Gloria Qi portfolio avatar used as the site's visual identity.",
           "caption": "Same content, human and agent readable"
         }
@@ -123,7 +123,7 @@
         },
         {
           "label": "GitHub",
-          "href": "https://github.com/AntaresYuan/personal_website"
+          "href": "https://github.com/Gloria-Qi0311/personal_website"
         }
       ],
       "updated": "2026-07-30",
@@ -140,7 +140,7 @@
         },
         {
           "label": "Outcome",
-          "value": "One source of truth, readable as HTML, JSON, llms.txt and a terminal CV."
+          "value": "One source of truth, readable as HTML, JSON and llms.txt."
         }
       ]
     },

@@ -15,7 +15,7 @@
 <meta name="theme-color" content="#F7F5F0" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1B1A17" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="../media/avatar-calm.png">
+<link rel="apple-touch-icon" href="../media/avatar.png">
 <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable summary">
 <link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLM-readable full content">
 
@@ -25,14 +25,14 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:title" content="Projects — Gloria Qi">
 <meta property="og:description" content="Every project by Gloria Qi, with problem, role, decisions and outcome.">
-<meta property="og:image" content="https://gloria-qi.glqi63583.workers.dev/media/avatar-calm.png">
+<meta property="og:image" content="https://gloria-qi.glqi63583.workers.dev/media/avatar.png">
 <meta property="og:image:width" content="512">
 <meta property="og:image:height" content="512">
 <meta property="og:image:alt" content="Gloria Qi">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Projects — Gloria Qi">
 <meta name="twitter:description" content="Every project by Gloria Qi, with problem, role, decisions and outcome.">
-<meta name="twitter:image" content="https://gloria-qi.glqi63583.workers.dev/media/avatar-calm.png">
+<meta name="twitter:image" content="https://gloria-qi.glqi63583.workers.dev/media/avatar.png">
 
 <script type="application/ld+json">{
   "@context": "https://schema.org",
@@ -42,7 +42,7 @@
   "url": "https://gloria-qi.glqi63583.workers.dev",
   "jobTitle": "AI Product Builder",
   "description": "Building agent workflows, memory systems, and tools that make AI work visible.",
-  "image": "https://gloria-qi.glqi63583.workers.dev/media/avatar-calm.png",
+  "image": "https://gloria-qi.glqi63583.workers.dev/media/avatar.png",
   "knowsAbout": [
     "Informatics @ UW",
     "AI Product",
@@ -132,20 +132,20 @@
   <article class="entry" id="shipped-personal-website">
       <p class="kicker">Portfolio · 2026-07-30</p>
       <h2>Personal Website</h2>
-      <p class="lead">A PM-style portfolio dashboard with JSON content, pre-rendered HTML, llms.txt surfaces, CMS editing, and a terminal resume.</p>
-      <p class="links"><a href="https://gloria-qi.glqi63583.workers.dev" target="_blank" rel="noopener">Live ↗</a> · <a href="https://github.com/AntaresYuan/personal_website" target="_blank" rel="noopener">GitHub ↗</a></p>
+      <p class="lead">A PM-style portfolio dashboard with JSON content, pre-rendered HTML, llms.txt surfaces, and CMS editing.</p>
+      <p class="links"><a href="https://gloria-qi.glqi63583.workers.dev" target="_blank" rel="noopener">Live ↗</a> · <a href="https://github.com/Gloria-Qi0311/personal_website" target="_blank" rel="noopener">GitHub ↗</a></p>
       
-      <dl class="facts"><div><dt>Problem</dt><dd>Portfolios are written only for humans, while agents increasingly read them too.</dd></div><div><dt>My work</dt><dd>Content model, pre-rendered HTML, Decap CMS editing, Cloudflare deploy.</dd></div><div><dt>Outcome</dt><dd>One source of truth, readable as HTML, JSON, llms.txt and a terminal CV.</dd></div></dl>
+      <dl class="facts"><div><dt>Problem</dt><dd>Portfolios are written only for humans, while agents increasingly read them too.</dd></div><div><dt>My work</dt><dd>Content model, pre-rendered HTML, Decap CMS editing, Cloudflare deploy.</dd></div><div><dt>Outcome</dt><dd>One source of truth, readable as HTML, JSON and llms.txt.</dd></div></dl>
       <div class="details"><h4>Problem</h4>
 <p>A normal portfolio is optimized for humans, while the people and agents reading it increasingly need structured, stable, machine-readable context. I wanted the site to be more than a resume: it should be a living product surface for what I have shipped, what I am building, and how I think.</p>
 <h4>My Role</h4>
-<ul><li>Designed and built the static portfolio system end to end</li><li>Created JSON content sources for profile, project board, principles, and contact data</li><li>Built pre-rendered HTML plus runtime hydration so the same content works with or without JavaScript</li><li>Added Decap CMS editing, Cloudflare deployment support, llms.txt surfaces, and a terminal-shaped resume CLI</li></ul>
+<ul><li>Designed and built the static portfolio system end to end</li><li>Created JSON content sources for profile, project board, principles, and contact data</li><li>Built pre-rendered HTML plus runtime hydration so the same content works with or without JavaScript</li><li>Added Decap CMS editing, Cloudflare deployment support, and llms.txt surfaces</li></ul>
 <h4>Product Decisions</h4>
-<ul><li>Treated the portfolio as a dashboard instead of a landing page</li><li>Kept stable card IDs so agents and people can cite projects across conversations</li><li>Made the site readable through HTML, JSON, llms.txt, llms-full.txt, and <code>npx antares-cv</code></li></ul>
+<ul><li>Treated the portfolio as a dashboard instead of a landing page</li><li>Kept stable card IDs so agents and people can cite projects across conversations</li><li>Made the site readable through HTML, JSON, llms.txt, and llms-full.txt</li></ul>
 <h4>System Design</h4>
-<p>Vanilla HTML/CSS/JS, build scripts that generate static artifacts from <code>content/*.json</code>, Decap CMS for browser edits, Cloudflare Pages/Worker support, and a single-file Node CLI that reads the same public content.</p>
+<p>Vanilla HTML/CSS/JS, build scripts that generate static artifacts from <code>content/*.json</code>, Decap CMS for browser edits, and a Cloudflare Worker for hosting.</p>
 <h4>Outcome</h4>
-<p>A content-managed, agent-friendly portfolio where the website, terminal resume, and machine-readable files all share one source of truth.</p>
+<p>A content-managed, agent-friendly portfolio where the website and its machine-readable files share one source of truth.</p>
 <h4>Reflection</h4>
 <p>This project is a small statement of taste: if agents are going to read our work, the source material should be deliberate, structured, and still pleasant for humans.</p></div>
     </article>
