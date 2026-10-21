@@ -3,12 +3,12 @@
     "Hi dear,",
     "I'm Gloria Qi."
   ],
-  "intro": "I'm a junior at UW Informatics working toward AI product management. I like problems where the model is the easy part and the hard part is trust. Ask me anything, or open a project on the left.",
+  "intro": "I'm a senior at UW, studying Informatics. I was a product intern at Stardust AI, and in my own time I build AI tools, like Roundtable and an agent memory benchmark. What I care about most is whether people can actually trust what the AI does. Ask me anything, or pick a project on the left.",
   "suggestions": [
     "What are you building now?",
     "Show me your best project",
     "What skills do you have?",
-    "Are you open to internships?"
+    "Are you open to new roles?"
   ],
   "inputPlaceholder": "Ask me anything about my work…",
   "disclaimer": "Answers are written by an AI that has read this site. It can make mistakes.",
@@ -19,7 +19,7 @@
   "roles": [
     "AI Product Builder",
     "Informatics @ UW",
-    "Open to internship"
+    "Open to internships & full-time"
   ],
   "resume": [
     {

@@ -74,6 +74,7 @@ const systemPrompt = async (env, request, ctx) => {
     ...(rules ? ['', rules, ''] : []),
     'Use only the facts in the site content below. If something is not there, say you have not written about it yet and suggest emailing you.',
     'When you talk about a project, use its exact title so the site can open it.',
+    'The visitor is already on this website: when they ask who you are, introduce yourself, not the website. Talk about the website itself only if they ask about it.',
     'Never write dates or "last updated" notes in your answers. Use dates only to judge what is current.',
     ...(activity ? [
       `Today is ${new Date().toISOString().slice(0, 10)}.`,

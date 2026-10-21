@@ -82,15 +82,32 @@
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const inline = (s) => esc(s)
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/(^|[^*\w])\*([^*\s][^*]*?)\*(?!\*)/g, '$1<em>$2</em>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
     .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+|mailto:[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
     .replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g, '$1<a href="$2" target="_blank" rel="noopener">$2</a>');
-  const formatReply = (text) => text.trim().split(/\n{2,}/).map((block) => {
-    const lines = block.split('\n');
-    if (lines.every((l) => /^\s*[-*]\s+/.test(l))) {
-      return `<ul>${lines.map((l) => `<li>${inline(l.replace(/^\s*[-*]\s+/, ''))}</li>`).join('')}</ul>`;
+  // Paragraphs, bullet or numbered lists, and Markdown headings (shown bold).
+  const formatReply = (text) => {
+    const out = [];
+    let para = [];
+    let list = [];
+    const flush = () => {
+      if (para.length) out.push(`<p>${para.map(inline).join('<br>')}</p>`);
+      if (list.length) out.push(`<ul>${list.map((l) => `<li>${inline(l)}</li>`).join('')}</ul>`);
+      para = [];
+      list = [];
+    };
+    for (const line of text.trim().split('\n')) {
+      const head = line.match(/^\s*#{1,6}\s+(.*)/);
+      const item = line.match(/^\s*(?:[-*]|\d+[.)])\s+(.*)/);
+      if (!line.trim()) flush();
+      else if (head) { flush(); out.push(`<p><strong>${inline(head[1])}</strong></p>`); }
+      else if (item) { if (para.length) flush(); list.push(item[1]); }
+      else { if (list.length) flush(); para.push(line); }
     }
-    return `<p>${lines.map(inline).join('<br>')}</p>`;
-  }).join('');
+    flush();
+    return out.join('');
+  };
 
   const scrollDown = () => { scroller.scrollTop = scroller.scrollHeight; };
 
@@ -131,10 +148,12 @@
   // The project a text names first (on a tie, the longer title wins, so
   // "Agent Memory Benchmark" beats a shorter title inside it).
   const byTitle = projects.slice().sort((a, b) => b.title.length - a.title.length);
-  const mentioned = (text) => {
+  // The card about this site opens only when the visitor asked about it.
+  const mentioned = (text, withSelf = false) => {
     const t = text.toLowerCase();
     let best = null, at = Infinity;
     for (const p of byTitle) {
+      if (p.self && !withSelf) continue;
       const i = t.indexOf(p.title.toLowerCase());
       if (i >= 0 && i < at) { best = p; at = i; }
     }
@@ -146,7 +165,7 @@
   const contactLine = () => (data.contact || []).map((c) => `[${c.label}](${c.href})`).join(' · ');
   const local = (q, recent = []) => {
     const t = q.toLowerCase();
-    const project = mentioned(q) || byTitle.find((p) => p.id.split('-').slice(1).some((w) => w.length > 3 && t.includes(w)));
+    const project = mentioned(q, true) || byTitle.find((p) => p.id.split('-').slice(1).some((w) => w.length > 3 && t.includes(w)));
     if (project) return { text: `**${project.title}**: ${project.summary}\n\nThe details are open on the right.`, open: project.id };
     if (/best|favou?rite|proud|flagship|最好|代表/.test(t)) {
       const p = find(data.featured?.[0]);
@@ -165,7 +184,7 @@
       return { text: `Here's what I work with:\n\n${lines}\n\nThe right panel shows which project used each one.`, open: 'skills' };
     }
     if (/intern|hire|hiring|job|work with|available|实习|工作/.test(t)) {
-      return { text: `Yes, I'm open to AI product and product-engineering internships, and to collaborations. The easiest way to reach me:\n\n${contactLine()}`, open: 'home' };
+      return { text: `Yes, I'm open to AI PM and product-engineering internships and full-time roles, and to collaborations. The easiest way to reach me:\n\n${contactLine()}`, open: 'home' };
     }
     if (/contact|email|reach|linkedin|github|联系|邮箱/.test(t)) {
       return { text: `You can reach me here:\n\n${contactLine()}`, open: 'home' };
@@ -210,7 +229,7 @@
 
     let target = null;
     if (reply) {
-      target = mentioned(reply);
+      target = mentioned(reply, Boolean(mentioned(q, true)?.self));
     } else {
       const answer = local(q, recent);
       reply = answer.text;
