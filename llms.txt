@@ -1,6 +1,6 @@
 # Gloria Qi — AI Product Builder
 
-> AI product manager and builder, senior at UW Informatics. Agent workflows, memory benchmarks, and human-AI collaboration tools.
+> Gloria Qi, AI product manager and builder. Senior at UW Informatics, product intern at Stardust AI.
 
 Building agent workflows, memory systems, and tools that make AI work visible.
 
