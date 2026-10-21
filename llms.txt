@@ -1,6 +1,6 @@
 # Gloria Qi — AI Product Builder
 
-> UW Informatics junior building AI agent workflows, memory benchmarks, and human-AI collaboration tools.
+> AI product manager and builder, senior at UW Informatics. Agent workflows, memory benchmarks, and human-AI collaboration tools.
 
 Building agent workflows, memory systems, and tools that make AI work visible.
 
@@ -8,7 +8,7 @@ Building agent workflows, memory systems, and tools that make AI work visible.
 - Name: Gloria Qi
 - Role: AI Product Builder
 - Location: Seattle · UW Informatics
-- Status: Open to internship
+- Status: Open to internships & full-time
 - Tags: Informatics @ UW, AI Product, Agent Workflows, Memory Systems, Seattle
 
 ## Sections

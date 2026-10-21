@@ -2,7 +2,7 @@
 
 Building agent workflows, memory systems, and tools that make AI work visible.
 
-Junior at UW Informatics, working toward AI product management through shipped products, research benchmarks, and collaboration tools. I think in user problems, system boundaries, and the evidence needed to trust a product.
+AI PM and builder, senior at UW Informatics. Product internship at Stardust AI, plus a shelf of AI products I designed and shipped myself. AI-native in how I work: I think in user problems, system boundaries, and the evidence it takes to trust an AI product.
 
 Name: Gloria Qi
 Role: AI Product Builder
@@ -340,14 +340,14 @@ The strongest version of this portfolio should not just list projects. It should
 
 # Contact
 
-Junior at UW Informatics, open to AI PM / product-engineering internships and collaborations around agents, memory, and human-AI workflows. Tell me what you're building.
+Senior at UW Informatics and an AI PM who builds. Open to AI PM and product-engineering internships and full-time roles, and to collaborations around agents, memory, and human-AI workflows. Tell me what you're building.
 
 - email: qpt0311@uw.edu (mailto:qpt0311@uw.edu)
 - linkedin: Gloria Qi (https://www.linkedin.com/in/peitong-qi-4478ba293)
 - github: @Gloria-Qi0311 (https://github.com/Gloria-Qi0311)
 
 ---
-Generated 2026-10-20 from content/*.json. Last site update: 2026-07-30
+Generated 2026-10-21 from content/*.json. Last site update: 2026-07-30
 
 
 ---

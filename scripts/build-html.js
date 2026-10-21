@@ -331,7 +331,9 @@ const panelsHtml = () => `<aside class="right" id="panel-host" aria-label="Detai
 const chatData = () => {
   const { all } = catalogue();
   return {
-    projects: all.map((c) => ({ id: c.id, title: c.title, summary: c.summary, category: category(c), status: c.status, tags: (c.tags ?? []).slice(1) })),
+    // `self` marks the card about this very site, so the chat doesn't open it unasked.
+    projects: all.map((c) => ({ id: c.id, title: c.title, summary: c.summary, category: category(c), status: c.status, tags: (c.tags ?? []).slice(1),
+      ...((c.links ?? []).some((l) => siteUrl && String(l.href || '').replace(/\/+$/, '') === siteUrl) ? { self: true } : {}) })),
     featured: home.projects?.featured ?? [],
     now: home.now ?? '',
     skills: (home.skills?.groups ?? []).map((g) => ({ title: g.title, items: g.items ?? [] })),
